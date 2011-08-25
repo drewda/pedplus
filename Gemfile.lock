@@ -60,6 +60,7 @@ GEM
       cucumber (~> 1.0.0)
       nokogiri (>= 1.4.6)
     diff-lcs (1.1.2)
+    drewda-railroad (0.5.3)
     dynamic_form (1.1.4)
     erubis (2.7.0)
     execjs (1.2.4)
@@ -166,6 +167,7 @@ DEPENDENCIES
   capybara (>= 1.0.0)
   coffee-rails (~> 3.1.0.rc)
   cucumber-rails (>= 1.0.2)
+  drewda-railroad (~> 0.5.3)
   dynamic_form
   factory_girl_rails (>= 1.1.0)
   geocoder
