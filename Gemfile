@@ -13,6 +13,7 @@ gem 'jquery-rails'
 
 group :assets do
   gem 'sass-rails'
+  gem "less"
   gem 'coffee-rails'
   gem 'uglifier'
 end
