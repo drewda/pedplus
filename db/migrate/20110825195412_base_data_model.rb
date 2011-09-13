@@ -14,13 +14,9 @@ class BaseDataModel < ActiveRecord::Migration
     
     create_table :segments, :force => true do |t|
       t.integer :ped_project_id
-      t.integer :geopoint_a_id
-      t.integer :geopoint_b_id
       t.timestamps
     end
     add_index :segments, :ped_project_id
-    add_index :segments, :geopoint_a_id
-    add_index :segments, :geopoint_b_id
     
     create_table :geo_points, :force => true do |t|
       t.decimal :latitude, :precision => 15, :scale => 10
@@ -30,6 +26,13 @@ class BaseDataModel < ActiveRecord::Migration
       t.timestamps
     end
     add_index :geo_points, :data_source_id
+    
+    create_table :geo_point_on_segments, :force => true do |t|
+      t.integer :geo_point_id
+      t.integer :segment_id
+    end
+    add_index :geo_point_on_segments, :geo_point_id
+    add_index :geo_point_on_segments, :segment_id
     
     create_table :data_sources, :force => true do |t|
       t.string :name

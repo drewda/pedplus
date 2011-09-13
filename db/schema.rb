@@ -41,6 +41,14 @@ ActiveRecord::Schema.define(:version => 20110825195412) do
     t.datetime "updated_at"
   end
 
+  create_table "geo_point_on_segments", :force => true do |t|
+    t.integer "geo_point_id"
+    t.integer "segment_id"
+  end
+
+  add_index "geo_point_on_segments", ["geo_point_id"], :name => "index_geo_point_on_segments_on_geo_point_id"
+  add_index "geo_point_on_segments", ["segment_id"], :name => "index_geo_point_on_segments_on_segment_id"
+
   create_table "geo_points", :force => true do |t|
     t.decimal  "latitude",       :precision => 15, :scale => 10
     t.decimal  "longitude",      :precision => 15, :scale => 10
@@ -80,14 +88,10 @@ ActiveRecord::Schema.define(:version => 20110825195412) do
 
   create_table "segments", :force => true do |t|
     t.integer  "ped_project_id"
-    t.integer  "geopoint_a_id"
-    t.integer  "geopoint_b_id"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
-  add_index "segments", ["geopoint_a_id"], :name => "index_segments_on_geopoint_a_id"
-  add_index "segments", ["geopoint_b_id"], :name => "index_segments_on_geopoint_b_id"
   add_index "segments", ["ped_project_id"], :name => "index_segments_on_ped_project_id"
 
 end
