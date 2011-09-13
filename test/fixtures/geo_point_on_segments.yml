@@ -1,0 +1,12 @@
+gpos1:
+  geo_point: gp1
+  segment: berkeley_way
+gpos2:
+  geo_point: gp2
+  segment: berkeley_way
+gpos3:
+  geo_point: gp1
+  segment: mlk
+gpos4:
+  geo_point: gp3
+  segment: mlk
