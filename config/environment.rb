@@ -13,3 +13,5 @@ ActionMailer::Base.smtp_settings = {
   :authentication => :plain,
   :enable_starttls_auto => true
 }
+
+Tilt::CoffeeScriptTemplate.default_bare = true
