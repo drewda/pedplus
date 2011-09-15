@@ -13,13 +13,9 @@ class App.Views.GeoPointLayer extends Backbone.View
     layer = d3.select("#map-area svg").insert "svg:g", ".compass"
     layer.attr "id", "geo-point-layer"
     
-    map.on "move", ->
-      d3.select('#geo-point-layer').selectAll("g").attr "transform", (d) =>
-        lp = map.locationPoint
-          lon: d.get('longitude')
-          lat: d.get('latitude')
-        return "translate(#{lp.x}, #{lp.y})"
-    
+    map.on "move", @redraw
+    map.on "resize", @redraw
+      
     @change()
   change: ->
     console.log "changing GeoPointLayer: #{@collection.length}"
@@ -36,4 +32,10 @@ class App.Views.GeoPointLayer extends Backbone.View
           "geo-point-circle-#{d.id}"
         .on 'click', (d) ->
           d.toggle()
+  redraw: ->
+    d3.select('#geo-point-layer').selectAll("g").attr "transform", (d) =>
+      lp = map.locationPoint
+        lon: d.get('longitude')
+        lat: d.get('latitude')
+      return "translate(#{lp.x}, #{lp.y})"
     
