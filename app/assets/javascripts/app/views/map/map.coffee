@@ -13,6 +13,7 @@ class App.Views.Map extends Backbone.View
                 /b8f01ac08d4242be9c2876f862c8ef2c
                 /997/256/{Z}/{X}/{Y}.png''')
                 .hosts(["a.", "b.", "c.", ""]))
+                .id("osm-layer")
     map.add(osmLayer)
 
     map.add(po.compass()
@@ -25,3 +26,4 @@ class App.Views.Map extends Backbone.View
         map.center
           lat: position.coords.latitude
           lon: position.coords.longitude
+        map.zoom 16
