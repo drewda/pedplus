@@ -4,7 +4,7 @@ class App.Collections.GeoPoints extends Backbone.Collection
   initialize: ->
     @bind "change", @change()
   change: ->
-    console.log 'geo_pointers updated'
+    console.log 'geo_points updated'
   geojson: ->
     geojson =
       type: 'FeatureCollection'

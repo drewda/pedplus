@@ -1,36 +1,31 @@
 class App.Views.SegmentLayer extends Backbone.View
   initialize: ->
-    # @collection.bind 'reset', @draw()
-    @collection.bind 'change', @change()
-  transform: (d) ->
-    lp = map.locationPoint
-      lon: d.geometry.coordinates[0][0]
-      lat: d.geometry.coordinates[0][1]
-    console.log "translate(#{lp.x}, #{lp.y})"
-    return "translate(#{lp.x}, #{lp.y})"
-  draw: ->
-    # console.log "rendering SegmentLayer: #{@collection.length}"
-    
-    layer = d3.select("#map-area svg").insert "svg:g", ".compass"
-    
-    marker = layer.selectAll("g")
-                  .data(@collection.map (s) -> s.geojson())
-                  .enter().append("svg:g")
-                  .attr("transform", @transform)
-    path = d3.geo.path()
-    marker.append("svg:path")
-        .attr("d", path)
-        .attr("stroke", '#000000')
-        .attr("stroke-weight", "5")
-        .on 'click', (d) ->
-          console.log "clicked the Segment"
-    
-    map.on "move", ->
-      layer.selectAll("g").attr "transform", (d) =>
-        lp = map.locationPoint
-          lon: d.geometry.coordinates[0][0]
-          lat: d.geometry.coordinates[0][1]
-        console.log "translate(#{lp.x}, #{lp.y})"
-        return "translate(#{lp.x}, #{lp.y})"
+    @collection.bind 'reset',  @render, this
+    @collection.bind 'change', @change, this
+    @collection.bind 'redraw', @render, this
+    # @collection.bind 'add',    @render, this
+  render: ->
+    $('#segment-layer').remove() if $('#segment-layer')
+    layer = po.geoJson()
+              .features(@collection.map (s) -> s.geojson())
+              .id("segment-layer")
+              .on "load", (e) ->
+                for f in e.features
+                  c = f.element
+                  g = f.element = po.svg("g")
+                  
+                  c.setAttribute "class", "segment-line"
+                  c.setAttribute "id", "segment-line-#{f.data.id}"
+                  c.setAttribute "stroke-width", "5"
+                  c.setAttribute "stroke", "#000"
+                                    
+                  $(c).bind "click", (event) ->
+                     id = Number event.currentTarget.id.split('-').pop()
+                     segments.get(id).toggle()
+                                        
+    map.add(layer)
+    # reorder the layers: we want SegmentLayer to be under GeoPointLayer
+    #                     and we want both to be under the zoom buttons
+    $('#osm-layer').after($('#segment-layer'))
   change: ->
-    console.log "change: #{@collection.length}"
+    # TODO

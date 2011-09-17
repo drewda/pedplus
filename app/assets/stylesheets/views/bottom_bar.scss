@@ -1,0 +1,24 @@
+#bottom-bar {
+  position: absolute;
+  height: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+
+  .object-kind {
+    float: left;
+    width: 200px;
+  }
+  
+  .object-details {
+    float: left;
+    width: 300px;
+  }
+
+  .object-actions {
+    float: left;
+    .edit-actions {
+      display: none;
+    }
+  }
+}

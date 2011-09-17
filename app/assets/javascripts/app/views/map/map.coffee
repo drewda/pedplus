@@ -1,6 +1,10 @@
 class App.Views.Map extends Backbone.View
   initialize: ->
     @render()
+    masterRouter.bind "route:mapView", @mapViewMode
+    masterRouter.bind "route:mapEdit", @mapEditMode
+    masterRouter.bind "route:mapMoveGeoPoint", @mapMoveGeoPointMode
+    masterRouter.bind "route:mapConnectGeoPoint", @mapConnectGeoPointMode
   render: ->
     window.po = org.polymaps
  
@@ -27,3 +31,61 @@ class App.Views.Map extends Backbone.View
           lat: position.coords.latitude
           lon: position.coords.longitude
         map.zoom 16
+  mapViewMode: ->
+    $('#osm-layer').unbind 'click'
+  mapEditMode: ->
+    $('#osm-layer').bind 'click', (event) =>
+      x = event.pageX - $('#map-area').offset().left
+      y = event.pageY - $('#map-area').offset().top
+      pointLocation = map.pointLocation
+        x: x
+        y: y
+      newGeoPoint = geo_points.create
+                       longitude: pointLocation.lon
+                       latitude: pointLocation.lat
+                       # TODO: add project association -- in Rails data model as well
+      # if a GeoPoint is currently selected, we will create a Segment
+      # to connect that GeoPoint with the new GeoPoint
+      if geo_points.selected().length == 1
+        previousGeoPoint = geo_points.selected()[0]
+        newSegment = segments.create
+          ped_project_id: 0 # TODO: add project association
+        ,
+          success: -> 
+            geo_point_on_segments.create
+              geo_point_id: previousGeoPoint.id
+              segment_id: newSegment.id
+            ,
+              success: ->
+                geo_point_on_segments.create
+                  geo_point_id: newGeoPoint.id
+                  segment_id: newSegment.id
+                ,
+                  success: ->
+                    newGeoPoint.select()
+                    masterRouter.fetchData()
+  mapMoveGeoPointMode: ->
+    $('#osm-layer').unbind 'click' # disable editing mode
+    
+    geoPointId = arguments[0]
+    
+    $('#osm-layer').bind 'click', (event) =>
+      x = event.pageX - $('#map-area').offset().left
+      y = event.pageY - $('#map-area').offset().top
+      pointLocation = map.pointLocation
+        x: x
+        y: y
+      geo_points.selected()[0].save
+        longitude: pointLocation.lon
+        latitude: pointLocation.lat
+      ,
+        success: (model, response) ->
+          $('#geo-point-move-button').attr("checked", false).button "refresh"
+          masterRouter.navigate "map/edit", true
+        error: (model, response) ->
+          console.log "ERROR moving GeoPoint"
+  mapConnectGeoPointMode: ->
+    $('#osm-layer').unbind 'click'
+    
+    geoPointId = arguments[0]
+    console.log "connecting GeoPoint: #{geoPointId}"

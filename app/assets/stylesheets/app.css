@@ -1,3 +1,7 @@
+/*
+ *= require_tree ./views
+*/
+
 html, body, #container, #side-bar, #main-area {
   height: 100%;
   margin: 0;
@@ -52,15 +56,9 @@ html, body, .container, #accordion {
   bottom: 0;
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* to disable tap highlighting */
 }
-#bottom-bar {
-  position: absolute;
-  height: 70px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: #CCC;
+.dialog {
+  display: none;
 }
-
 .compass .back {
   fill: #eee;
   fill-opacity: .8;

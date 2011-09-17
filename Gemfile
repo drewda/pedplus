@@ -8,6 +8,7 @@ gem "geocoder"
 
 gem 'slim'
 gem 'dynamic_form'
+gem 'ejs'
 
 gem 'jquery-rails'
 

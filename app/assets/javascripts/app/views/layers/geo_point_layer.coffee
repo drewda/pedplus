@@ -1,41 +1,30 @@
 class App.Views.GeoPointLayer extends Backbone.View
   initialize: ->
-    @collection.bind 'reset', @render, this
+    @collection.bind 'reset',  @render, this
     @collection.bind 'change', @change, this
-  transform: (d) ->
-    lp = map.locationPoint
-      lon: d.get('longitude')
-      lat: d.get('latitude')
-    return "translate(#{lp.x}, #{lp.y})"
   render: ->
-    console.log "rendering GeoPointLayer: #{@collection.length}"
-    
-    layer = d3.select("#map-area svg").insert "svg:g", ".compass"
-    layer.attr "id", "geo-point-layer"
-    
-    map.on "move", @redraw
-    map.on "resize", @redraw
-      
-    @change()
+    $('#geo-point-layer').remove() if $('#geo-point-layer')
+    layer = po.geoJson()
+              .features(@collection.map (s) -> s.geojson())
+              .id("geo-point-layer")
+              .on "load", (e) ->
+                for f in e.features
+                  c = f.element
+                  g = f.element = po.svg("g")
+                  
+                  c.setAttribute "class", "geo-point-circle"
+                  c.setAttribute "id", "geo-point-circle-#{f.data.id}"
+                  if geo_points.get(f.data.id).selected
+                    c.setAttribute "r", "12"
+                    c.setAttribute "fill", "#55ee33"
+                  else
+                    c.setAttribute "r", "8"
+                    c.setAttribute "fill", "#000"
+                                    
+                  $(c).bind "click", (event) ->
+                     id = Number event.currentTarget.id.split('-').pop()
+                     geo_points.get(id).toggle()
+                                        
+    map.add(layer)
   change: ->
-    console.log "changing GeoPointLayer: #{@collection.length}"
-    
-    marker = d3.select('#geo-point-layer').selectAll("g")
-                  .data(@collection.models)
-                  .enter().append("svg:g")
-                  .attr("transform", @transform)
-    
-    marker.append("svg:circle")
-        .attr("fill", '#000000')
-        .attr("r", "8")
-        .attr "id", (d) ->
-          "geo-point-circle-#{d.id}"
-        .on 'click', (d) ->
-          d.toggle()
-  redraw: ->
-    d3.select('#geo-point-layer').selectAll("g").attr "transform", (d) =>
-      lp = map.locationPoint
-        lon: d.get('longitude')
-        lat: d.get('latitude')
-      return "translate(#{lp.x}, #{lp.y})"
-    
+    # TODO

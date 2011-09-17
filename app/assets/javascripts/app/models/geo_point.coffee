@@ -21,6 +21,10 @@ class App.Models.GeoPoint extends Backbone.RelationalModel
           parseFloat @get "latitude"
         ]
   select: ->
+    # only want one GeoPoint or Segment selected at a time
+    @collection.selectNone()
+    segments.selectNone()
+    
     @selected = true
     $("#geo-point-circle-#{@id}").attr("fill", "#55ee33").attr("r", "12")
     @collection.trigger "selection"
@@ -31,5 +35,22 @@ class App.Models.GeoPoint extends Backbone.RelationalModel
   toggle: ->
     if @selected
       @deselect()
+    else if location.hash.startsWith('#map/edit/geo_point/connect')
+      currentGeoPoint = this
+      newSegment = segments.create
+        ped_project_id: 0 # TODO: add project association
+      ,
+        success: -> 
+          geo_point_on_segments.create
+            geo_point_id: currentGeoPoint.id
+            segment_id: newSegment.id
+          ,
+            success: ->
+              geo_point_on_segments.create
+                geo_point_id: geo_points.selected()[0].id
+                segment_id: newSegment.id
+              ,
+                success: ->
+                  masterRouter.fetchData()
     else
       @select()

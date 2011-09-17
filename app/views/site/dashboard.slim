@@ -23,10 +23,10 @@
         label
           | Map Editing
           #editing-mode
-            input#editing-mode-off(type="radio" name="editing-mode" value="off")
-            label(for="editing-mode-off") Off
-            input#editing-mode-on(type="radio" name="editing-mode" value="on")
-            label(for="editing-mode-on") On
+            input#editing-mode-off(type="radio" name="editing-mode" value="view")
+            label(for="editing-mode-off") View
+            input#editing-mode-on(type="radio" name="editing-mode" value="edit")
+            label(for="editing-mode-on") Edit
       h2
         a(href="#") Measure
       #measure-tab
@@ -37,5 +37,4 @@
         p modify stuff
   #main-area
     #map-area
-    #bottom-bar
-      p bottom bar stuff
+    #bottom-bar.ui-widget-header.ui-corner-all

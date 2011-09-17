@@ -22,3 +22,20 @@ class App.Models.Segment extends Backbone.RelationalModel
           [ Number @geo_points()[1].get 'longitude'
             Number @geo_points()[1].get 'latitude' ]
         ]
+  select: ->
+    # only want one GeoPoint or Segment selected at a time
+    @collection.selectNone()
+    geo_points.selectNone()
+    
+    @selected = true
+    $("#segment-line-#{@id}").attr("stroke", "#55ee33").attr("stroke-width", "9")
+    @collection.trigger "selection"
+  deselect: ->
+    @selected = false
+    $("#segment-line-#{@id}").attr("stroke", "#000000").attr("stroke-width", "5")
+    @collection.trigger "selection"
+  toggle: ->
+    if @selected
+      @deselect()
+    else
+      @select()
