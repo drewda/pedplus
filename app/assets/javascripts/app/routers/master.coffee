@@ -14,6 +14,8 @@ class App.Routers.Master extends Backbone.Router
     window.segments = new App.Collections.Segments
     window.geo_points = new App.Collections.GeoPoints
     window.geo_point_on_segments = new App.Collections.GeoPointOnSegments
+    
+    new App.Views.Spinner
 
     @fetchData()
       
