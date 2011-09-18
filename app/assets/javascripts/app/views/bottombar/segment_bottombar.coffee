@@ -16,7 +16,7 @@ class App.Views.SegmentBottomBar extends Backbone.View
     $('#bottom-bar').html @template segments.selected()[0].toJSON() 
     
     # draw button
-    $('.object-actions .edit-actions').show().button()
+    $('.object-actions .edit-actions').show().buttonset()
     $('#segment-delete-button').button "option", "icons"
       primary: 'ui-icon-trash'
   
