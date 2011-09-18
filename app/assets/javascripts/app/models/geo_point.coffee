@@ -7,6 +7,7 @@ class App.Models.GeoPoint extends Backbone.RelationalModel
     collectionType: 'App.Collections.GeoPointOnSegments'
     reverseRelation:
       key: 'geo_point'
+      includeInJSON: 'id'
   ]
   segments: ->
     @get('geo_point_on_segments').map (gpos) => gpos.get 'segment'
