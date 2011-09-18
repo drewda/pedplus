@@ -6,5 +6,14 @@
 </div>
 
 <span class="object-actions">
-  <button id="segment-delete-button">delete</button>
+  <div class="edit-actions">
+    <input type="checkbox" id="segment-delete-button"/><label for="segment-delete-button">delete</label>
+  </div>
 </span>
+
+<div class="dialog" id="segment-delete-confirm" title="Delete this segment?">
+	<p>
+	  <span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 20px 0;"></span>
+	  Deleting this segment will also remove all associated measurements.
+	</p>
+</div>
