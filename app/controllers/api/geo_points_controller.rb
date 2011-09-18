@@ -7,6 +7,14 @@ class Api::GeoPointsController < Api::ApiController
     end
   end
   
+  def show
+    @geo_point = GeoPoint.find(params[:id])
+    
+    respond_to do |format|
+      format.json { render :json => @geo_point.to_json(:include => [:geo_point_on_segments]) }
+    end
+  end
+  
   def create
     @geo_point = GeoPoint.new params[:geo_point]
     

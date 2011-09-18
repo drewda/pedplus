@@ -7,6 +7,14 @@ class Api::SegmentsController < Api::ApiController
     end
   end
   
+  def show
+    @segment = Segment.find(params[:id])
+    
+    respond_to do |format|
+      format.json { render :json => @segment.to_json(:include => [:geo_point_on_segments]) }
+    end
+  end
+  
   def create
     @segment = Segment.new params[:segment]
     
