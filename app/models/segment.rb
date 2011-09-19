@@ -4,7 +4,13 @@ class Segment < ActiveRecord::Base
   has_many :segment_in_scenarios
   has_many :scenarios, :through => :segment_in_scenarios
   has_many :geo_points, :through => :geo_point_on_segments
-  has_many :geo_point_on_segments, :dependent => :destroy
+  has_many :geo_point_on_segments
   
   accepts_nested_attributes_for :geo_point_on_segments
+  
+  after_destroy :destroy_geo_point_on_segments
+  
+  def destroy_geo_point_on_segments
+    geo_point_on_segments.delete_all
+  end
 end
