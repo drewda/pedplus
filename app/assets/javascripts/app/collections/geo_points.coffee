@@ -2,7 +2,7 @@ class App.Collections.GeoPoints extends Backbone.Collection
   model: App.Models.GeoPoint
   url: '/api/geo_points'
   initialize: ->
-    @bind "change", @change()
+    @bind "change", @change
   change: ->
     console.log 'geo_points updated'
   geojson: ->
