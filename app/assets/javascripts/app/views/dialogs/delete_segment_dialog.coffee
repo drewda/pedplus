@@ -7,9 +7,9 @@ class App.Views.DeleteSegmentDialog extends Backbone.View
     			modal: true
     			buttons:
     				"Delete": ->
-    				  geoPoint = segments.selected()[0]
+    				  segment = segments.selected()[0]
     				  segments.selectNone()
-    				  geoPoint.destroy
+    				  segment.destroy
     				    success: (model, response) ->
     				      # uncheck the delete button
         					$('#segment-delete-button').attr("checked", false).button "refresh"
