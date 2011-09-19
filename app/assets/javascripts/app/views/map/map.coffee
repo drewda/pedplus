@@ -10,7 +10,10 @@ class App.Views.Map extends Backbone.View
  
     window.map = po.map()
        .container(document.getElementById("map-area").appendChild(po.svg("svg")))
-       .add(po.interact())
+       .add(po.drag())
+       .add(po.wheel())
+       .add(po.touch())
+       .add(po.arrow())
 
     osmLayer = po.image()
                 .url(po.url('''http://{S}tile.cloudmade.com
