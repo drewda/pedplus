@@ -40,4 +40,5 @@ class App.Views.GeoPointBottomBar extends Backbone.View
       new App.Views.DeleteGeoPointDialog
   mapConnectGeoPoint: ->
     if $('#geo-point-connect-button').attr("checked") != "checked"
+      $('#geo-point-connect-button').attr("checked", true).button "refresh"
       
