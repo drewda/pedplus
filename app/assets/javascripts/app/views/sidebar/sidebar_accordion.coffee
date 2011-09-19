@@ -35,3 +35,5 @@ class App.Views.SidebarAccordion extends Backbone.View
             window.location.hash = "measure"
           when 4
             window.location.hash = "modify"
+    $(window).resize =>
+      $('#accordion').accordion("resize")
