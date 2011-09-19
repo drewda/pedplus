@@ -10,6 +10,11 @@ class App.Views.SegmentLayer extends Backbone.View
               .features(@collection.map (s) -> s.geojson())
               .id("segment-layer")
               .on "load", (e) ->
+                connectedSegmentIds = []
+                if location.hash.startsWith('#map/edit/geo_point/connect')
+                  geoPointId = location.hash.split('/').pop()
+                  connectedSegmentIds = _.map geo_points.get(geoPointId).segments(), (s) => s.id
+                
                 for f in e.features
                   c = f.element
                   g = f.element = po.svg("g")
@@ -17,11 +22,19 @@ class App.Views.SegmentLayer extends Backbone.View
                   c.setAttribute "class", "segment-line"
                   c.setAttribute "id", "segment-line-#{f.data.id}"
                   c.setAttribute "stroke-width", "5"
-                  c.setAttribute "stroke", "#000"
+                  
+                  if connectedSegmentIds.length > 0
+                    if _.include connectedSegmentIds, f.data.id
+                      c.setAttribute "stroke", "#429BF8"
+                      connectedSegmentIds = _.without connectedSegmentIds, f.data.id
+                    else
+                      c.setAttribute "stroke", "#000"
+                  else
+                    c.setAttribute "stroke", "#000"
                                     
                   $(c).bind "click", (event) ->
-                     id = Number event.currentTarget.id.split('-').pop()
-                     segments.get(id).toggle()
+                    id = Number event.currentTarget.id.split('-').pop()
+                    segments.get(id).toggle()
                                         
     map.add(layer)
     # reorder the layers: we want SegmentLayer to be under GeoPointLayer

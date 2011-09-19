@@ -88,4 +88,7 @@ class App.Views.Map extends Backbone.View
     $('#osm-layer').unbind 'click'
     
     geoPointId = arguments[0]
-    console.log "connecting GeoPoint: #{geoPointId}"
+    
+    $("#geo-point-circle-#{geoPointId}").attr "fill", "#524CEF"
+    for s in geo_points.get(geoPointId).segments()
+      $("#segment-line-#{s.id}").attr "stroke", "#429BF8"

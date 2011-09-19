@@ -17,6 +17,8 @@ class App.Views.GeoPointLayer extends Backbone.View
                   if geo_points.get(f.data.id).selected
                     c.setAttribute "r", "12"
                     c.setAttribute "fill", "#55ee33"
+                    if location.hash.startsWith('#map/edit/geo_point/connect')
+                      c.setAttribute "fill", "#524CEF"
                   else
                     c.setAttribute "r", "8"
                     c.setAttribute "fill", "#000"
