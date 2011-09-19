@@ -3,6 +3,7 @@ class App.Views.GeoPointBottomBar extends Backbone.View
     @render()
     masterRouter.bind "route:mapView", @mapViewMode, this
     masterRouter.bind "route:mapEdit", @mapEditMode, this
+    masterRouter.bind "route:mapConnectGeoPoint", @mapConnectGeoPoint, this
   template: JST["app/templates/bottombar/geo_point"]
   render: ->
     switch location.hash
@@ -37,3 +38,6 @@ class App.Views.GeoPointBottomBar extends Backbone.View
       
     $('#geo-point-delete-button').bind "click", (event) ->
       new App.Views.DeleteGeoPointDialog
+  mapConnectGeoPoint: ->
+    if $('#geo-point-connect-button').attr("checked") != "checked"
+      

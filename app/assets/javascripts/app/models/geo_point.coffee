@@ -11,6 +11,12 @@ class App.Models.GeoPoint extends Backbone.RelationalModel
   ]
   segments: ->
     @get('geo_point_on_segments').map (gpos) => gpos.get 'segment'
+  connectedGeoPoints: ->
+    connectedGeoPoints = []
+    _.each @segments(), (s) =>
+      _.each s.geo_points(), (gp) =>
+        connectedGeoPoints.push(gp) if gp != this
+    return connectedGeoPoints
   geojson: ->
     geojson = 
       id: @attributes.id
@@ -34,10 +40,24 @@ class App.Models.GeoPoint extends Backbone.RelationalModel
     $("#geo-point-circle-#{@id}").svg().removeClass("selected").attr("r", "8")
     @collection.trigger "selection"
   toggle: ->
-    if @selected
+    if location.hash.startsWith '#map/edit/geo_point/connect'
+      if geo_points.selected()[0] == this
+        masterRouter.navigate("map/edit", true)
+      else
+        @drawSegmentToGeoPoint geo_points.selected()[0]
+    else if @selected and location.hash.startsWith '#map/edit'
+      masterRouter.navigate("map/edit/geo_point/connect/#{@id}", true)
+    else if @selected
       @deselect()
-    else if location.hash.startsWith('#map/edit/geo_point/connect')
-      currentGeoPoint = this
+    else
+      @select()
+  drawSegmentToGeoPoint: (targetGeoPoint) ->
+    console.log "drawSegmentToGeoPoint: #{targetGeoPoint.id} -- #{this.id} -- #{_.include @connectedGeoPoints(), targetGeoPoint}"
+    currentGeoPoint = this
+    
+    # check to see if this connection already exists
+    if not _.include currentGeoPoint.connectedGeoPoints(), targetGeoPoint
+      # create the Segment and the two GeoPointOnSegment's
       newSegment = segments.create
         ped_project_id: 0 # TODO: add project association
       ,
@@ -48,10 +68,8 @@ class App.Models.GeoPoint extends Backbone.RelationalModel
           ,
             success: ->
               geo_point_on_segments.create
-                geo_point_id: geo_points.selected()[0].id
+                geo_point_id: targetGeoPoint.id
                 segment_id: newSegment.id
               ,
                 success: ->
                   masterRouter.fetchData()
-    else
-      @select()
