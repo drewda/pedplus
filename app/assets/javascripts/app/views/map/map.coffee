@@ -37,6 +37,10 @@ class App.Views.Map extends Backbone.View
   mapViewMode: ->
     $('#osm-layer').unbind 'click'
   mapEditMode: ->
+    # remove coloring -- if coming from connectGeoPointMode
+    $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
+    $(".segment-line.connected").svg().removeClass("connected")
+    
     $('#osm-layer').bind 'click', (event) =>
       x = event.pageX - $('#map-area').offset().left
       y = event.pageY - $('#map-area').offset().top
@@ -92,6 +96,6 @@ class App.Views.Map extends Backbone.View
     
     geoPointId = arguments[0]
     
-    $("#geo-point-circle-#{geoPointId}").attr "fill", "#524CEF"
+    $("#geo-point-circle-#{geoPointId}").svg().addClass "connected"
     for s in geo_points.get(geoPointId).segments()
-      $("#segment-line-#{s.id}").attr "stroke", "#429BF8"
+      $("#segment-line-#{s.id}").svg().addClass "connected"

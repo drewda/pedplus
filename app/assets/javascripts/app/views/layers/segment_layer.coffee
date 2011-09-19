@@ -25,12 +25,8 @@ class App.Views.SegmentLayer extends Backbone.View
                   
                   if connectedSegmentIds.length > 0
                     if _.include connectedSegmentIds, f.data.id
-                      c.setAttribute "stroke", "#429BF8"
+                      c.setAttribute "class", "segment-line connected"
                       connectedSegmentIds = _.without connectedSegmentIds, f.data.id
-                    else
-                      c.setAttribute "stroke", "#000"
-                  else
-                    c.setAttribute "stroke", "#000"
                                     
                   $(c).bind "click", (event) ->
                     id = Number event.currentTarget.id.split('-').pop()

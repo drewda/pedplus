@@ -29,12 +29,8 @@ class App.Views.GeoPointBottomBar extends Backbone.View
       geoPointId = geo_points.selected()[0].id
       if $('#geo-point-connect-button').attr("checked") == "checked"
         masterRouter.navigate("map/edit/geo_point/connect/#{geoPointId}", true)
-
       else
         masterRouter.navigate("map/edit", true)
-        $("#geo-point-circle-#{geoPointId}").attr("fill", "#55ee33")
-        for s in geo_points.get(geoPointId).segments()
-          $("#segment-line-#{s.id}").attr "stroke", "#000000"
     
     $('#geo-point-move-button').bind "click", (event) ->
       masterRouter.navigate("map/edit/geo_point/move/#{geo_points.selected()[0].id}", true)

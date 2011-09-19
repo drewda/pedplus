@@ -29,11 +29,11 @@ class App.Models.Segment extends Backbone.RelationalModel
     geo_points.selectNone()
     
     @selected = true
-    $("#segment-line-#{@id}").attr("stroke", "#55ee33").attr("stroke-width", "9")
+    $("#segment-line-#{@id}").svg().addClass('selected').attr("stroke-width", "9")
     @collection.trigger "selection"
   deselect: ->
     @selected = false
-    $("#segment-line-#{@id}").attr("stroke", "#000000").attr("stroke-width", "5")
+    $("#segment-line-#{@id}").svg().removeClass('selected').attr("stroke-width", "5")
     @collection.trigger "selection"
   toggle: ->
     if @selected

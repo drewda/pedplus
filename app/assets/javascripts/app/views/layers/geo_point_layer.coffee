@@ -16,12 +16,12 @@ class App.Views.GeoPointLayer extends Backbone.View
                   c.setAttribute "id", "geo-point-circle-#{f.data.id}"
                   if geo_points.get(f.data.id).selected
                     c.setAttribute "r", "12"
-                    c.setAttribute "fill", "#55ee33"
                     if location.hash.startsWith('#map/edit/geo_point/connect')
-                      c.setAttribute "fill", "#524CEF"
+                      c.setAttribute "class", "geo-point-circle connected"
+                    else
+                      c.setAttribute "class", "geo-point-circle selected"
                   else
                     c.setAttribute "r", "8"
-                    c.setAttribute "fill", "#000"
                                     
                   $(c).bind "click", (event) ->
                      id = Number event.currentTarget.id.split('-').pop()

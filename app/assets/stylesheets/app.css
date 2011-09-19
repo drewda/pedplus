@@ -48,14 +48,6 @@ html, body, .container, #accordion {
   right: 0;
   bottom: 0;
 }
-#map-area {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  -webkit-tap-highlight-color: rgba(0,0,0,0); /* to disable tap highlighting */
-}
 .dialog {
   display: none;
 }
