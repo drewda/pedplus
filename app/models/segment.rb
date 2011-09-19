@@ -8,9 +8,11 @@ class Segment < ActiveRecord::Base
   
   accepts_nested_attributes_for :geo_point_on_segments
   
-  after_destroy :destroy_geo_point_on_segments
+  before_destroy :clean_before_destroy
   
-  def destroy_geo_point_on_segments
-    geo_point_on_segments.delete_all
+  def clean_before_destroy
+    self.geo_point_on_segments.each do |gpos|
+      gpos.delete()
+    end
   end
 end
