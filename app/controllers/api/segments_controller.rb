@@ -34,9 +34,9 @@ class Api::SegmentsController < Api::ApiController
     respond_to do |format|
       if @segment.update_attributes(params[:segment])
         flash[:notice] = 'Segment was successfully updated.'
-        format.json  { head :ok }
+        format.json  { render :json => @segment }
       else
-        format.json  { render :xml => @segment.errors, :status => :unprocessable_entity }
+        format.json  { render :json => @segment.errors, :status => :unprocessable_entity }
       end
     end
   end

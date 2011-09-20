@@ -34,9 +34,9 @@ class Api::GeoPointsController < Api::ApiController
     respond_to do |format|
       if @geo_point.update_attributes(params[:geo_point])
         flash[:notice] = 'GeoPoint was successfully updated.'
-        format.json  { head :ok }
+        format.json  { render :json => @geo_point }
       else
-        format.json  { render :xml => @geo_point.errors, :status => :unprocessable_entity }
+        format.json  { render :json => @geo_point.errors, :status => :unprocessable_entity }
       end
     end
   end
