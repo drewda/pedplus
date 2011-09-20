@@ -88,6 +88,7 @@ class App.Views.Map extends Backbone.View
       ,
         success: (model, response) ->
           $('#geo-point-move-button').attr("checked", false).button "refresh"
+          masterRouter.fetchData()
           masterRouter.navigate "map/edit", true
         error: (model, response) ->
           console.log "ERROR moving GeoPoint"
