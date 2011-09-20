@@ -4,4 +4,4 @@
 
 require File.expand_path('../config/application', __FILE__)
 
-Urbped::Application.load_tasks
+Pedplus::Application.load_tasks

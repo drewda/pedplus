@@ -2,7 +2,7 @@
 require File.expand_path('../application', __FILE__)
 
 # Initialize the rails application
-Urbped::Application.initialize!
+Pedplus::Application.initialize!
 
 ActionMailer::Base.smtp_settings = {
   :user_name => "s3sol.com",

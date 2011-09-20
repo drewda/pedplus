@@ -1,4 +1,4 @@
-Urbped::Application.routes.draw do
+Pedplus::Application.routes.draw do
   root :to => 'site#dashboard'
   
   namespace :api do
