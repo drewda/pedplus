@@ -72,4 +72,6 @@ class App.Models.GeoPoint extends Backbone.RelationalModel
                 segment_id: newSegment.id
               ,
                 success: ->
-                  masterRouter.fetchData()
+                  masterRouter.fetchData
+                    success: ->
+                      geo_points.get(targetGeoPoint.id).toggle()

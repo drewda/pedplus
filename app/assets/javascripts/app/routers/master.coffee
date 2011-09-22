@@ -31,11 +31,13 @@ class App.Routers.Master extends Backbone.Router
     window.segment_layer = new App.Views.SegmentLayer
       collection: segments
 
-  fetchData: ->
+  fetchData: (functions) ->
     # order the fetching of the data, because Segment's depend on GeoPoint's
     geo_points.fetch
       success: ->
-        segments.fetch()
+        segments.fetch
+          success: ->
+            functions.success() if functions? and functions.success?
         
   routes:
     "user"                                     : "user"

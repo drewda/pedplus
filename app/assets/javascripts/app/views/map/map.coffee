@@ -69,8 +69,9 @@ class App.Views.Map extends Backbone.View
                   segment_id: newSegment.id
                 ,
                   success: ->
-                    newGeoPoint.select()
-                    masterRouter.fetchData()
+                    masterRouter.fetchData
+                      success: ->
+                        geo_points.get(newGeoPoint.id).select()
   mapMoveGeoPointMode: ->
     $('#osm-layer').unbind 'click' # disable editing mode
     
@@ -87,9 +88,12 @@ class App.Views.Map extends Backbone.View
         latitude: pointLocation.lat
       ,
         success: (model, response) ->
-          $('#geo-point-move-button').attr("checked", false).button "refresh"
-          masterRouter.fetchData()
-          masterRouter.navigate "map/edit", true
+          masterRouter.fetchData
+            success: ->
+              geo_points.get(model.id).select()
+              $('#osm-layer').unbind 'click'
+              $('#geo-point-move-button').attr("checked", false).button "refresh"
+              masterRouter.navigate "map/edit", true
         error: (model, response) ->
           console.log "ERROR moving GeoPoint"
   mapConnectGeoPointMode: ->
