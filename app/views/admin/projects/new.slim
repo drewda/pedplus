@@ -1,0 +1,23 @@
+- content_for :body do
+  = form_for([:admin, @project]) do |f|
+    h1 Create Project
+        
+    - if f.error_messages
+      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+    fieldset
+      .clearfix
+        = f.label :organization
+        .input
+          = f.collection_select(:organization_id, Organization.all, :id, :name)
+      .clearfix
+        = f.label :name
+        .input
+          = f.text_field :name
+      .clearfix
+        = f.label :kind
+        .input
+          = f.text_field :kind
+
+    .row(align="right")
+      = f.submit "Create Project", {:class => "btn primary"}
+= render :template => '/admin/layout'

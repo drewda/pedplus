@@ -1,22 +1,13 @@
 class BaseDataModel < ActiveRecord::Migration
-  def change
-    create_table :ped_projects, :force => true do |t|
-      t.string :name
-      t.timestamps
-    end
-    
+  def change  
     create_table :scenarios, :force => true do |t|
-      t.integer :ped_project_id
       t.string :name
       t.timestamps
     end
-    add_index :scenarios, :ped_project_id
     
     create_table :segments, :force => true do |t|
-      t.integer :ped_project_id
       t.timestamps
     end
-    add_index :segments, :ped_project_id
     
     create_table :geo_points, :force => true do |t|
       t.decimal :latitude, :precision => 15, :scale => 10
@@ -53,7 +44,6 @@ class BaseDataModel < ActiveRecord::Migration
       t.integer :segment_id
       t.datetime :start
       t.datetime :stop
-      t.integer :user_id
       t.string :status
       t.timestamps
     end

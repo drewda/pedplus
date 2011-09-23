@@ -1,0 +1,61 @@
+- content_for :body do
+  = form_for([:admin, @user]) do |f|
+    h1 Create User
+        
+    - if f.error_messages
+      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+    fieldset
+      .clearfix
+        = f.label :first_name
+        .input
+          = f.text_field :first_name
+      .clearfix
+        = f.label :last_name
+        .input
+          = f.text_field :last_name
+      .clearfix
+        = f.label :email
+        .input
+          = f.text_field :email
+      .clearfix
+        = f.label :password
+        .input
+          = f.password_field :password
+      .clearfix
+        = f.label :password_confirmation
+        .input
+          = f.password_field :password_confirmation
+      .clearfix
+        = f.label :phone_number
+        .input
+          = f.telephone_field :phone_number
+      .clearfix
+        = f.label :orgup_admin, "Is an OrgUP administrator?"
+        .input
+          = f.check_box :orgup_admin
+      .clearfix
+        = f.label :orgup_api, "Has access to OrgUP API?"
+        .input
+          = f.check_box :orgup_api
+
+    .row
+      .span4.columns
+        .clearfix
+          = f.label :organization
+          .input
+            = f.collection_select(:organization_id, Organization.all, :id, :name)
+      .span3.offset5.columns(align="right")
+        h6 Permissions
+      .span2.columns(align="center")
+        h5 
+          ' Billing?
+          = f.check_box :organization_billing
+      .span2.columns(align="center")
+        h5 
+          ' Manager?
+          = f.check_box :organization_manager
+          
+    .row(align="right")
+      = f.submit "Create User", {:class => "btn primary"}
+      
+= render :template => '/admin/layout'

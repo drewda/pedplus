@@ -1,0 +1,32 @@
+- content_for :body do
+  = form_for([:admin, @subscription]) do |f|
+    h1 Create Subscription
+        
+    - if f.error_messages
+      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+    fieldset
+      .clearfix
+        = f.label :name
+        .input
+          = f.text_field :name
+      .clearfix
+        = f.label :uses_ped
+        .input
+          = f.check_box :uses_ped
+      .clearfix
+        = f.label :uses_sign
+        .input
+          = f.check_box :uses_sign
+      .clearfix
+        = f.label :max_users
+        .input
+          = f.text_field :max_users
+      .clearfix
+        = f.label :max_projects
+        .input
+          = f.text_field :max_projects
+
+    .row(align="right")
+       = f.submit "Save Changes", {:class => "btn primary"}
+     
+= render :template => '/admin/layout'

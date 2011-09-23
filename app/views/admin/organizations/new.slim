@@ -1,0 +1,66 @@
+- content_for :body do
+  = form_for([:admin, @organization]) do |f|
+    h1 Create Organization
+
+    - if f.error_messages
+      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+    fieldset
+      .clearfix
+        = f.label :name
+        .input
+          = f.text_field :name
+      .clearfix
+        = f.label :url
+        .input
+          = f.url_field :url
+      .clearfix
+        = f.label :address
+        .input
+          = f.text_field :address
+      .clearfix
+        = f.label :city
+        .input
+          = f.text_field :city
+      .clearfix
+        = f.label :state
+        .input
+          = f.text_field :state
+      .clearfix
+        = f.label :postal_code
+        .input
+          = f.text_field :postal_code
+      .clearfix
+        = f.label :country
+        .input
+          = f.country_select(:country, ["United States"])
+    
+      h2 Subscription
+      = f.collection_select(:subscription_id, Subscription.all, :id, :name)
+      
+      h2 Users
+      = f.fields_for :organization_members, @organization.organization_members do |om_fields|
+        .row
+          .span7.columns
+            .clearfix
+              = label(:organization_member, :user_id)
+              .input
+                = om_fields.collection_select(:user_id, User.all, :id, :full_name_and_email)
+          .span3.columns(align="right")
+            h6 Permissions
+          .span2.columns(align="center")
+            h5 
+              ' View?
+              = om_fields.check_box :view
+          .span2.columns(align="center")
+            h5 
+              ' Bill?
+              = om_fields.check_box :bill
+          .span2.columns(align="center")
+            h5 
+              ' Manage?
+              = om_fields.check_box :manage
+              
+      .row(align="right")
+        = f.submit "Create Organization", {:class => "btn primary"}
+
+= render :template => '/admin/layout'

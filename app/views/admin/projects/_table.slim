@@ -1,0 +1,19 @@
+.row
+  .span13.columns
+    h1 Projects
+  .span3.columns(align="right")
+    = link_to "Create Project", new_admin_project_path, :class => "btn"
+table.common-table
+  thead
+    tr
+      th Name
+      th Kind
+      th Organization
+      th Members(s)
+  tbody
+    - @projects.each do |p|
+      tr
+        td = link_to p.name, admin_project_path(p.id)
+        td = p.kind
+        td = link_to p.organization.name, admin_organization_path(p.organization.id)
+        td = p.project_members.collect{|m| m.user.full_name}.to_sentence

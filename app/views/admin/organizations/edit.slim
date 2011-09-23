@@ -1,0 +1,83 @@
+- content_for :body do
+  = form_for([:admin, @organization]) do |f|
+    .row
+      .span13.columns
+        h1 = @organization.name
+      .span3.columns(align="right")
+        = f.submit "Save Changes", {:class => "btn primary"}
+    ul.tabs
+      li 
+        = link_to "View", admin_organization_path(@organization.id)
+      li.active
+        a Edit
+
+    - if f.error_messages
+      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+    fieldset
+      .clearfix
+        = f.label :name
+        .input
+          = f.text_field :name, :class => 'large'
+      .clearfix
+        = f.label :url
+        .input
+          = f.url_field :url, :class => 'large'
+      .clearfix
+        = f.label :address
+        .input
+          = f.text_field :address, :class => 'large'
+      .clearfix
+        = f.label :city
+        .input
+          = f.text_field :city, :class => 'large'
+      .clearfix
+        = f.label :state
+        .input
+          = f.text_field :state, :class => 'large'
+      .clearfix
+        = f.label :postal_code
+        .input
+          = f.text_field :postal_code, :class => 'large'
+      .clearfix
+        = f.label :country
+        .input
+          = f.country_select(:country, ["United States"])
+    
+      h2 Subscription
+      = f.collection_select(:subscription_id, Subscription.all, :id, :name)
+
+    h2 Users
+    table.common-table
+      thead
+        tr
+          th Name
+          th E-mail Address
+          th Billing?
+          th Manager?
+      tbody
+        - @organization.users.each do |u|
+          = f.fields_for :users, u do |u_fields|
+            tr
+              td 
+                strong = link_to u.full_name, admin_user_path(u.id)
+              td = u.email
+              td = u_fields.check_box :organization_billing
+              td = u_fields.check_box :organization_manager
+    
+    h2 Projects
+    table.common-table
+      thead
+        tr
+          th Name
+          th Kind
+          th Created
+      tbody
+        - @organization.projects.each do |p|
+          tr
+            td = link_to p.name, admin_project_path(p.id)
+            td = p.kind
+            td = p.created_at
+  .well(align="left")
+     = button_to "Delete Organization", admin_organization_path(@organization.id), :method => :delete, :class => "btn danger", :confirm => "Are you sure you want to delete #{@organization.name}?"
+
+= render :template => '/admin/layout'

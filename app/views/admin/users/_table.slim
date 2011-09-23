@@ -1,0 +1,17 @@
+.row
+  .span13.columns
+    h1 Users
+  .span3.columns(align="right")
+    = link_to "Create User", new_admin_user_path, :class => "btn"
+table.common-table
+  thead
+    tr
+      th Name
+      th E-mail Address
+      th Organization
+  tbody
+    - @users.each do |u|
+      tr
+        td = link_to u.full_name, admin_user_path(u.id)
+        td = u.email
+        td = u.organization.name

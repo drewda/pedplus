@@ -1,0 +1,19 @@
+.row
+  .span13.columns
+    h1 Organizations
+  .span3.columns(align="right")
+    = link_to "Create Organization", new_admin_organization_path, :class => "btn"
+table.common-table
+  thead
+    tr
+      th Name
+      th City, State, Country
+      th Subscription
+  tbody
+    - @organizations.each do |o|
+      tr
+        td = link_to o.name, admin_organization_path(o.id)
+        td = "#{o.city}, #{o.state}, #{o.country}"
+        td
+          - if o.subscription
+            = link_to o.subscription.name, admin_subscription_path(o.subscription.id)

@@ -1,0 +1,41 @@
+- content_for :body do
+  #container
+    #side-bar
+      #side-top
+        | PedPlus icon
+      #accordion
+        h2
+          a(href="#user") #{current_user.full_name}
+        #user-tab
+          a.button#account-settings-button(href="#") Account Settings
+          = link_to "Sign Out", destroy_user_session_path, :method => :delete, :id => "sign-out-button", :class => "button"
+        h2
+          a#project-tab-link(href="#") Project
+        #project-tab
+          p select project
+          p switch project
+          p rename project
+        h2
+          a(href="#") Map
+        #map-tab
+          label
+            | Map Editing
+            #editing-mode
+              input#editing-mode-off(type="radio" name="editing-mode" value="view")
+              label(for="editing-mode-off") View
+              input#editing-mode-on(type="radio" name="editing-mode" value="edit")
+              label(for="editing-mode-on") Edit
+        h2
+          a(href="#") Measure
+        #measure-tab
+          p measure stuff
+        h2
+          a(href="#") Modify
+        #modify-tab
+          p modify stuff
+    #main-area
+      #map-area
+      #bottom-bar.ui-widget-header.ui-corner-all
+    #spinner
+
+= render :template => '/app/layout'

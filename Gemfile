@@ -4,6 +4,9 @@ gem 'rails', '3.1.0'
 
 gem 'mysql2'
 
+gem 'devise'
+gem 'devise_invitable'
+
 gem "geocoder"
 
 gem 'slim'

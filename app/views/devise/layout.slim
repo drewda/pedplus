@@ -1,0 +1,8 @@
+html
+  head
+    title PedPlus Admin
+    = stylesheet_link_tag "admin/admin"
+    = csrf_meta_tags
+  body
+    .container
+      == yield(:body)

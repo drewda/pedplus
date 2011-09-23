@@ -1,0 +1,52 @@
+- content_for :body do
+  = form_for([:admin, @project]) do |f|
+    .row
+      .span13.columns
+        h1 = @project.name
+      .span3.columns(align="right")
+        = f.submit "Save Changes", {:class => "btn primary"}
+    ul.tabs
+      li 
+        = link_to "View", admin_project_path(@project.id)
+      li.active
+        a Edit
+        
+    - if f.error_messages
+      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+    fieldset
+      .clearfix
+        = f.label :organization
+        .input
+          = f.collection_select(:organization_id, Organization.all, :id, :name)
+      .clearfix
+        = f.label :name
+        .input
+          = f.text_field :name
+      .clearfix
+        = f.label :kind
+        .input
+          = f.text_field :kind
+          
+    h2 Users
+    table.common-table
+      thead
+        tr
+          th Name
+          th E-mail Address
+          th View?
+          th Edit?
+          th Manage?
+      tbody
+        - @project.organization.users.each do |u|
+          = f.fields_for :project_members, ProjectMember.find_or_create_by_user_id_and_project_id(u.id, @project.id) do |pm_fields|
+            tr
+              td = u.full_name
+              td = u.email
+              td = pm_fields.check_box :view
+              td = pm_fields.check_box :edit
+              td = pm_fields.check_box :manage
+
+  .well(align="left")
+     = button_to "Delete Project", admin_project_path(@project.id), :method => :delete, :class => "btn danger", :confirm => "Are you sure you want to delete #{@project.name}?"
+     
+= render :template => '/admin/layout'

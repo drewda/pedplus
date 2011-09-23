@@ -1,0 +1,69 @@
+- content_for :body do
+  = form_for([:admin, @user]) do |f|
+    .row
+      .span13.columns
+        h1 = @user.full_name
+      .span3.columns(align="right")
+        = f.submit "Save Changes", {:class => "btn primary"}
+
+    ul.tabs
+      li
+        = link_to "View", admin_user_path(@user.id)
+      li.active
+        a Edit
+        
+    - if f.error_messages
+      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+    fieldset
+      .clearfix
+        = f.label :email
+        .input
+          = f.text_field :email, :class => "large"
+      .clearfix
+        = f.label :phone_number
+        .input
+          = f.telephone_field :phone_number, :class => "large"
+      .clearfix
+        = f.label :orgup_admin, "Is an OrgUP administrator?"
+        .input
+          = f.check_box :orgup_admin
+      .clearfix
+        = f.label :orgup_api, "Has access to OrgUP API?"
+        .input
+          = f.check_box :orgup_api
+
+      .row
+        .span4.columns
+          .clearfix
+            = f.label :organization
+            .input
+              = f.collection_select(:organization_id, Organization.all, :id, :name)
+        .span3.offset5.columns(align="right")
+          h6 Permissions
+        .span2.columns(align="center")
+          h5 
+            ' Billing?
+            = f.check_box :organization_billing
+        .span2.columns(align="center")
+          h5 
+            ' Manager?
+            = f.check_box :organization_manager
+            
+  = form_for([:admin, @user]) do |f|
+    .row
+      .span6.columns
+        .clearfix
+          = f.label :password
+          .input
+            = f.password_field :password, :class => "large"
+      .span6.columns
+        .clearfix
+          = f.label :password_confirmation, "Confirmation"
+          .input
+            = f.password_field :password_confirmation, :class => "large"
+      .span4.columns(align="right")
+        = f.submit "Change Password", {:class => "btn primary"}
+                  
+  .well(align="left")
+    = button_to "Delete User", admin_user_path(@user.id), :method => :delete, :class => "btn danger", :confirm => "Are you sure you want to delete #{@user.full_name}?"
+= render :template => '/admin/layout'

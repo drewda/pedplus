@@ -1,0 +1,23 @@
+- content_for :body do
+  .row
+    .span4.columns &nbsp;
+    .span8.columns
+      = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
+        fieldset
+          legend Sign In
+          .clearfix
+            = f.label :email, "E-mail Address"
+            .input = f.email_field :email, :class => '.span4'
+          .clearfix
+            = f.label :password
+            .input
+              .input-append
+                = f.password_field :password, :class => '.span3'
+                label.add-on 
+                  | Save
+                  input#user_remember_me.span1(type="checkbox" checked="checked" name="user[remember_me]" value="1")
+          .actions = f.submit "Sign in", :class => "btn primary"
+      = render :partial => "devise/shared/links"
+    .span4.columns &nbsp;
+
+= render :template => '/devise/layout'
