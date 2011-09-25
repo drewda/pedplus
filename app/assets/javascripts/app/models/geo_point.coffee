@@ -1,25 +1,15 @@
-class App.Models.GeoPoint extends Backbone.RelationalModel
+class App.Models.GeoPoint extends Backbone.Model
   name: 'geo_point'
-  relations: [
-    type: 'HasMany'
-    key: 'geo_point_on_segments'
-    relatedModel: 'App.Models.GeoPointOnSegment'
-    collectionType: 'App.Collections.GeoPointOnSegments'
-    reverseRelation:
-      key: 'geo_point'
-      includeInJSON: 'id'
-  ]
-  segments: ->
-    @get('geo_point_on_segments').map (gpos) => gpos.get 'segment'
-  connectedGeoPoints: ->
-    connectedGeoPoints = []
-    _.each @segments(), (s) =>
-      _.each s.geo_points(), (gp) =>
-        connectedGeoPoints.push(gp) if gp != this
-    return connectedGeoPoints
+  getGeoPointOnSegments: ->
+    masterRouter.geoPointOnSegments.select (gpos) =>
+      gpos.get('geo_point_cid') == @cid or gpos.get('geo_point_id') == @id
+  getSegments: ->
+    _.map @getGeoPointOnSegments(), (gpos) =>
+      gpos.getSegment()
   geojson: ->
     geojson = 
       id: @attributes.id
+      cid: @cid
       type: 'Feature'
       geometry:
         type: "Point"
@@ -30,14 +20,16 @@ class App.Models.GeoPoint extends Backbone.RelationalModel
   select: ->
     # only want one GeoPoint or Segment selected at a time
     @collection.selectNone()
-    segments.selectNone()
+    masterRouter.segments.selectNone()
     
     @selected = true
-    $("#geo-point-circle-#{@id}").svg().addClass("selected").attr("r", "12")
+    masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
+    $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr("r", "12")
     @collection.trigger "selection"
   deselect: ->
     @selected = false
-    $("#geo-point-circle-#{@id}").svg().removeClass("selected").attr("r", "8")
+    masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
+    $("#geo-point-circle-#{@cid}").svg().removeClass("selected").attr("r", "8")
     @collection.trigger "selection"
   toggle: ->
     if location.hash.startsWith '#map/edit/geo_point/connect'

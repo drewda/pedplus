@@ -1,8 +1,7 @@
 class App.Views.SegmentLayer extends Backbone.View
   initialize: ->
     @collection.bind 'reset',  @render, this
-    @collection.bind 'change', @change, this
-    @collection.bind 'redraw', @render, this
+    @collection.bind 'add', @render, this
     # @collection.bind 'add',    @render, this
   render: ->
     $('#segment-layer').remove() if $('#segment-layer')
@@ -10,27 +9,27 @@ class App.Views.SegmentLayer extends Backbone.View
               .features(@collection.map (s) -> s.geojson())
               .id("segment-layer")
               .on "load", (e) ->
-                connectedSegmentIds = []
-                if location.hash.startsWith('#map/edit/geo_point/connect')
-                  geoPointId = location.hash.split('/').pop()
-                  connectedSegmentIds = _.map geo_points.get(geoPointId).segments(), (s) => s.id
+                # connectedSegmentIds = []
+                # if location.hash.startsWith('#map/edit/geo_point/connect')
+                #   geoPointId = location.hash.split('/').pop()
+                #   connectedSegmentIds = _.map geo_points.get(geoPointId).segments(), (s) => s.id
                 
                 for f in e.features
                   c = f.element
                   g = f.element = po.svg("g")
                   
                   c.setAttribute "class", "segment-line"
-                  c.setAttribute "id", "segment-line-#{f.data.id}"
+                  c.setAttribute "id", "segment-line-#{f.data.cid}"
                   c.setAttribute "stroke-width", "5"
                   
-                  if connectedSegmentIds.length > 0
-                    if _.include connectedSegmentIds, f.data.id
-                      c.setAttribute "class", "segment-line connected"
-                      connectedSegmentIds = _.without connectedSegmentIds, f.data.id
+                  # if connectedSegmentCids.length > 0
+                  #   if _.include connectedSegmentIds, f.data.cid
+                  #     c.setAttribute "class", "segment-line connected"
+                  #     connectedSegmentCids = _.without connectedSegmentCids, f.data.id
                                     
                   $(c).bind "click", (event) ->
-                    id = Number event.currentTarget.id.split('-').pop()
-                    segments.get(id).toggle()
+                    cid = event.currentTarget.id.split('-').pop()
+                    segments.getByCid(cid).toggle()
                                         
     map.add(layer)
     # reorder the layers: we want SegmentLayer to be under GeoPointLayer

@@ -47,9 +47,11 @@ ActiveRecord::Schema.define(:version => 20110922224726) do
   create_table "geo_point_on_segments", :force => true do |t|
     t.integer "geo_point_id"
     t.integer "segment_id"
+    t.integer "project_id"
   end
 
   add_index "geo_point_on_segments", ["geo_point_id"], :name => "index_geo_point_on_segments_on_geo_point_id"
+  add_index "geo_point_on_segments", ["project_id"], :name => "index_geo_point_on_segments_on_project_id"
   add_index "geo_point_on_segments", ["segment_id"], :name => "index_geo_point_on_segments_on_segment_id"
 
   create_table "geo_points", :force => true do |t|

@@ -15,6 +15,8 @@ gem 'ejs'
 
 gem 'jquery-rails'
 
+gem 'juggernaut', :git => 'https://github.com/maccman/juggernaut.git'
+
 group :assets do
   gem 'sass-rails'
   gem "less"

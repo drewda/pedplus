@@ -1,6 +1,7 @@
 class App.Collections.GeoPoints extends Backbone.Collection
   model: App.Models.GeoPoint
-  url: '/api/geo_points'
+  url: ->
+    "/api/projects/#{masterRouter.projects.getCurrentProjectId()}/geo_points"
   initialize: ->
     @bind "change", @change
   change: ->

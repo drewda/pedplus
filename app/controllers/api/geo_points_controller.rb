@@ -1,6 +1,7 @@
 class Api::GeoPointsController < Api::ApiController
   def index
-    @geo_points = GeoPoint.all
+    @geo_points = GeoPoint.where(:project_id => params[:project_id])
+    # raise ActionController::RoutingError.new('Not Found') if @geo_points.length == 0
     
     respond_to do |format|
       format.json { render :json => @geo_points.to_json(:include => [:geo_point_on_segments]) }
@@ -8,7 +9,7 @@ class Api::GeoPointsController < Api::ApiController
   end
   
   def show
-    @geo_point = GeoPoint.find(params[:id])
+    @geo_point = GeoPoint.where(:id => params[:id], :project_id => params[:project_id])
     
     respond_to do |format|
       format.json { render :json => @geo_point.to_json(:include => [:geo_point_on_segments]) }
@@ -17,6 +18,7 @@ class Api::GeoPointsController < Api::ApiController
   
   def create
     @geo_point = GeoPoint.new params[:geo_point]
+    @geo_point.project = Project.find!(params[:project_id])
     
     respond_to do |format|
       if @geo_point.save
@@ -29,7 +31,7 @@ class Api::GeoPointsController < Api::ApiController
   end
   
   def update
-    @geo_point = GeoPoint.find(params[:id])
+    @geo_point = GeoPoint.where!(:id => params[:id], :project_id => params[:project_id])
 
     respond_to do |format|
       if @geo_point.update_attributes(params[:geo_point])

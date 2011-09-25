@@ -1,3 +1,10 @@
+GIT
+  remote: https://github.com/maccman/juggernaut.git
+  revision: 54747ee7a0a9fce7d39d9f41218bc96ea1795529
+  specs:
+    juggernaut (2.0.1)
+      redis
+
 GEM
   remote: http://rubygems.org/
   specs:
@@ -127,6 +134,7 @@ GEM
       thor (~> 0.14.6)
     rake (0.9.2)
     rdoc (3.9.4)
+    redis (2.2.2)
     rspec (2.6.0)
       rspec-core (~> 2.6.0)
       rspec-expectations (~> 2.6.0)
@@ -191,6 +199,7 @@ DEPENDENCIES
   factory_girl_rails (>= 1.1.0)
   geocoder
   jquery-rails
+  juggernaut!
   less
   mysql2
   rails (= 3.1.0)

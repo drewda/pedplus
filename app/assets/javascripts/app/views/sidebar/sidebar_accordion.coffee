@@ -4,6 +4,7 @@ class App.Views.SidebarAccordion extends Backbone.View
     
     new App.Views.UserTab
     new App.Views.ProjectTab
+      projects: @projects
     new App.Views.MapTab
     new App.Views.MeasureTab
     new App.Views.ModifyTab

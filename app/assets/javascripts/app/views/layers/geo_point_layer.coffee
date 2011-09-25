@@ -1,32 +1,37 @@
 class App.Views.GeoPointLayer extends Backbone.View
   initialize: ->
-    @collection.bind 'reset',  @render, this
-    @collection.bind 'change', @change, this
+    @render()
+    @geo_points = @options.geo_points
+    @geo_points.bind 'reset', @render, this
+    @geo_points.bind 'add', @render, this
+    @geo_points.bind 'remove', @remove, this
+  drawFeatures: (e) ->
+    for f in e.features
+      c = f.element
+      g = f.element = po.svg("g")
+      
+      c.setAttribute "class", "geo-point-circle"
+      c.setAttribute "id", "geo-point-circle-#{f.data.cid}"
+      if masterRouter.geo_points.getByCid(f.data.cid).selected
+        c.setAttribute "r", "12"
+        if location.hash.startsWith('#map/edit/geo_point/connect')
+          c.setAttribute "class", "geo-point-circle connected"
+        else
+          c.setAttribute "class", "geo-point-circle selected"
+      else
+        c.setAttribute "r", "8"
+                        
+      $(c).bind "click", (event) ->
+         cid = event.currentTarget.id.split('-').pop()
+         masterRouter.geo_points.getByCid(cid).toggle()
   render: ->
     $('#geo-point-layer').remove() if $('#geo-point-layer')
     layer = po.geoJson()
-              .features(@collection.map (s) -> s.geojson())
+              .features(masterRouter.geo_points.map (s) -> s.geojson())
               .id("geo-point-layer")
-              .on "load", (e) ->
-                for f in e.features
-                  c = f.element
-                  g = f.element = po.svg("g")
-                  
-                  c.setAttribute "class", "geo-point-circle"
-                  c.setAttribute "id", "geo-point-circle-#{f.data.id}"
-                  if geo_points.get(f.data.id).selected
-                    c.setAttribute "r", "12"
-                    if location.hash.startsWith('#map/edit/geo_point/connect')
-                      c.setAttribute "class", "geo-point-circle connected"
-                    else
-                      c.setAttribute "class", "geo-point-circle selected"
-                  else
-                    c.setAttribute "r", "8"
-                                    
-                  $(c).bind "click", (event) ->
-                     id = Number event.currentTarget.id.split('-').pop()
-                     geo_points.get(id).toggle()
-                                        
+              .on "load", @drawFeatures   
     map.add(layer)
-  change: ->
-    # TODO
+  add: (model) ->
+    # TODO: http://groups.google.com/group/d3-js/browse_thread/thread/b2009ed9afc05974
+  remove: (model) ->
+    $("#geo-point-circle-#{model.cid}").remove()

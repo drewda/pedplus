@@ -1,0 +1,33 @@
+<div id="project-modal" class="modal">
+  <div class="modal-header">
+    <ul class="pills">
+      <li><h3>Projects</h3></li>
+      <li <% if (mode == "new") { %>class="active"<% } %> style="float: right;">
+        <a href="#project/new">New</a>
+      </li>
+      <li <% if (mode == "open") { %>class="active"<% } %> style="float: right;">
+        <a href="#project/open">Open</a>
+      </li>
+    </ul>
+  </div>
+  
+  <div class="modal-body">
+    <% if (mode == "open") { %>
+      <% projects.each(function(p) { %>
+        <p><a href="#project/<%= p.id %>"><%= p.get('name') %></a></p>
+      <% });%>
+    <% } %>
+    <% if (mode == "new") { %>
+    <div id="project-new-content">
+      <p>new</p>
+    </div>
+    <% } %>
+  </div>
+  
+  <%  if (mode == "new") { %>
+  <div class="modal-footer">
+    <a href="#" class="btn primary">Create</a>
+    <a href="#project/open" class="btn secondary">Cancel</a>
+  </div>
+  <% } %>
+</div>

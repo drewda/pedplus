@@ -1,6 +1,6 @@
 class Api::SegmentsController < Api::ApiController
   def index
-    @segments = Segment.all
+    @segments = Segment.where(:project_id => params[:project_id])
     
     respond_to do |format|
       format.json { render :json => @segments.to_json(:include => [:geo_point_on_segments]) }
@@ -8,7 +8,7 @@ class Api::SegmentsController < Api::ApiController
   end
   
   def show
-    @segment = Segment.find(params[:id])
+    @segment = Segment.find(:conditions => ["id = ? and project_id = ?", params[:id], params[:project_id]])
     
     respond_to do |format|
       format.json { render :json => @segment.to_json(:include => [:geo_point_on_segments]) }
@@ -17,6 +17,7 @@ class Api::SegmentsController < Api::ApiController
   
   def create
     @segment = Segment.new params[:segment]
+    @segment.project = Project.find(params[:project_id])
     
     respond_to do |format|
       if @segment.save
@@ -29,7 +30,7 @@ class Api::SegmentsController < Api::ApiController
   end
   
   def update
-    @segment = Segment.find(params[:id])
+    @segment = Segment.find(:conditions => ["id = ? and project_id = ?", params[:id], params[:project_id]])
 
     respond_to do |format|
       if @segment.update_attributes(params[:segment])
@@ -42,7 +43,7 @@ class Api::SegmentsController < Api::ApiController
   end
 
   def destroy
-    @segment = Segment.find(params[:id])
+    @segment = Segment.find(:conditions => ["id = ? and project_id = ?", params[:id], params[:project_id]])
     @segment.destroy
 
     respond_to do |format|

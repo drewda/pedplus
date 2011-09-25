@@ -1,6 +1,7 @@
 class App.Collections.Segments extends Backbone.Collection
   model: App.Models.Segment
-  url: '/api/segments'
+  url: ->
+    "/api/projects/#{masterRouter.projects.getCurrentProjectId()}/segments"
   initialize: ->
     @bind "change", @change
   change: ->

@@ -21,9 +21,11 @@ class BaseDataModel < ActiveRecord::Migration
     create_table :geo_point_on_segments, :force => true do |t|
       t.integer :geo_point_id
       t.integer :segment_id
+      t.integer :project_id
     end
     add_index :geo_point_on_segments, :geo_point_id
     add_index :geo_point_on_segments, :segment_id
+    add_index :geo_point_on_segments, :project_id
     
     create_table :data_sources, :force => true do |t|
       t.string :name

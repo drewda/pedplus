@@ -2,15 +2,18 @@ Pedplus::Application.routes.draw do
   root :to => 'app#dashboard'
   
   namespace :api do
-    resources :projects,
-              :data_sources, 
-              :geo_points,
-              :segments,
-              :geo_point_on_segments,
-              :count_sessions,
-              :counts,
-              :scenarios,
-              :segment_in_scenarios
+    resources :projects do
+      resources :geo_points,
+                :segments,
+                :geo_point_on_segments,
+                :scenarios,
+                :segment_in_scenarios
+      resources :count_sessions do
+        resources :counts
+      end
+    end
+    resources :data_sources
+    match 'map_edits' => 'map_edits#upload'
   end
   
   devise_for :users
