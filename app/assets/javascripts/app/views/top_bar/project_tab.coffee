@@ -2,11 +2,10 @@ class App.Views.ProjectTab extends Backbone.View
   initialize: ->
     @topBar = @options.topBar
     @projects = @options.projects
-    @projectId = @options.projectId
     
     @projects.bind "reset", @render, this
 
-    @topBar.render 'project', @projectId
+    @topBar.render 'project'
     
     @render()
   template: JST["app/templates/top_bar/project_tab"]

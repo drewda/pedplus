@@ -1,6 +1,6 @@
 class App.Views.TopBar extends Backbone.View
   template: JST["app/templates/top_bar/top_bar"]
-  render: (mode, projectId) ->
+  render: (mode) ->
     $('#top-bar').empty().html @template
-      projectId: projectId
+      projectId: masterRouter.projects.getCurrentProjectId()
     $("##{mode}-pill").addClass('active')

@@ -12,7 +12,7 @@ class App.Views.MapTab extends Backbone.View
       mapMode: @options.mapMode
       mapEditsLength: @options.map_edits.length
 
-    @topBar.render 'map', @projectId
+    @topBar.render 'map'
     
     @render()
   template: JST["app/templates/top_bar/map_tab"]
