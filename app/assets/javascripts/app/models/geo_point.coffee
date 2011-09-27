@@ -14,16 +14,19 @@ class App.Models.GeoPoint extends Backbone.Model
     _.compact _.map @getSegments(), (s) =>
       s.getGeoPoints() unless s.get('markedForDelete')
   geojson: ->
-    geojson = 
-      id: @attributes.id
-      cid: @cid
-      type: 'Feature'
-      geometry:
-        type: "Point"
-        coordinates: [
-          parseFloat @get "longitude"
-          parseFloat @get "latitude"
-        ]
+    if @get('markedForDelete')
+      return null
+    else
+      geojson = 
+        id: @attributes.id
+        cid: @cid
+        type: 'Feature'
+        geometry:
+          type: "Point"
+          coordinates: [
+            parseFloat @get "longitude"
+            parseFloat @get "latitude"
+          ]
   select: ->  
     if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/c"
       @drawSegmentToGeoPoint masterRouter.geo_points.selected()[0]

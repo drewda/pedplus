@@ -2,10 +2,10 @@ class App.Views.GeoPointLayer extends Backbone.View
   initialize: ->
     @render()
     @geo_points = @options.geo_points
-    @geo_points.bind 'reset', @render, this
-    @geo_points.bind 'add', @render, this
-    @geo_points.bind 'remove', @remove, this
-    @geo_points.bind 'change', @render, this
+    @geo_points.bind 'reset',   @render, this
+    @geo_points.bind 'add',     @render, this
+    @geo_points.bind 'remove',  @render, this
+    @geo_points.bind 'change',  @render, this
   drawFeatures: (e) ->
     for f in e.features
       c = f.element
@@ -31,11 +31,11 @@ class App.Views.GeoPointLayer extends Backbone.View
   render: ->
     $('#geo-point-layer').remove()
     layer = po.geoJson()
-              .features(masterRouter.geo_points.map (s) -> s.geojson())
+              .features(masterRouter.geo_points.geojson().features)
               .id("geo-point-layer")
               .on "load", @drawFeatures   
     map.add(layer)
-  add: (model) ->
-    # TODO: http://groups.google.com/group/d3-js/browse_thread/thread/b2009ed9afc05974
-  remove: (model) ->
-    $("#geo-point-circle-#{model.cid}").remove()
+  # add: (model) ->
+  #   # TODO: http://groups.google.com/group/d3-js/browse_thread/thread/b2009ed9afc05974
+  # remove: (model) ->
+  #   $("#geo-point-circle-#{model.cid}").remove()

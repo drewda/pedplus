@@ -17,60 +17,30 @@ class App.Views.DeleteGeoPointModal extends Backbone.View
       # delete Segment's (and their other GeoPointOnSegment's)
       _.each geoPointToDelete.getSegments(), (s) =>
         if s.getGeoPoints().length <= 2
-          if s.isNew()
-            _.each s.getGeoPointOnSegments(), (gpos) =>
-              masterRouter.geo_point_on_segments.remove gpos
-              masterRouter.map_edits.each (me) =>
-                gposMinusThisOne = _.reject me.get('geo_point_on_segments'), (gposInMe) =>
-                  gposInMe.cid == gpos.cid
-                me.set
-                  geo_point_on_segments: gposMinusThisOne
-            masterRouter.segments.remove s
-            masterRouter.map_edits.each (me) =>
-              segmentsMinusThisOne = _.reject me.get('segments'), (sInMe) =>
-                sInMe.cid == s.cid
-              me.set
-                segments: segmentsMinusThisOne
-          else
-            s.set
+          s.set
+            markedForDelete: true
+          segmentsToDelete.push s
+          _.each s.getGeoPointOnSegments(), (gpos) =>
+            gpos.set
               markedForDelete: true
-            segmentsToDelete.push s
-            _.each s.getGeoPointOnSegments(), (gpos) =>
-              gpos.set
-                markedForDelete: true
-              geoPointOnSegmentsToDelete.push gpos
+            geoPointOnSegmentsToDelete.push gpos
+        
+      # delete GeoPoint
+      geoPointToDelete.set
+        markedForDelete: true
           
       # delete GeoPointOnSegment
       _.each geoPointToDelete.getGeoPointOnSegments(), (gpos) =>
-        if gpos.isNew()
-          masterRouter.geo_point_on_segments.remove gpos
-          masterRouter.map_edits.each (me) =>
-            gposMinusThisOne = _.reject me.get('geo_point_on_segments'), (gposInMe) =>
-              gposInMe.cid == gpos.cid
-            me.set
-              geo_point_on_segments: gposMinusThisOne
-        else
-          gpos.set
-            markedForDelete: true
-          geoPointOnSegmentsToDelete.push gpos
-        
-      # delete GeoPoint
-      if geoPointToDelete.isNew()
-        masterRouter.geo_points.remove geoPointToDelete
-        masterRouter.map_edits.each (me) =>
-          gpsMinusThisOne = _.reject me.get('geo_points'), (gpInMe) =>
-            gpInMe.cid == geoPointToDelete.cid
-          me.set
-            geo_points: gpsMinusThisOne
-      else
-        geoPointToDelete.set
-          markedForDelete: true      
-        mapEdit = new App.Models.MapEdit
-        masterRouter.map_edits.add mapEdit
-        mapEdit.set
-          geo_points: [masterRouter.geo_points.selected()[0]]
-          segments: segmentsToDelete
-          geo_point_on_segments: geoPointOnSegmentsToDelete
+        gpos.set
+          markedForDelete: true
+        geoPointOnSegmentsToDelete.push gpos
+           
+      mapEdit = new App.Models.MapEdit
+      masterRouter.map_edits.add mapEdit
+      mapEdit.set
+        geo_points: [masterRouter.geo_points.selected()[0]]
+        segments: segmentsToDelete
+        geo_point_on_segments: geoPointOnSegmentsToDelete
       
       masterRouter.geo_points.selectNone()
       masterRouter.segments.selectNone()

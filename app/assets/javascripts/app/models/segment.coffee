@@ -13,7 +13,9 @@ class App.Models.Segment extends Backbone.Model
     _.map @getGeoPointOnSegments(), (gpos) =>
       gpos.getGeoPoint() unless gpos.get('markedForDelete')
   geojson: ->
-    if @getGeoPoints()?.length == 2
+    if @get('markedForDelete') 
+      return null
+    else if @getGeoPoints()?.length == 2
       geojson =
         id: @attributes.id
         cid: @cid

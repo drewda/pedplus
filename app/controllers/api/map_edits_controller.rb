@@ -7,10 +7,10 @@ class Api::MapEditsController < Api::ApiController
     geoPoints.each do |gpLocal|
       if gpLocal['id']
         if gpLocal['markedForDelete']
-          GeoPoint.find(gpLocal['id']).delete
+          GeoPoint.where(:id => gpLocal['id']).delete_all
         else
           cid = gpLocal.delete 'cid'
-          GeoPoint.find(gpLocal['id']).update_attributes gpLocal # TODO: check
+          GeoPoint.find(gpLocal['id']).update_attributes gpLocal
         end
       else
         if !gpLocal['markedForDelete']
@@ -24,7 +24,7 @@ class Api::MapEditsController < Api::ApiController
     segments.each do |sLocal|
       if sLocal['id']
         if sLocal['markedForDelete']
-          Segment.find(sLocal['id']).delete
+          Segment.where(:id => sLocal['id']).delete_all
         else
           cid = sLocal.delete 'cid'
           Segment.find(sLocal['id']).update_attributes sLocal # TODO: check
@@ -40,7 +40,7 @@ class Api::MapEditsController < Api::ApiController
     end
     geoPointOnSegments.each do |gposLocal|
       if gposLocal['geo_point_id'] and gposLocal['markedForDelete']
-        GeoPointOnSegment.find(gposLocal['id']).delete
+        GeoPointOnSegment.where(:id => gposLocal['id']).delete_all
       else
         if !gposLocal['markedForDelete']
           if gposLocal['geo_point_id']
