@@ -172,6 +172,9 @@ class App.Routers.Master extends Backbone.Router
       segmentId: segmentId
       mapMode: 'segmentDelete'
       map_edits: masterRouter.map_edits
+    deleteSegmentModal = new App.Views.DeleteSegmentModal
+        segmentId: segmentId
+    masterRouter.modals.push deleteSegmentModal
       
   mapUploadEdits: (projectId) ->
     @reset(projectId)

@@ -16,6 +16,11 @@ class App.Views.DeleteGeoPointModal extends Backbone.View
         if s.getGeoPoints().length <= 2
           if s.isNew()
             masterRouter.segments.remove s
+            masterRouter.map_edits.each (me) =>
+              segmentsMinusThisOne = _.reject me.get('segments'), (sInMe) =>
+                sInMe.cid == s.cid
+              me.set
+                segments: segmentsMinusThisOne
           else
             s.set
               markedForDelete: true
@@ -25,6 +30,11 @@ class App.Views.DeleteGeoPointModal extends Backbone.View
       _.each geoPointToDelete.getGeoPointOnSegments(), (gpos) =>
         if gpos.isNew()
           masterRouter.geo_point_on_segments.remove gpos
+          masterRouter.map_edits.each (me) =>
+            gposMinusThisOne = _.reject me.get('geo_point_on_segments'), (gposInMe) =>
+              gposInMe.cid == gpos.cid
+            me.set
+              geo_point_on_segments: gposMinusThisOne
         else
           gpos.set
             markedForDelete: true
@@ -32,6 +42,11 @@ class App.Views.DeleteGeoPointModal extends Backbone.View
         
       if geoPointToDelete.isNew()
         masterRouter.geo_points.remove geoPointToDelete
+        masterRouter.map_edits.each (me) =>
+          gpsMinusThisOne = _.reject me.get('geo_points'), (gpInMe) =>
+            gpInMe.cid == geoPointToDelete.cid
+          me.set
+            geo_points: gpsMinusThisOne
       else
         geoPointToDelete.set
           markedForDelete: true

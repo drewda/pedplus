@@ -5,7 +5,7 @@ class App.Views.GeoPointLayer extends Backbone.View
     @geo_points.bind 'reset', @render, this
     @geo_points.bind 'add', @render, this
     @geo_points.bind 'remove', @remove, this
-    @geo_points.bind 'change', @remove, this
+    @geo_points.bind 'change', @render, this
   drawFeatures: (e) ->
     for f in e.features
       c = f.element
@@ -29,7 +29,7 @@ class App.Views.GeoPointLayer extends Backbone.View
            cid = event.currentTarget.id.split('-').pop()
            masterRouter.geo_points.getByCid(cid).toggle()
   render: ->
-    $('#geo-point-layer').remove() if $('#geo-point-layer')
+    $('#geo-point-layer').remove()
     layer = po.geoJson()
               .features(masterRouter.geo_points.map (s) -> s.geojson())
               .id("geo-point-layer")

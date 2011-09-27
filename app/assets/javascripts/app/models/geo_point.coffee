@@ -5,7 +5,7 @@ class App.Models.GeoPoint extends Backbone.Model
       if gpos.isNew()
         return gpos.get('geo_point_cid') == @cid
       else 
-        return gpos.get('geo_point_id') == @id
+        return gpos.get('geo_point_id') == @id or gpos.get('geo_point_cid') == @cid
   getSegments: ->
     _.compact _.map @getGeoPointOnSegments(), (gpos) =>
       gpos.getSegment() unless gpos.get('markedForDelete')

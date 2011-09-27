@@ -59,6 +59,7 @@ class App.Views.Map extends Backbone.View
         @mapMode()
       when "mapMoveGeoPoint"
         @resetMap()
+        @moveGeoPointMode()
       when "mapConnectGeoPoint"
         @resetMap()
       when "mapDeleteGeoPoint"
@@ -124,8 +125,7 @@ class App.Views.Map extends Backbone.View
         masterRouter.segments.add newSegment
       
       newGeoPoint.select()
-
-  mapMoveGeoPointMode: ->
+  moveGeoPointMode: ->
     geoPointId = arguments[0]
     
     $('#osm-layer').bind 'click', (event) =>
@@ -134,19 +134,16 @@ class App.Views.Map extends Backbone.View
       pointLocation = map.pointLocation
         x: x
         y: y
-      geo_points.selected()[0].save
+      geoPointToMove = masterRouter.geo_points.selected()[0]
+      geoPointToMove.set
         longitude: pointLocation.lon
         latitude: pointLocation.lat
-      ,
-        success: (model, response) ->
-          masterRouter.fetchData
-            success: ->
-              geo_points.get(model.id).select()
-              $('#osm-layer').unbind 'click'
-              $('#geo-point-move-button').attr("checked", false).button "refresh"
-              masterRouter.navigate "map/edit", true
-        error: (model, response) ->
-          console.log "ERROR moving GeoPoint"
+      mapEdit = new App.Models.MapEdit
+      masterRouter.map_edits.add mapEdit
+      mapEdit.set
+        geo_points: [geoPointToMove.unset 'geo_point_on_segments']
+      masterRouter.segments.trigger "change"
+      masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{geoPointToMove.cid}", true
   mapConnectGeoPointMode: ->
     $('#osm-layer').unbind 'click'
     
