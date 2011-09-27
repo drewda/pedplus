@@ -102,7 +102,6 @@ class App.Routers.Master extends Backbone.Router
       projects: masterRouter.projects
   
   map: (projectId) ->
-    console.log 'map'
     @reset(projectId)
     new App.Views.MapTab
       topBar: masterRouter.topBar

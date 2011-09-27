@@ -5,11 +5,14 @@ class App.Models.GeoPoint extends Backbone.Model
       if @isNew()
         return gpos.get('geo_point_cid') == @cid
       else 
-        return gpos.get('geo_point_id')
+        return gpos.get('geo_point_id') == @id
     , this
   getSegments: ->
     _.compact _.map @getGeoPointOnSegments(), (gpos) =>
       gpos.getSegment() unless gpos.get('markedForDelete')
+  getConnectedGeoPoints: ->
+    _.compact _.map @getSegments(), (s) =>
+      s.getGeoPoints() unless s.get('markedForDelete')
   geojson: ->
     geojson = 
       id: @attributes.id
@@ -21,53 +24,73 @@ class App.Models.GeoPoint extends Backbone.Model
           parseFloat @get "longitude"
           parseFloat @get "latitude"
         ]
-  select: ->
-    # only want one GeoPoint or Segment selected at a time
-    @collection.selectNone()
-    masterRouter.segments.selectNone()
+  select: ->  
+    if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/c"
+      @drawSegmentToGeoPoint masterRouter.geo_points.selected()[0]
+    else if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map" or 
+            location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}" 
+      # only want one GeoPoint or Segment selected at a time
+      @collection.selectNone()
+      masterRouter.segments.selectNone()
+
+      @selected = true
+      
+      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
+      $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr("r", "12")
     
-    @selected = true
-    masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true) # TODO: change this to allow for different mapModes
-    $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr("r", "12")
-    @collection.trigger "selection"
   deselect: ->
-    @selected = false
-    masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true) # TODO: change this to allow for different mapModes
-    $("#geo-point-circle-#{@cid}").svg().removeClass("selected").attr("r", "8")
-    @collection.trigger "selection"
+    if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/c"
+      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
+      $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr("r", "12")
+    else if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map" or
+            location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{cid}" 
+      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
+      $("#geo-point-circle-#{@cid}").svg().removeClass("selected").attr("r", "8")
+      @selected = false
+      
   toggle: ->
-    if location.hash.startsWith '#map/edit/geo_point/connect'
-      if geo_points.selected()[0] == this
-        masterRouter.navigate("map/edit", true)
-      else
-        @drawSegmentToGeoPoint geo_points.selected()[0]
-    else if @selected and location.hash.startsWith '#map/edit'
-      masterRouter.navigate("map/edit/geo_point/connect/#{@id}", true)
-    else if @selected
+    if @selected
       @deselect()
     else
       @select()
   drawSegmentToGeoPoint: (targetGeoPoint) ->
-    console.log "drawSegmentToGeoPoint: #{targetGeoPoint.id} -- #{this.id} -- #{_.include @connectedGeoPoints(), targetGeoPoint}"
+    console.log "drawSegmentToGeoPoint: #{targetGeoPoint.cid} -- #{this.cid}"
     currentGeoPoint = this
     
     # check to see if this connection already exists
-    if not _.include currentGeoPoint.connectedGeoPoints(), targetGeoPoint
-      # create the Segment and the two GeoPointOnSegment's
-      newSegment = segments.create
-        ped_project_id: 0 # TODO: add project association
-      ,
-        success: -> 
-          geo_point_on_segments.create
-            geo_point_id: currentGeoPoint.id
-            segment_id: newSegment.id
-          ,
-            success: ->
-              geo_point_on_segments.create
-                geo_point_id: targetGeoPoint.id
-                segment_id: newSegment.id
-              ,
-                success: ->
-                  masterRouter.fetchData
-                    success: ->
-                      geo_points.get(targetGeoPoint.id).toggle()
+    if not _.include currentGeoPoint.getConnectedGeoPoints(), targetGeoPoint
+      mapEdit = new App.Models.MapEdit
+      masterRouter.map_edits.add mapEdit
+      # create the Segment
+      newSegment = new App.Models.Segment
+        project_id: masterRouter.projects.getCurrentProjectId()
+      mapEdit.set
+        segments: [newSegment]
+      # create the first GeoPointOnSegment
+      if currentGeoPoint.isNew()
+        gposCurrentGeoPoint = new App.Models.GeoPointOnSegment
+          geo_point_cid: currentGeoPoint.cid
+          segment_cid: newSegment.cid
+          project_id: masterRouter.projects.getCurrentProjectId()
+      else
+        gposCurrentGeoPoint = new App.Models.GeoPointOnSegment
+          geo_point_id: currentGeoPoint.id
+          segment_cid: newSegment.cid
+          project_id: masterRouter.projects.getCurrentProjectId()
+      # create the second GeoPointOnSegment
+      if targetGeoPoint.isNew()
+        gposTargetGeoPoint = new App.Models.GeoPointOnSegment
+          geo_point_cid: targetGeoPoint.cid
+          segment_cid: newSegment.cid
+          project_id: masterRouter.projects.getCurrentProjectId()
+      else
+        gposTargetGeoPoint = new App.Models.GeoPointOnSegment
+          geo_point_id: targetGeoPoint.id
+          segment_cid: newSegment.cid
+          project_id: masterRouter.projects.getCurrentProjectId()
+      mapEdit.set
+        geo_point_on_segments: [gposCurrentGeoPoint, gposTargetGeoPoint]
+      
+      masterRouter.geo_point_on_segments.add gposCurrentGeoPoint
+      masterRouter.geo_point_on_segments.add gposTargetGeoPoint
+      masterRouter.segments.add newSegment

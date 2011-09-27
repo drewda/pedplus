@@ -62,6 +62,7 @@ class App.Views.Map extends Backbone.View
         @moveGeoPointMode()
       when "mapConnectGeoPoint"
         @resetMap()
+        @connectGeoPointMode()
       when "mapDeleteGeoPoint"
         @resetMap()
       when "mapSelectedSegment"
@@ -144,11 +145,9 @@ class App.Views.Map extends Backbone.View
         geo_points: [geoPointToMove.unset 'geo_point_on_segments']
       masterRouter.segments.trigger "change"
       masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{geoPointToMove.cid}", true
-  mapConnectGeoPointMode: ->
-    $('#osm-layer').unbind 'click'
+  connectGeoPointMode: ->
+    geoPointToConnect = masterRouter.geo_points.selected()[0]
     
-    geoPointId = arguments[0]
-    
-    $("#geo-point-circle-#{geoPointId}").svg().addClass "connected"
-    for s in geo_points.get(geoPointId).segments()
-      $("#segment-line-#{s.id}").svg().addClass "connected"
+    $("#geo-point-circle-#{geoPointToConnect.cid}").svg().addClass "connected"
+    for s in geoPointToConnect.getSegments()
+      $("#segment-line-#{s.cid}").svg().addClass "connected"

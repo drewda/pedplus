@@ -13,7 +13,7 @@
   <% } else if (mapMode == "geoPointConnect") { %>
     Point: 
     <a href="#project/<%= projectId %>/map/geo_point/move/<%= geoPointId %>" class="btn">Move</a> 
-    <a href="#project/<%= projectId %>/map/geo_point/connect/<%= geoPointId %>" class="btn primary">Connect</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/<%= geoPointId %>" class="btn primary">Connect</a> 
     <a href="#project/<%= projectId %>/map/geo_point/delete/<%= geoPointId %>" class="btn">Delete</a>
   <% } else if (mapMode == "geoPointDelete") { %>
     Point: 
