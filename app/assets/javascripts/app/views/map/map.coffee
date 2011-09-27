@@ -73,13 +73,13 @@ class App.Views.Map extends Backbone.View
   resetMap: ->
     # remove click listeners
     $('#osm-layer').unbind 'click'
+    $('#osm-layer').unbind 'dblclick'
     
     # remove coloring -- if coming from connectGeoPointMode
     $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
     $(".segment-line.connected").svg().removeClass("connected")
   mapMode: ->
-    $('#osm-layer').bind 'click', (event) =>
-      # TODO: do something about po.drag()
+    $('#osm-layer').bind 'dblclick', (event) =>
       mapEdit = new App.Models.MapEdit
       masterRouter.map_edits.add mapEdit
       x = event.pageX - $('#map-area').offset().left
