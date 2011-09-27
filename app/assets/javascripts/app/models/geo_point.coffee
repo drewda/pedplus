@@ -2,10 +2,11 @@ class App.Models.GeoPoint extends Backbone.Model
   name: 'geo_point'
   getGeoPointOnSegments: ->
     masterRouter.geo_point_on_segments.select (gpos) =>
-      if gpos.isNew()
+      if @isNew()
         return gpos.get('geo_point_cid') == @cid
       else 
-        return gpos.get('geo_point_id') == @id or gpos.get('geo_point_cid') == @cid
+        return gpos.get('geo_point_id')
+    , this
   getSegments: ->
     _.compact _.map @getGeoPointOnSegments(), (gpos) =>
       gpos.getSegment() unless gpos.get('markedForDelete')

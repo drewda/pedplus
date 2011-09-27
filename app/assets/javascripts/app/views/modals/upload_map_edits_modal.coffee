@@ -9,13 +9,13 @@ class App.Views.UploadMapEditsModal extends Backbone.View
     $('#upload-map-edits-modal').modal
       backdrop: true
       show: true
-  upload: ->
-    mapEdit = new App.Models.MapEdit
-    
+  upload: ->  
     segments = _.compact _.flatten masterRouter.map_edits.pluck('segments')
     geo_points = _.compact _.flatten masterRouter.map_edits.pluck('geo_points')
     geo_point_on_segments = _.compact _.flatten masterRouter.map_edits.pluck('geo_point_on_segments')
     
+    masterRouter.map_edits.reset()
+    mapEdit = new App.Models.MapEdit
     masterRouter.map_edits.add mapEdit
     mapEdit.save
       segments: segments
