@@ -1,3 +1,9 @@
+- content_for :head do
+  script
+    | function injectProjects() {
+    == "masterRouter.projects.reset(#{current_user.projects.to_json(:methods => [:geographic_center])});"
+    | }
+
 - content_for :body do
   .container-fluid
     #activity-box
@@ -13,38 +19,6 @@
         li 
           a(href="#message/new") M
     #top-bar
-  
-    / #map-
-    / #side-bar
-    /   #side-top
-    /     | PedPlus icon
-    /   #accordion
-    /     h2
-    /       a(href="#user") #{current_user.full_name}
-    /     #user-tab
-    /       a.button#account-settings-button(href="#") Account Settings
-    /       = link_to "Sign Out", destroy_user_session_path, :method => :delete, :id => "sign-out-button", :class => "button"
-    /     h2
-    /       a#project-tab-link(href="#") Project
-    /     #project-tab
-    /     h2
-    /       a(href="#") Map
-    /     #map-tab
-    /       label
-    /         | Map Editing
-    /         #editing-mode
-    /           input#editing-mode-off(type="radio" name="editing-mode" value="view")
-    /           label(for="editing-mode-off") View
-    /           input#editing-mode-on(type="radio" name="editing-mode" value="edit")
-    /           label(for="editing-mode-on") Edit
-    /     h2
-    /       a(href="#") Measure
-    /     #measure-tab
-    /       p measure stuff
-    /     h2
-    /       a(href="#") Modify
-    /     #modify-tab
-    /       p modify stuff
     #map-area
     #spinner
 

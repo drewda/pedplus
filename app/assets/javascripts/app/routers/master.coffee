@@ -5,6 +5,7 @@ class App.Routers.Master extends Backbone.Router
     
     # initialize collections, but don't yet fetch()
     @projects = new App.Collections.Projects
+    injectProjects() # projects will be injected by dashboard.slim
     @segments = new App.Collections.Segments
     @geo_points = new App.Collections.GeoPoints
     @geo_point_on_segments = new App.Collections.GeoPointOnSegments
@@ -19,8 +20,6 @@ class App.Routers.Master extends Backbone.Router
     @topBar = new App.Views.TopBar
     @topBarTabs = []
     @modals = []
-    
-    @projects.fetch()
     
     window.geo_point_layer = new App.Views.GeoPointLayer
        geo_points: @geo_points
