@@ -1,8 +1,36 @@
 <div id="map-tab">
   <div id="map-object-buttons" style="float: left;">
-    <p>point or segment buttons</p>
+  <% if (mapMode == "geoPointSelected") { %>
+    Point: 
+    <a href="#project/<%= projectId %>/map/geo_point/move/<%= geoPointId %>" class="btn">Move</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/connect/<%= geoPointId %>" class="btn">Connect</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/delete/<%= geoPointId %>" class="btn">Delete</a>
+  <% } else if (mapMode == "geoPointMove") { %>
+    Point: 
+    <a href="#project/<%= projectId %>/map/geo_point/move/<%= geoPointId %>" class="btn primary">Move</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/connect/<%= geoPointId %>" class="btn">Connect</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/delete/<%= geoPointId %>" class="btn">Delete</a>
+  <% } else if (mapMode == "geoPointConnect") { %>
+    Point: 
+    <a href="#project/<%= projectId %>/map/geo_point/move/<%= geoPointId %>" class="btn">Move</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/connect/<%= geoPointId %>" class="btn primary">Connect</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/delete/<%= geoPointId %>" class="btn">Delete</a>
+  <% } else if (mapMode == "geoPointDelete") { %>
+    Point: 
+    <a href="#project/<%= projectId %>/map/geo_point/move/<%= geoPointId %>" class="btn">Move</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/connect/<%= geoPointId %>" class="btn">Connect</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/delete/<%= geoPointId %>" class="btn primary">Delete</a>
+  <% } else if (mapMode == "segmentSelected") { %>
+    Segment: 
+    <a href="#project/<%= projectId %>/map/segment/delete/<%= segmentId %>" class="btn">Delete</a>
+  <% } else if (mapMode == "segmentDelete") { %>
+    Segment: 
+    <a href="#project/<%= projectId %>/map/segment/delete/<%= segmentId %>" class="btn primary">Delete</a>
+  <% } %>
   </div>
   <div id="map-buttons" style="float: right;">
-    <a id="upload-map-edits-button" class="btn primary">Upload Map Edits</a>
+    <% if (mapEditsLength > 0) { %>
+      <a href="#project/<%= projectId %>/map/upload_edits" class="btn danger">Upload Map Edits</a>
+    <% } %>
   </div>
 </div>

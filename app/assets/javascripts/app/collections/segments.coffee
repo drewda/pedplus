@@ -9,7 +9,7 @@ class App.Collections.Segments extends Backbone.Collection
   geojson: ->
     geojson =
       type: 'FeatureCollection'
-      features: @map (s) -> s.geojson()
+      features: _.compact @map (s) -> s.geojson()
   selected: ->
     @filter (s) -> s.selected
   selectAll: ->

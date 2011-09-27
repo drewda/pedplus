@@ -9,7 +9,7 @@ class App.Collections.GeoPoints extends Backbone.Collection
   geojson: ->
     geojson =
       type: 'FeatureCollection'
-      features: @map (gp) -> gp.geojson()
+      features: _.compact @map (gp) -> gp.geojson()
   selected: ->
     @filter (gp) -> gp.selected
   selectAll: ->

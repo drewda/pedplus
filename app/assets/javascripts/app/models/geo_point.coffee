@@ -1,11 +1,14 @@
 class App.Models.GeoPoint extends Backbone.Model
   name: 'geo_point'
   getGeoPointOnSegments: ->
-    masterRouter.geoPointOnSegments.select (gpos) =>
-      gpos.get('geo_point_cid') == @cid or gpos.get('geo_point_id') == @id
+    masterRouter.geo_point_on_segments.select (gpos) =>
+      if gpos.isNew()
+        return gpos.get('geo_point_cid') == @cid
+      else 
+        return gpos.get('geo_point_id') == @id
   getSegments: ->
-    _.map @getGeoPointOnSegments(), (gpos) =>
-      gpos.getSegment()
+    _.compact _.map @getGeoPointOnSegments(), (gpos) =>
+      gpos.getSegment() unless gpos.get('markedForDelete')
   geojson: ->
     geojson = 
       id: @attributes.id
@@ -23,12 +26,12 @@ class App.Models.GeoPoint extends Backbone.Model
     masterRouter.segments.selectNone()
     
     @selected = true
-    masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
+    masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true) # TODO: change this to allow for different mapModes
     $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr("r", "12")
     @collection.trigger "selection"
   deselect: ->
     @selected = false
-    masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
+    masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true) # TODO: change this to allow for different mapModes
     $("#geo-point-circle-#{@cid}").svg().removeClass("selected").attr("r", "8")
     @collection.trigger "selection"
   toggle: ->

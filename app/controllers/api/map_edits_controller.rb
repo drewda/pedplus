@@ -4,12 +4,14 @@ class Api::MapEditsController < Api::ApiController
     segments = params['segments']
     geoPointOnSegments = params['geo_point_on_segments']
     
-    # TODO: handle local deletes
-    
     geoPoints.each do |gpLocal|
       if gpLocal['id']
-        cid = gpLocal.delete 'cid'
-        GeoPoint.find(gpLocal['id']).update gpLocal # TODO: check
+        if gpLocal['markedForDelete']
+          GeoPoint.find(gpLocal['id']).delete
+        else
+          cid = gpLocal.delete 'cid'
+          GeoPoint.find(gpLocal['id']).update_attributes gpLocal # TODO: check
+        end
       else
         cid = gpLocal.delete 'cid'
         gpServer = GeoPoint.create gpLocal
@@ -19,8 +21,12 @@ class Api::MapEditsController < Api::ApiController
     end
     segments.each do |sLocal|
       if sLocal['id']
-        cid = sLocal.delete 'cid'
-        Segment.find(sLocal['id']).update sLocal # TODO: check
+        if sLocal['markedForDelete']
+          Segment.find(sLocal['id']).delete
+        else
+          cid = sLocal.delete 'cid'
+          Segment.find(sLocal['id']).update_attributes sLocal # TODO: check
+        end
       else
         cid = sLocal.delete 'cid'
         sServer = Segment.create sLocal
@@ -29,10 +35,17 @@ class Api::MapEditsController < Api::ApiController
       end
     end
     geoPointOnSegments.each do |gposLocal|
-      # TODO: check to see if it's new or old
-      geoPointId = geoPoints.find { |gp| gp['cid'] == gposLocal['geo_point_cid'] }['id']
-      segmentId = segments.find { |s| s['cid'] == gposLocal['segment_cid'] }['id']
-      GeoPointOnSegment.create geo_point_id: geoPointId, segment_id: segmentId, project_id: gposLocal['project_id']
+      if gposLocal['geo_point_id'] and gposLocal['markedForDelete']
+        GeoPointOnSegment.find(gposLocal['id']).delete
+      else
+        if gposLocal['geo_point_id']
+          geoPointId = gposLocal['geo_point_id']
+        elsif gposLocal['geo_point_cid']
+          geoPointId = geoPoints.find { |gp| gp['cid'] == gposLocal['geo_point_cid'] }['id']
+        end
+        segmentId = segments.find { |s| s['cid'] == gposLocal['segment_cid'] }['id']
+        GeoPointOnSegment.create geo_point_id: geoPointId, segment_id: segmentId, project_id: gposLocal['project_id']
+      end
     end
     
     json = {

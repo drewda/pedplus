@@ -78,6 +78,8 @@ class App.Views.Map extends Backbone.View
   mapMode: ->
     $('#osm-layer').bind 'click', (event) =>
       # TODO: do something about po.drag()
+      mapEdit = new App.Models.MapEdit
+      masterRouter.map_edits.add mapEdit
       x = event.pageX - $('#map-area').offset().left
       y = event.pageY - $('#map-area').offset().top
       pointLocation = map.pointLocation
@@ -88,6 +90,8 @@ class App.Views.Map extends Backbone.View
                        latitude: pointLocation.lat
                        project_id: @projects.getCurrentProjectId()
       masterRouter.geo_points.add newGeoPoint
+      mapEdit.set
+        geo_points: [newGeoPoint]
       # if a GeoPoint is currently selected, we will create a Segment
       # to connect that GeoPoint with the new GeoPoint
       if masterRouter.geo_points.selected().length == 1
@@ -95,23 +99,31 @@ class App.Views.Map extends Backbone.View
         
         newSegment = new App.Models.Segment
           project_id: @projects.getCurrentProjectId()
-          
-        gposPreviousGeoPoint = new App.Models.GeoPointOnSegment
-          geo_point_cid: previousGeoPoint.cid
-          segment_cid: newSegment.cid
-          project_id: @projects.getCurrentProjectId()
+        mapEdit.set
+          segments: [newSegment]
+        
+        if previousGeoPoint.isNew()
+          gposPreviousGeoPoint = new App.Models.GeoPointOnSegment
+            geo_point_cid: previousGeoPoint.cid
+            segment_cid: newSegment.cid
+            project_id: @projects.getCurrentProjectId()
+        else
+          gposPreviousGeoPoint = new App.Models.GeoPointOnSegment
+            geo_point_id: previousGeoPoint.id
+            segment_cid: newSegment.cid
+            project_id: @projects.getCurrentProjectId()
         gposNewGeoPoint = new App.Models.GeoPointOnSegment
           geo_point_cid: newGeoPoint.cid
           segment_cid: newSegment.cid
           project_id: @projects.getCurrentProjectId()
+        mapEdit.set
+          geo_point_on_segments: [gposPreviousGeoPoint, gposNewGeoPoint]
         
         masterRouter.geo_point_on_segments.add gposPreviousGeoPoint
         masterRouter.geo_point_on_segments.add gposNewGeoPoint
         masterRouter.segments.add newSegment
-        
-      newGeoPoint.select()
       
-      masterRouter.trigger "mapEdited"
+      newGeoPoint.select()
 
   mapMoveGeoPointMode: ->
     geoPointId = arguments[0]
