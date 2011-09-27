@@ -129,7 +129,7 @@ class App.Views.Map extends Backbone.View
   moveGeoPointMode: ->
     geoPointId = arguments[0]
     
-    $('#osm-layer').bind 'click', (event) =>
+    $('#osm-layer').bind 'dblclick', (event) =>
       x = event.pageX - $('#map-area').offset().left
       y = event.pageY - $('#map-area').offset().top
       pointLocation = map.pointLocation
