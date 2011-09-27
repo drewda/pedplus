@@ -4,7 +4,7 @@ class Api::GeoPointsController < Api::ApiController
     # raise ActionController::RoutingError.new('Not Found') if @geo_points.length == 0
     
     respond_to do |format|
-      format.json { render :json => @geo_points.to_json(:include => [:geo_point_on_segments]) }
+      format.json { render :json => @geo_points }
     end
   end
   
@@ -12,7 +12,7 @@ class Api::GeoPointsController < Api::ApiController
     @geo_point = GeoPoint.where(:id => params[:id], :project_id => params[:project_id])
     
     respond_to do |format|
-      format.json { render :json => @geo_point.to_json(:include => [:geo_point_on_segments]) }
+      format.json { render :json => @geo_point }
     end
   end
   

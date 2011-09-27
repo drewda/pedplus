@@ -3,7 +3,7 @@ class Api::SegmentsController < Api::ApiController
     @segments = Segment.where(:project_id => params[:project_id])
     
     respond_to do |format|
-      format.json { render :json => @segments.to_json(:include => [:geo_point_on_segments]) }
+      format.json { render :json => @segments }
     end
   end
   
@@ -11,7 +11,7 @@ class Api::SegmentsController < Api::ApiController
     @segment = Segment.find(:conditions => ["id = ? and project_id = ?", params[:id], params[:project_id]])
     
     respond_to do |format|
-      format.json { render :json => @segment.to_json(:include => [:geo_point_on_segments]) }
+      format.json { render :json => @segment }
     end
   end
   
