@@ -28,7 +28,7 @@ class App.Views.SegmentLayer extends Backbone.View
                       c.setAttribute "class", "segment-line connected"
                       connectedSegmentCids = _.without connectedSegmentCids, f.data.id
                   
-                  if masterRouter.segments.getByCid(f.data.cid).get("markedForDelete")
+                  if masterRouter.segments.getByCid(f.data.cid)?.get("markedForDelete")?
                     $(c).remove()
                   else
                     $(c).bind "click", (event) ->

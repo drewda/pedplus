@@ -13,7 +13,7 @@ class App.Views.GeoPointLayer extends Backbone.View
     
       c.setAttribute "class", "geo-point-circle"
       c.setAttribute "id", "geo-point-circle-#{f.data.cid}"
-      if masterRouter.geo_points.getByCid(f.data.cid).selected
+      if masterRouter.geo_points.getByCid(f.data.cid)?.selected?
         c.setAttribute "r", "12"
         if location.hash.startsWith('#map/edit/geo_point/connect')
           c.setAttribute "class", "geo-point-circle connected"
@@ -22,7 +22,7 @@ class App.Views.GeoPointLayer extends Backbone.View
       else
         c.setAttribute "r", "8"
         
-      if masterRouter.geo_points.getByCid(f.data.cid).get("markedForDelete")
+      if masterRouter.geo_points.getByCid(f.data.cid)?.get("markedForDelete")?
         $(c).remove()
       else
         $(c).bind "click", (event) ->
