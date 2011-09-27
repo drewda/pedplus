@@ -4,6 +4,8 @@ gem 'rails', '3.1.0'
 
 gem 'mysql2'
 
+gem 'newrelic_rpm'
+
 gem 'devise'
 gem 'devise_invitable'
 
