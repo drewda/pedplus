@@ -11,7 +11,7 @@ class App.Models.GeoPoint extends Backbone.Model
     _.compact _.map @getGeoPointOnSegments(), (gpos) =>
       gpos.getSegment() unless gpos.get('markedForDelete')
   getConnectedGeoPoints: ->
-    _.compact _.map @getSegments(), (s) =>
+    _.compact _.flatten _.map @getSegments(), (s) =>
       s.getGeoPoints() unless s.get('markedForDelete')
   geojson: ->
     if @get('markedForDelete')
@@ -61,7 +61,9 @@ class App.Models.GeoPoint extends Backbone.Model
     currentGeoPoint = this
     
     # check to see if this connection already exists
-    if not _.include currentGeoPoint.getConnectedGeoPoints(), targetGeoPoint # TODO: fix this!
+    existingConnections = _.select currentGeoPoint.getConnectedGeoPoints(), (gp) =>
+      gp.cid == targetGeoPoint.cid
+    if existingConnections.length == 0
       mapEdit = new App.Models.MapEdit
       masterRouter.map_edits.add mapEdit
       # create the Segment
