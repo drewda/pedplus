@@ -15,4 +15,19 @@ class Segment < ActiveRecord::Base
       gpos.delete()
     end
   end
+  
+  def connected_segments
+    segmentId = self.id
+    connected_segments = []
+    self.geo_points.each do |gp| 
+      gp.segments.each do |s|
+        connected_segments.push s unless s.id == segmentId
+      end
+    end
+    connected_segments
+  end
+  
+  def length
+    Geocoder::Calculations.distance_between self.geo_points[0], self.geo_points[1] # miles
+  end
 end

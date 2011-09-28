@@ -9,6 +9,8 @@ class App.Views.SegmentLayer extends Backbone.View
     layer = po.geoJson()
               .features(@collection.geojson().features)
               .id("segment-layer")
+              .tile(false)
+              .scale("fixed")
               .on "load", (e) ->
                 connectedSegmentCids = []
                 if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/c"

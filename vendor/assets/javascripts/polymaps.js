@@ -1,3 +1,8 @@
+/***
+ * Drew commented out lines 1881 - 1885
+ * in order to disable zoom on double tap
+ ***/
+
 if (!org) var org = {};
 if (!org.polymaps) org.polymaps = {};
 (function(po){
@@ -1878,11 +1883,11 @@ po.touch = function() {
         t = Date.now();
 
     // doubletap detection
-    if ((n == 1) && (t - last < 300)) {
-      var z = map.zoom();
-      map.zoomBy(1 - z + Math.floor(z), map.mouse(e.touches[0]));
-      e.preventDefault();
-    }
+    // if ((n == 1) && (t - last < 300)) {
+    //   var z = map.zoom();
+    //   map.zoomBy(1 - z + Math.floor(z), map.mouse(e.touches[0]));
+    //   e.preventDefault();
+    // }
     last = t;
 
     // store original zoom & touch locations

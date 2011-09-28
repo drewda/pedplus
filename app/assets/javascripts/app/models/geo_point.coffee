@@ -61,7 +61,7 @@ class App.Models.GeoPoint extends Backbone.Model
     currentGeoPoint = this
     
     # check to see if this connection already exists
-    if not _.include currentGeoPoint.getConnectedGeoPoints(), targetGeoPoint
+    if not _.include currentGeoPoint.getConnectedGeoPoints(), targetGeoPoint # TODO: fix this!
       mapEdit = new App.Models.MapEdit
       masterRouter.map_edits.add mapEdit
       # create the Segment

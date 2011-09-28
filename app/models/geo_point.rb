@@ -13,4 +13,9 @@ class GeoPoint < ActiveRecord::Base
       s.destroy()
     end
   end
+  
+  # to be used by Geocoder gem
+  def to_coordinates
+    [latitude, longitude]
+  end
 end

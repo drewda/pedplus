@@ -13,12 +13,12 @@ class App.Views.GeoPointLayer extends Backbone.View
     
       c.setAttribute "class", "geo-point-circle"
       c.setAttribute "id", "geo-point-circle-#{f.data.cid}"
-      if masterRouter.geo_points.getByCid(f.data.cid)?.selected?
+      if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{f.data.cid}"
         c.setAttribute "r", "12"
-        if location.hash.startsWith('#map/edit/geo_point/connect')
-          c.setAttribute "class", "geo-point-circle connected"
-        else
-          c.setAttribute "class", "geo-point-circle selected"
+        c.setAttribute "class", "geo-point-circle selected"
+      else if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/#{f.data.cid}"
+        c.setAttribute "r", "12"
+        c.setAttribute "class", "geo-point-circle connected"
       else
         c.setAttribute "r", "8"
         
@@ -33,6 +33,8 @@ class App.Views.GeoPointLayer extends Backbone.View
     layer = po.geoJson()
               .features(masterRouter.geo_points.geojson().features)
               .id("geo-point-layer")
+              .tile(false)
+              .scale("fixed")
               .on "load", @drawFeatures   
     map.add(layer)
   # add: (model) ->
