@@ -21,10 +21,14 @@ class App.Routers.Master extends Backbone.Router
     @topBarTabs = []
     @modals = []
     
-    window.geo_point_layer = new App.Views.GeoPointLayer
+    @geo_point_layer = new App.Views.GeoPointLayer
        geo_points: @geo_points
-    window.segment_layer = new App.Views.SegmentLayer
+       geoPointDefaultRadius: 8
+       geoPointSelectedRadius: 12
+       geoPointConnectedRadius: 12
+    @segment_layer = new App.Views.SegmentLayer
       collection: @segments
+      segmentStrokeWidth: 5
         
   routes:
     ".*" : "index"
