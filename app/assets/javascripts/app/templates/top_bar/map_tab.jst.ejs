@@ -7,7 +7,7 @@
     <a href="#project/<%= projectId %>/map/geo_point/delete/<%= geoPointId %>" class="btn">Delete</a>
   <% } else if (mapMode == "geoPointMove") { %>
     Point: 
-    <a href="#project/<%= projectId %>/map/geo_point/move/<%= geoPointId %>" class="btn primary">Move</a> 
+    <a href="#project/<%= projectId %>/map/geo_point/<%= geoPointId %>" class="btn primary">Move</a> 
     <a href="#project/<%= projectId %>/map/geo_point/connect/<%= geoPointId %>" class="btn">Connect</a> 
     <a href="#project/<%= projectId %>/map/geo_point/delete/<%= geoPointId %>" class="btn">Delete</a>
   <% } else if (mapMode == "geoPointConnect") { %>
@@ -19,13 +19,13 @@
     Point: 
     <a href="#project/<%= projectId %>/map/geo_point/move/<%= geoPointId %>" class="btn">Move</a> 
     <a href="#project/<%= projectId %>/map/geo_point/connect/<%= geoPointId %>" class="btn">Connect</a> 
-    <a href="#project/<%= projectId %>/map/geo_point/delete/<%= geoPointId %>" class="btn primary">Delete</a>
+    <a href="#project/<%= projectId %>/map/geo_point/<%= geoPointId %>" class="btn primary">Delete</a>
   <% } else if (mapMode == "segmentSelected") { %>
     Segment: 
     <a href="#project/<%= projectId %>/map/segment/delete/<%= segmentId %>" class="btn">Delete</a>
   <% } else if (mapMode == "segmentDelete") { %>
     Segment: 
-    <a href="#project/<%= projectId %>/map/segment/delete/<%= segmentId %>" class="btn primary">Delete</a>
+    <a href="#project/<%= projectId %>/map/segment/<%= segmentId %>" class="btn primary">Delete</a>
   <% } %>
   </div>
   <div id="map-buttons" style="float: right;">
