@@ -174,7 +174,7 @@ class App.Views.Map extends Backbone.View
     masterRouter.segments.trigger "change"
     
     # for some reason the selected styling is removed from the GeoPoint, so we'll kludge it in
-    $("#geo-point-circle-#{geoPointToMove.cid}").svg().addClass("selected").attr("r", 12)
+    $("#geo-point-circle-#{geoPointToMove.cid}").svg().addClass("selected").attr "r", masterRouter.geo_point_layer.geoPointSelectedRadius
     
     masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{geoPointToMove.cid}", true
   connectGeoPointMode: ->

@@ -1,6 +1,7 @@
 class App.Views.SegmentLayer extends Backbone.View
   initialize: ->
-    @segmentStrokeWidth = @options.segmentStrokeWidth
+    @segmentDefaultStrokeWidth = @options.segmentDefaultStrokeWidth
+    @segmentSelectedStrokeWidth = @options.segmentSelectedStrokeWidth
     
     @collection.bind 'reset',   @render, this
     @collection.bind 'add',     @render, this
@@ -27,7 +28,7 @@ class App.Views.SegmentLayer extends Backbone.View
                 
                   c.setAttribute "class", "segment-line"
                   c.setAttribute "id", "segment-line-#{f.data.cid}"
-                  c.setAttribute "stroke-width", masterRouter.segment_layer.segmentStrokeWidth
+                  c.setAttribute "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
                 
                   if connectedSegmentCids.length > 0
                     if _.include connectedSegmentCids, f.data.cid
@@ -47,6 +48,9 @@ class App.Views.SegmentLayer extends Backbone.View
     $('#osm-layer').after($('#segment-layer'))
   change: ->
     # TODO
-  setSegmentStrokeWidth: (segmentStrokeWidth) ->
-    @segmentStrokeWidth = segmentStrokeWidth
+  setSegmentDefaultStrokeWidth: (segmentDefaultStrokeWidth) ->
+    @segmentDefaultStrokeWidth = segmentDefaultStrokeWidth
+    @render()
+  setSegmentSelectedStrokeWidth: (segmentSelectedStrokeWidth) ->
+    @segmentSelectedStrokeWidth = segmentSelectedStrokeWidth
     @render()

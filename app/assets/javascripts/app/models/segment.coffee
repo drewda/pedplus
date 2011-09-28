@@ -35,11 +35,11 @@ class App.Models.Segment extends Backbone.Model
     
     @selected = true
     masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/segment/#{@cid}", true)
-    $("#segment-line-#{@cid}").svg().addClass('selected').attr("stroke-width", "9")
+    $("#segment-line-#{@cid}").svg().addClass('selected').attr "stroke-width", masterRouter.segment_layer.segmentSelectedStrokeWidth
     @collection.trigger "selection"
   deselect: ->
     @selected = false
-    $("#segment-line-#{@cid}").svg().removeClass('selected').attr("stroke-width", "5")
+    $("#segment-line-#{@cid}").svg().removeClass('selected').attr "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
     @collection.trigger "selection"
   toggle: ->
     if @selected

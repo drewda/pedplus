@@ -28,7 +28,8 @@ class App.Routers.Master extends Backbone.Router
        geoPointConnectedRadius: 12
     @segment_layer = new App.Views.SegmentLayer
       collection: @segments
-      segmentStrokeWidth: 5
+      segmentDefaultStrokeWidth: 5
+      segmentSelectedStrokeWidth: 8
         
   routes:
     ".*" : "index"

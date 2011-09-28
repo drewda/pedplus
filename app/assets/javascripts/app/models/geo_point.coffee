@@ -39,16 +39,16 @@ class App.Models.GeoPoint extends Backbone.Model
       @selected = true
       
       masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
-      $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr("r", "12")
+      $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr "r", masterRouter.geo_point_layer.geoPointSelectedRadius
     
   deselect: ->
     if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/c"
       masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
-      $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr("r", "12")
+      $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr "r", masterRouter.geo_point_layer.geoPointSelectedRadius
     else if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map" or
             location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{cid}" 
       masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
-      $("#geo-point-circle-#{@cid}").svg().removeClass("selected").attr("r", "8")
+      $("#geo-point-circle-#{@cid}").svg().removeClass("selected").attr "r", masterRouter.geo_point_layer.geoPointDefaultRadius
       @selected = false
       
   toggle: ->
