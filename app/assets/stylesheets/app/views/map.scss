@@ -7,6 +7,9 @@
   -webkit-tap-highlight-color: rgba(0,0,0,0); /* to disable tap highlighting */
   z-index: 0;
   
+  .compass {
+    z-index: 2;
+  }
   .compass .back {
     fill: #eee;
     fill-opacity: .8;

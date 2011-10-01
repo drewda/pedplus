@@ -54,7 +54,12 @@ class App.Routers.Master extends Backbone.Router
 
     "project/:project_id/model" : "model"
 
-    "project/:project_id/measure" : "measure"
+    "project/:project_id/measure"                                         : "measure"
+    "project/:project_id/measure/segment/:segment_id"                     : "measureSelectedSegment"
+    "project/:project_id/measure/segment/:segment_id/count_session/new"   : "measureNewCountSessionAtSelectedSegment"
+    "project/:project_id/measure/count_session/:count_session_id"         : "measureSelectedCountSession"
+    "project/:project_id/measure/count_session/enter/:count_session_id"   : "measureEnterCountSession"
+    "project/:project_id/measure/count_session/delete/:count_session_id"  : "measureDeleteCountSession"
 
     "project/:project_id/modify" : "modify"
     
@@ -199,11 +204,57 @@ class App.Routers.Master extends Backbone.Router
       projects: masterRouter.projects
 
   measure: (projectId) ->
-    @reset(projectId)
+    @reset(projectId, 240)
     new App.Views.MeasureTab
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects
+  
+  measureSelectedSegment: (projectId, segmentId) ->
+    @reset(projectId, 240)
+    new App.Views.MeasureTab
+      topBar: masterRouter.topBar
+      projectId: projectId
+      projects: masterRouter.projects
+      segmentId: segmentId
+      
+  measureNewCountSessionAtSelectedSegment: (projectId, segmentId) ->
+    @reset(projectId, 240)
+    new App.Views.MeasureTab
+      topBar: masterRouter.topBar
+      projectId: projectId
+      projects: masterRouter.projects
+      segmentId: segmentId
+    newCountSessionModal = new App.Views.NewCountSessionModal
+      segmentId: segmentId
+    masterRouter.modals.push newCountSessionModal
+      
+  measureSelectedCountSession: (projectId, countSessionId) ->
+    @reset(projectId, 240)
+    new App.Views.MeasureTab
+      topBar: masterRouter.topBar
+      projectId: projectId
+      projects: masterRouter.projects
+      countSessionId: countSessionId
+
+  measureEnterCountSession: (projectId, countSessionId) ->
+    @reset(projectId, 240)
+    new App.Views.MeasureTab
+      topBar: masterRouter.topBar
+      projectId: projectId
+      projects: masterRouter.projects
+      countSessionId: countSessionId
+
+  measureDeleteCountSession: (projectId, countSessionId) ->
+    @reset(projectId, 240)
+    new App.Views.MeasureTab
+      topBar: masterRouter.topBar
+      projectId: projectId
+      projects: masterRouter.projects
+      countSessionId: countSessionId
+    deleteCountSessionModal = new App.Views.DeleteCountSessionModal
+        countSessionId: countSessionId
+    masterRouter.modals.push deleteCountSessionModal
 
   modify: (projectId) ->
     @reset(projectId)
@@ -219,7 +270,7 @@ class App.Routers.Master extends Backbone.Router
       projectId: projectId
       projects: masterRouter.projects
     
-  reset: (projectId) ->
+  reset: (projectId, topBarHeight = 90) ->
     if projectId
       masterRouter.projects.setCurrentProjectId projectId
     else
@@ -228,4 +279,5 @@ class App.Routers.Master extends Backbone.Router
     $('.modal-backdrop').remove()
     masterRouter.topBarTabs = []
     masterRouter.modals = []
+    $('#top-bar').animate {height:"#{topBarHeight}px"}, 400 unless $('#top-bar').height == topBarHeight 
     

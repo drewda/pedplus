@@ -1,0 +1,24 @@
+<div id="measure-tab">
+  <div id="count-bar">
+    <h3>Count Sessions</h3>
+    <div id="count-buttons">
+      <% if (segmentId) { %>
+        <h6><a href="#" class="btn primary">Count At Selected Segment</a></h6>
+      <% } else { %>
+        <em>To start or schedule a count session, select a segment on the map.</em> 
+      <% } %>
+    </div>    
+  </div>
+  <table id="count-session-table">
+    <thead>
+      <th>Started Time</th>
+      <th>Duration</th>
+      <th>Pedestrians Counted</th>
+      <th>Pedestrians per Hour</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <!-- will be populated by ... -->
+    </tbody>
+  </table>  
+</div>

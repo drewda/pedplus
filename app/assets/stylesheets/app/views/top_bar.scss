@@ -2,10 +2,22 @@
   z-index: 1;
   position: absolute;
   top: 0;
-  right: 0;
-  width: 80%;
-  height: 120px;
-  background-color: #fff;
+  left: 155px;
+  right: 75px;
+/*  width: 70%;*/
+  height: 90px; // also used in App.Routers.Master.reset()
+  background-color: #fff; //#fefbf3;
+  border: 1px solid rgba(0,0,0,.2);
+  padding: 4px;
+  -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  
+  ul.pills {
+    margin-bottom: 6px;
+    li {
+      font-weight: 400; 
+      font-size: 16px;
+    }
+  }
   
   #help-pill {
     float: right;
@@ -14,6 +26,33 @@
   #map-tab {
     #upload-map-edits-button {
       display: none;
+    }
+  }
+  
+  #measure-tab {
+    #count-bar {
+      h3 {
+        float: left;
+        text-align: left;
+        padding-top: 0;
+      }
+      #count-buttons {
+        float: right;
+        text-align: right;
+      }
+    }
+    #count-session-table {
+      border: 0;
+      padding: 0;
+      padding-top: 6px;
+      th {
+        border: 0;
+        padding: 0;
+      }
+      td {
+        border: 0;
+        padding: 0;
+      }
     }
   }
 }

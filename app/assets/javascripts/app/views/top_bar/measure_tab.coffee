@@ -3,6 +3,10 @@ class App.Views.MeasureTab extends Backbone.View
     @topBar = @options.topBar
     @projects = @options.projects
     
+    @renderData =
+      projectId: @options.projectId
+      segmentId: @options.segmentId
+    
     @projects.bind "reset", @render, this
 
     @topBar.render 'measure'
@@ -10,4 +14,4 @@ class App.Views.MeasureTab extends Backbone.View
     @render()
   template: JST["app/templates/top_bar/measure_tab"]
   render: ->
-    $('#tab-area').empty().html @template
+    $('#tab-area').empty().html @template @renderData

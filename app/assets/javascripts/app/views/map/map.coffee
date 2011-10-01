@@ -25,6 +25,8 @@ class App.Views.Map extends Backbone.View
                 .hosts(["a.", "b.", "c.", ""]))
                 .id("osm-layer")
     map.add(osmLayer)
+    
+    map.add(po.compass().position('top-right'))
   centerMap: ->
     if currentProject = @projects.getCurrentProject()
       if geographic_center = currentProject.get('geographic_center')

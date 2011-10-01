@@ -3,7 +3,27 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 20%;
-  height: 120px;
-  background-color: #fff;
+  width: 150px;
+  height: 100px;
+  background-color: #fefbf3;
+  border: 1px solid rgba(0,0,0,.2);
+  padding: 4px;
+  
+  ul.tabs {
+    li.dropdown {
+      a.dropdown-toggle {
+        
+      }
+      ul.dropdown-menu {
+        
+      }
+    }
+    li#message-button {
+      
+    }
+  }
+  
+  #activity-report {
+    
+  }
 }
