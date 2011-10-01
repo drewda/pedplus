@@ -30,6 +30,16 @@ class App.Routers.Master extends Backbone.Router
       collection: @segments
       segmentDefaultStrokeWidth: 5
       segmentSelectedStrokeWidth: 8
+    
+    @currentRouteName = ""
+    @bind "all", @routeNameKeeper
+     
+  routeNameKeeper: (route) ->
+    @currentRouteName = route.split(':').pop()
+    # if the current URL ends with an ID of the form c#
+    # then we'll attach that after the route name
+    if location.hash.split('/').pop().match(/c\d+/)
+      @currentRouteName += ":" + location.hash.split('/').pop()
         
   routes:
     ".*" : "index"
