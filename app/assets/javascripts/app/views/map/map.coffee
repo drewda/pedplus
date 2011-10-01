@@ -89,10 +89,14 @@ class App.Views.Map extends Backbone.View
     $('#osm-layer').bind 'dblclick', (event) => @drawGeoPoint(event, false)
     $('#osm-layer').bind 'touchstart', (event) => @checkForDoubleTapBeforeDrawingGeoPoint(event)
   checkForDoubleTapBeforeDrawingGeoPoint: (event) ->
-    if @latestTap 
-      if (new Date() - @latestTap) < 400
-        @drawGeoPoint(event, true)
-    @latestTap = new Date()
+    # only log taps with one touch
+    # because taps with two touches are probably
+    # a pinch-to-zoom gesture
+    if event.originalEvent.touches.length == 1
+      if @latestTap 
+        if (new Date() - @latestTap) < 400
+          @drawGeoPoint(event, true)
+      @latestTap = new Date()
   drawGeoPoint: (event, touch) ->
     if !touch
       x = event.pageX - $('#map-area').offset().left
@@ -150,10 +154,14 @@ class App.Views.Map extends Backbone.View
     $('#osm-layer').bind 'dblclick', (event) => @moveGeoPoint(event, false)
     $('#osm-layer').bind 'touchstart', (event) => @checkForDoubleTapBeforeMovingGeoPoint(event)
   checkForDoubleTapBeforeMovingGeoPoint: (event) ->
-    if @latestTap 
-      if (new Date() - @latestTap) < 400
-        @moveGeoPoint(event, true)
-    @latestTap = new Date()
+    # only log taps with one touch
+    # because taps with two touches are probably
+    # a pinch-to-zoom gesture
+    if event.originalEvent.touches.length == 1
+      if @latestTap 
+        if (new Date() - @latestTap) < 400
+          @moveGeoPoint(event, true)
+      @latestTap = new Date()
   moveGeoPoint: (event, touch) ->
     if !touch
       x = event.pageX - $('#map-area').offset().left
