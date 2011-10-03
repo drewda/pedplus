@@ -54,6 +54,10 @@ class Api::MapEditsController < Api::ApiController
       end
     end
     
+    # update project's bounding box
+    # we'll assume that data is only being uplaoded for one project
+    Project.find(geoPoints.first[:project_id]).cache_bounding_box if geoPoints.length > 0
+    
     json = {
       geoPoints: geoPoints,
       segments: segments,

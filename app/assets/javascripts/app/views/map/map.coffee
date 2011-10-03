@@ -29,10 +29,15 @@ class App.Views.Map extends Backbone.View
     map.add(po.compass().position('top-right'))
   centerMap: ->
     if currentProject = @projects.getCurrentProject()
-      if geographic_center = currentProject.get('geographic_center')
-        map.center
-          lat: geographic_center.latitude
-          lon: geographic_center.longitude
+      if currentProject.get 'southwest_latitude'
+        map.extent [
+          lat: currentProject.get 'northeast_latitude'
+          lon: currentProject.get 'northeast_longitude'
+        ,
+          lat: currentProject.get 'southwest_latitude'
+          lon: currentProject.get 'southwest_longitude'
+        ]
+        map.zoomBy -1
       else
         @centerMapAtCurrentPosition()
     else

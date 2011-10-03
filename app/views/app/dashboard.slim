@@ -1,7 +1,7 @@
 - content_for :head do
   script
     | function injectProjects() {
-    == "masterRouter.projects.reset(#{current_user.projects.to_json(:methods => [:geographic_center])});"
+    == "masterRouter.projects.reset(#{current_user.projects.to_json()});"
     | }
 
 - content_for :body do
