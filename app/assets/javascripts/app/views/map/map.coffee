@@ -7,7 +7,6 @@ class App.Views.Map extends Backbone.View
     @latestTap = null
     
     @render()
-    masterRouter.bind "all", @changeRoute, this
   render: ->
     window.po = org.polymaps
  
@@ -53,35 +52,18 @@ class App.Views.Map extends Backbone.View
       map.center
         lat: 37.871592
         lon: 122.272747
-  changeRoute: (route) ->
-    route = route.split(':').pop()
-    switch route
-      when "projectOpen"
-        @resetMap()
-        @centerMap()
-      when "project"
-        @resetMap()
-        @centerMap()
-      when "map"
-        @resetMap()
-        @mapMode()
-      when "mapSelectedGeoPoint"
-        @resetMap()
-        @mapMode()
-      when "mapMoveGeoPoint"
-        @resetMap()
-        @moveGeoPointMode()
-      when "mapConnectGeoPoint"
-        @resetMap()
-        @connectGeoPointMode()
-      when "mapDeleteGeoPoint"
-        @resetMap()
-      when "mapSelectedSegment"
-        @resetMap()
-      when "mapDeleteSegment"
-        @resetMap()
-      
-  resetMap: ->
+  resetMap: (showGeoPointLayer, showSegmentLayer) ->
+    # enable and disable layers
+    if showGeoPointLayer
+      masterRouter.geo_point_layer.enable()
+    else
+      masterRouter.geo_point_layer.disable()
+    
+    if showSegmentLayer
+      masterRouter.segment_layer.enable()
+    else
+      masterRouter.segment_layer.disable()
+    
     # remove click listeners
     $('#osm-layer').unbind 'click'
     $('#osm-layer').unbind 'dblclick'

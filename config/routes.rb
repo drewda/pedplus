@@ -2,6 +2,8 @@ Pedplus::Application.routes.draw do
   root :to => 'app#dashboard'
   
   namespace :api do
+    resources :organizations
+    resources :users
     resources :projects do
       resources :geo_points,
                 :segments,

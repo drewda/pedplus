@@ -2,16 +2,12 @@ class App.Collections.GeoPoints extends Backbone.Collection
   model: App.Models.GeoPoint
   url: ->
     "/api/projects/#{masterRouter.projects.getCurrentProjectId()}/geo_points"
-  initialize: ->
-    @bind "change", @change
-  change: ->
-    console.log 'geo_points updated'
   geojson: ->
     geojson =
       type: 'FeatureCollection'
       features: _.compact @map (gp) -> gp.geojson()
   selected: ->
-    @filter (gp) -> gp.selected
+    @filter (gp) -> gp.get 'selected'
   selectAll: ->
     @each (gp) -> gp.select()
   selectNone: ->

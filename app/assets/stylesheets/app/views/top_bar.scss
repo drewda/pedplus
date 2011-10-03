@@ -41,17 +41,59 @@
         text-align: right;
       }
     }
-    #count-session-table {
-      border: 0;
-      padding: 0;
-      padding-top: 6px;
-      th {
+    #count-session-table-wrapper {
+      height: 120px;
+      width: 100%;
+      overflow-y: scroll;
+      #count-session-table {
         border: 0;
         padding: 0;
+        padding-top: 6px;
+        th {
+          border: 0;
+          padding: 0;
+        }
+        td {
+          border: 0;
+          padding: 0;
+        }
+      } 
+    }
+    #count-session-entry {
+      clear: both;
+      #timer {
+        float: left;
+        padding: 20px;
+        margin-left: 20px;
+        width: 100px;
+        text-align: left;
+
       }
-      td {
-        border: 0;
-        padding: 0;
+      #counter {
+       float: left; 
+       font-size: 52pt;
+       padding: 33px;
+       text-align: center;
+       h6 {
+         display: block;
+         width: 100%;
+         padding-top: 20px;
+       }
+      }
+      .btn {
+        height: 120px;
+        width: 130px;
+        font-size: 52pt;
+      }
+      #count-minus-one-button {
+        float: left;
+      }
+      #count-plus-one-button {
+        float: right;
+        margin-left: 4px;
+      }
+      #count-plus-five-button {
+        float: right;
       }
     }
   }

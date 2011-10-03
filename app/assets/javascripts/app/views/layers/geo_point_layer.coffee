@@ -2,57 +2,84 @@ class App.Views.GeoPointLayer extends Backbone.View
   initialize: ->
     @geoPointDefaultRadius = @options.geoPointDefaultRadius
     @geoPointSelectedRadius = @options.geoPointSelectedRadius
-    @geoPointConnectedRadius = @options.geoPointConnectedRadius
     
-    @render()
     @geo_points = @options.geo_points
-    @geo_points.bind 'reset',   @render, this
-    @geo_points.bind 'add',     @render, this
-    @geo_points.bind 'remove',  @render, this
-    @geo_points.bind 'change',  @render, this
-  drawFeatures: (e) ->
-    for f in e.features
-      c = f.element
-      g = f.element = po.svg("g")
+  enable: ->
+    @geo_points.bind 'reset',  @change, this
+    @geo_points.bind 'change', @change, this
+    @geo_points.bind 'add',    @change, this
+    @geo_points.bind 'remove', @change, this
     
-      g.setAttribute "transform", c.getAttribute("transform")
-    
-      c.setAttribute "class", "geo-point-circle"
-      c.setAttribute "id", "geo-point-circle-#{f.data.cid}"
-      if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{f.data.cid}"
-        c.setAttribute "r", masterRouter.geo_point_layer.geoPointSelectedRadius
-        c.setAttribute "class", "geo-point-circle selected"
-      else if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/#{f.data.cid}"
-        c.setAttribute "r", masterRouter.geo_point_layer.geoPointConnectedRadius
-        c.setAttribute "class", "geo-point-circle connected"
-      else
-        c.setAttribute "r", masterRouter.geo_point_layer.geoPointDefaultRadius
-        
-      if masterRouter.geo_points.getByCid(f.data.cid)?.get("markedForDelete")?
-        $(c).remove()
-      else
-        $(c).bind "click", (event) ->
-           cid = event.currentTarget.id.split('-').pop()
-           masterRouter.geo_points.getByCid(cid).toggle()
-  render: ->
+    if $('#geo-point-layer').length == 0
+      @render()
+      @change()
+  disable: ->
+    @geo_points.unbind()
     $('#geo-point-layer').remove()
-    layer = po.geoJson()
-              .features(masterRouter.geo_points.geojson().features)
-              .id("geo-point-layer")
-              .tile(false)
-              .scale("fixed")
-              .on "load", @drawFeatures   
-    map.add(layer)
-  # add: (model) ->
-  #   # TODO: http://groups.google.com/group/d3-js/browse_thread/thread/b2009ed9afc05974
-  # remove: (model) ->
-  #   $("#geo-point-circle-#{model.cid}").remove()
+  render: ->
+    layer = d3.select("#map-area svg").insert "svg:g"
+    layer.attr "id", "geo-point-layer"
+
+    map.on "move",    @reapplyTransform
+    map.on "resize",  @reapplyTransform
+  transform: (d) ->
+    lp = map.locationPoint
+      lon: d.get('longitude')
+      lat: d.get('latitude')
+    return "translate(#{lp.x}, #{lp.y})"
+  reapplyTransform: ->
+    d3.select('#geo-point-layer').selectAll("g").attr "transform", masterRouter.geo_point_layer.transform
+  change: (geo_point) ->
+    # update the bound data
+    geo_points = @geo_points.reject (gp) => gp.get('markedForDelete')
+
+    geoPointMarkers = d3.select('#geo-point-layer').selectAll("g")
+                        .data geo_points, (d) =>
+                          d.cid
+              
+    # enter new elements          
+    geoPointMarkers.enter()
+      .append("svg:g")
+        .attr("transform", @transform)
+      .append("svg:circle")
+        .classed 'selected', (d) ->
+          d.get 'selected'
+        .attr "r", (d) ->
+          if d.selected
+            masterRouter.geo_point_layer.geoPointSelectedRadius
+          # else if connected
+          else
+            masterRouter.geo_point_layer.geoPointDefaultRadius
+        .classed("geo-point-circle", true)
+        .attr "id", (d) -> 
+          "geo-point-circle-#{d.cid}"
+        .on 'click', (d) -> 
+          d.toggle()
+          
+    # if there is a changed GeoPoint, go in and modify it      
+    if geo_point and !geo_point.models
+      changedGeoPointMarkers = geoPointMarkers.filter (d, i) =>
+        d.cid == geo_point.cid
+      # select
+      changedGeoPointMarkers.selectAll('circle')
+        .attr "r", (d) ->
+          if d.get 'selected'
+            masterRouter.geo_point_layer.geoPointSelectedRadius
+          else
+            masterRouter.geo_point_layer.geoPointDefaultRadius
+        .classed "selected", (d) ->
+          d.get 'selected'
+      # move
+      @reapplyTransform()
+      # move segments
+      masterRouter.segment_layer.reapplyTransform()
+          
+    # remove old elements
+    geoPointMarkers.exit().remove()
+
   setGeoPointDefaultRadius: (geoPointDefaultRadius) ->
     @geoPointDefaultRadius = geoPointDefaultRadius
     @render()
   setGeoPointSelectedRadius: (geoPointSelectedRadius) ->
     @geoPointSelectedRadius = geoPointSelectedRadius
-    @render()
-  setGeoPointConnectedRadius: (geoPointConnectedRadius) ->
-    @geoPointConnectedRadius = geoPointConnectedRadius
     @render()

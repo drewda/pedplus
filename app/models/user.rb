@@ -38,4 +38,8 @@ class User < ActiveRecord::Base
     project_members.where(:manage => true).map { |pm| pm.project }
   end
   
+  attr_accessor :current_user
+  def is_current_user
+    return self == current_user
+  end
 end

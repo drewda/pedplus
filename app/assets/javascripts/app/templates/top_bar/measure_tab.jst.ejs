@@ -1,24 +1,32 @@
 <div id="measure-tab">
   <div id="count-bar">
+    <% if (mode == "measure" || mode == "selectedSegment" || mode == "selectedCountSession") { %>
     <h3>Count Sessions</h3>
     <div id="count-buttons">
       <% if (segmentId) { %>
-        <h6><a href="#" class="btn primary">Count At Selected Segment</a></h6>
+        <h6><a href="#project/<%= projectId %>/measure/segment/<%= segmentId %>/count_session/new" class="btn primary">Count At Selected Segment</a></h6>
       <% } else { %>
-        <em>To start or schedule a count session, select a segment on the map.</em> 
+        <h6><em>To start or schedule a count session, select a segment on the map.</em></h6>
       <% } %>
     </div>    
   </div>
-  <table id="count-session-table">
-    <thead>
-      <th>Started Time</th>
-      <th>Duration</th>
-      <th>Pedestrians Counted</th>
-      <th>Pedestrians per Hour</th>
-      <th></th>
-    </thead>
-    <tbody>
-      <!-- will be populated by ... -->
-    </tbody>
-  </table>  
+  <div id="count-session-table-wrapper">
+    <!-- will be populated by App.Views.CountSessionTable -->
+  </div>
+  <% } else if (mode == "enterCountSession") { %>
+    <h3>Entering Counts</h3>
+    <div id="count-buttons" style="float: left; margin-left: 6px">
+      <h6><a id="stop-count-session-early-button" class="btn danger">Stop Early</a></h6>
+    </div>
+    <div id="count-session-entry">
+      <button id="count-minus-one-button" class="btn danger large">&ndash; 1</button>
+      <div id="timer">
+        <h6 id="minutes"></h6>
+        <h6 id="seconds"></h6>
+      </div>
+      <div id="counter">0 <h6>people</h6></div>
+      <button id="count-plus-one-button" class="btn primary large">+ 1</button>
+      <button id="count-plus-five-button" class="btn primary large">+ 5</button>
+    </div>
+  <% } %>
 </div>

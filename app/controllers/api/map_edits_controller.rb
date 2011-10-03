@@ -4,6 +4,13 @@ class Api::MapEditsController < Api::ApiController
     segments = params['segments']
     geoPointOnSegments = params['geo_point_on_segments']
     
+    # Backbone shouldn't be sending all of this, but for now it is, 
+    # so we want to ignore these extra attributes
+    ['selected'].each do |attr|
+      geoPoints.map! { |gp| gp.except attr }
+      segments.map! { |s| s.except attr }
+    end
+    
     geoPoints.each do |gpLocal|
       if gpLocal['id']
         if gpLocal['markedForDelete']

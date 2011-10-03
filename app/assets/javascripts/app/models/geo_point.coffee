@@ -28,36 +28,35 @@ class App.Models.GeoPoint extends Backbone.Model
             parseFloat @get "latitude"
           ]
   select: ->  
-    if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/c"
-      @drawSegmentToGeoPoint masterRouter.geo_points.selected()[0]
-    else if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map" or 
-            location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}" 
-      # only want one GeoPoint or Segment selected at a time
-      @collection.selectNone()
-      masterRouter.segments.selectNone()
-
-      @selected = true
-      
-      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
-      $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr "r", masterRouter.geo_point_layer.geoPointSelectedRadius
-    
+    if masterRouter.currentRouteName.startsWith "map"
+      if masterRouter.currentRouteName.startsWith "mapConnectGeoPoint" 
+        @drawSegmentToGeoPoint masterRouter.geo_points.selected()[0]
+      else 
+        # only want one GeoPoint or Segment selected at a time
+        @collection.selectNone()
+        masterRouter.segments.selectNone()
+        @set
+          selected: true
+        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
   deselect: ->
-    if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/c"
-      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
-      $("#geo-point-circle-#{@cid}").svg().addClass("selected").attr "r", masterRouter.geo_point_layer.geoPointSelectedRadius
-    else if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map" or
-            location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{cid}" 
-      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
-      $("#geo-point-circle-#{@cid}").svg().removeClass("selected").attr "r", masterRouter.geo_point_layer.geoPointDefaultRadius
-      @selected = false
-      
+    if masterRouter.currentRouteName.startsWith "map"
+      if masterRouter.currentRouteName == "mapConnectGeoPoint:#{@cid}"
+        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/#{@cid}", true)
+      else
+        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
+        # if this GeoPoint is not already selected, then we want its 
+        # @set() command to be silent and not fire a changed event
+        alreadySelected = @get('selected')
+        @set
+          selected: false
+        , 
+          silent: !alreadySelected
   toggle: ->
-    if @selected
+    if @get('selected')
       @deselect()
     else
       @select()
   drawSegmentToGeoPoint: (targetGeoPoint) ->
-    console.log "drawSegmentToGeoPoint: #{targetGeoPoint.cid} -- #{this.cid}"
     currentGeoPoint = this
     
     # check to see if this connection already exists

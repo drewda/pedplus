@@ -29,20 +29,40 @@ class App.Models.Segment extends Backbone.Model
               Number @getGeoPoints()[1].get 'latitude' ]
           ]
   select: ->
+    if masterRouter.currentRouteName.startsWith "map"
+      if masterRouter.currentRouteName.startsWith "mapConnectGeoPoint"
+        return
+      else
+        @doSelect()
+        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/segment/#{@cid}", true)
+    else if masterRouter.currentRouteName.startsWith "measure"
+      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure/segment/#{@cid}", true)
+      @doSelect()
+  doSelect: ->
     # only want one GeoPoint or Segment selected at a time
     @collection.selectNone()
     masterRouter.geo_points.selectNone()
-    
-    @selected = true
-    masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/segment/#{@cid}", true)
-    $("#segment-line-#{@cid}").svg().addClass('selected').attr "stroke-width", masterRouter.segment_layer.segmentSelectedStrokeWidth
-    @collection.trigger "selection"
+    @set
+      selected: true
   deselect: ->
-    @selected = false
-    $("#segment-line-#{@cid}").svg().removeClass('selected').attr "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
-    @collection.trigger "selection"
+    if masterRouter.currentRouteName.startsWith "map"
+      if masterRouter.currentRouteName == "mapConnectGeoPoint:#{@cid}"
+        return null
+      else
+        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
+        @doDeselect()
+    else if masterRouter.currentRouteName.startsWith "measure"
+      @doDeselect()
+  doDeselect: ->
+    # if this Segment is not already selected, then we want its 
+    # @set() command to be silent and not fire a changed event
+    alreadySelected = @get('selected')
+    @set
+      selected: false
+    , 
+      silent: !alreadySelected
   toggle: ->
-    if @selected
+    if @get 'selected'
       @deselect()
     else
       @select()

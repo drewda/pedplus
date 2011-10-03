@@ -52,7 +52,9 @@
   
   #segment-layer {
     path {
-      stroke: #000000;;
+      stroke: #000000;
+      opacity: .8;
+      stroke-linecap: round;
     }
     path.selected {
       stroke: #55ee33;
@@ -64,15 +66,13 @@
   #geo-point-layer {
     circle {
       fill: #000000;
-    }
+      opacity: .8;
+    } 
     circle.selected {
       fill: #55ee33;
     }
     circle.connected {
       fill: #524CEF;
-    }
-    circle.move {
-      
     }
   }
 }
