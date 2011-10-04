@@ -54,8 +54,12 @@ class App.Views.MeasureTab extends Backbone.View
       # plusTwoBeep = new Audio "/media/audio/plus_two_beep.mp3"
       # minusOneBeep = new Audio "/media/audio/minus_one_beep.mp3"
       
-      $('#stop-count-session-early-button').bind "click", (event) =>
-        masterRouter.measureTab.finish()
+      $('#stop-count-session-cancel-button').bind "click", (event) =>
+        countSession = masterRouter.count_sessions.selected()[0]
+        countSession.destroy
+          success: ->
+            masterRouter.count_sessions.remove countSession
+            masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/segment/#{masterRouter.segments.selected()[0].cid}", true
         
       $('#count-plus-one-button').bind "click", (event) =>
         @countSession = masterRouter.count_sessions.selected()[0]
