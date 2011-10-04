@@ -18,8 +18,10 @@ class App.Views.MeasureTab extends Backbone.View
       @countSession.counts.bind "add", @redrawCounter, this
       @countSession.counts.bind "remove", @redrawCounter, this
     
-    @millisecondsTotal = 5 * 60 * 1000
+    @minutes = 5
+    @millisecondsTotal = @minutes * 60 * 1000
     @millisecondsRemaining = @millisecondsTotal
+    @endTime = null
     
     @render()
   template: JST["app/templates/top_bar/measure_tab"]
@@ -33,13 +35,20 @@ class App.Views.MeasureTab extends Backbone.View
       @countSession.set
         start: new Date
       
-      # start the timer
-      setTimeout =>
-        masterRouter.measureTab.finish()
-      , @millisecondsTotal
-      setInterval =>
+      # set the end time
+      @endTime = new Date();
+      @endTime.setMinutes(@endTime.getMinutes() + @minutes)
+      
+      # setTimeout =>
+      #   masterRouter.measureTab.finish()
+      # , @millisecondsTotal
+      timer = setInterval =>
+        now = new Date
+        if now > @endTime
+          clearInterval timer
+          masterRouter.measureTab.finish()
         masterRouter.measureTab.redrawTimer()
-      , 1000 # run every second
+      , 1000 # run every minute
       
       # plusOneBeep = new Audio "/media/audio/plus_one_beep.mp3"
       # plusTwoBeep = new Audio "/media/audio/plus_two_beep.mp3"
