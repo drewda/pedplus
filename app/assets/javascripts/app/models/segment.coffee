@@ -35,7 +35,10 @@ class App.Models.Segment extends Backbone.Model
       else
         @doSelect()
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/segment/#{@cid}", true)
-    else if masterRouter.currentRouteName.startsWith "measure"
+    else if masterRouter.currentRouteName == "measure" or
+            masterRouter.currentRouteName.startsWith "measureSelectedSegment" or
+            masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
+      # note that we do not want to allow selected when at the "measureEnterCountSession" route
       masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure/segment/#{@cid}", true)
       @doSelect()
   doSelect: ->
@@ -51,7 +54,10 @@ class App.Models.Segment extends Backbone.Model
       else
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
         @doDeselect()
-    else if masterRouter.currentRouteName.startsWith "measure"
+    else if masterRouter.currentRouteName == "measure" or
+            masterRouter.currentRouteName.startsWith "measureSelectedSegment" or
+            masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
+      # note that we do not want to allow selected when at the "measureEnterCountSession" route
       @doDeselect()
   doDeselect: ->
     # if this Segment is not already selected, then we want its 
