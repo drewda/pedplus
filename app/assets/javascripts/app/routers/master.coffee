@@ -5,7 +5,7 @@ class App.Routers.Master extends Backbone.Router
     
     # initialize collections
     @projects = new App.Collections.Projects
-    injectProjects() # projects will be injected by dashboard.slim
+    # injectProjects() # projects will be injected by dashboard.slim
     
     @users = new App.Collections.Users
     @users.fetch()
@@ -28,6 +28,7 @@ class App.Routers.Master extends Backbone.Router
     @topBar = new App.Views.TopBar
     @topBarTabs = []
     @modals = []
+    @projectTab = null
     @measureTab = null
     @countSessionsTable = null
     
@@ -95,6 +96,13 @@ class App.Routers.Master extends Backbone.Router
     @routeNameKeeper 'messageNew'
 
   projectOpen: ->
+    if @projectTab
+      @projectTab.remove()
+    masterRouter.projects.reset()
+    masterRouter.projects.fetch()
+    masterRouter.geo_points.reset()
+    masterRouter.geo_point_on_segments.reset()
+    masterRouter.segments.reset()
     @reset()
     @routeNameKeeper 'projectOpen'
     projectModal = new App.Views.ProjectModal
@@ -117,11 +125,11 @@ class App.Routers.Master extends Backbone.Router
     @routeNameKeeper 'project'
     @fetchProjectData()
     # topBar
-    projectTab = new App.Views.ProjectTab
+    @projectTab = new App.Views.ProjectTab
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects
-    masterRouter.topBarTabs.push projectTab
+    masterRouter.topBarTabs.push @projectTab
     @geo_points.selectNone()
     @segments.selectNone()
     @map.resetMap false, true
@@ -131,7 +139,7 @@ class App.Routers.Master extends Backbone.Router
     @reset(projectId)  
     @routeNameKeeper 'projectSettings'
     # @fetchProjectData()
-    new App.Views.ProjectTab
+    @projectTab = new App.Views.ProjectTab
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects
@@ -394,8 +402,6 @@ class App.Routers.Master extends Backbone.Router
     
     if projectId
       masterRouter.projects.setCurrentProjectId projectId
-    else
-      masterRouter.projects.setCurrentProjectId 0
     $('.modal').modal('hide').remove()
     $('.modal-backdrop').remove()
     masterRouter.topBarTabs = []
