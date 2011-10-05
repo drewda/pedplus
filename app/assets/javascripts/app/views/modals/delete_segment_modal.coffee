@@ -19,6 +19,7 @@ class App.Views.DeleteSegmentModal extends Backbone.View
         
       segmentToDelete.set
         markedForDelete: true
+      $("#segment-layer #segment-line-#{segmentToDelete.cid}").remove()
     
       mapEdit = new App.Models.MapEdit
       masterRouter.map_edits.add mapEdit
