@@ -18,7 +18,7 @@ class App.Views.MeasureTab extends Backbone.View
       @countSession.counts.bind "add", @redrawCounter, this
       @countSession.counts.bind "remove", @redrawCounter, this
     
-      @minutes = 1
+      @minutes = 0.5 #5
       @millisecondsTotal = @minutes * 60 * 1000
       @millisecondsRemaining = @millisecondsTotal
       @endTime = null
@@ -37,7 +37,8 @@ class App.Views.MeasureTab extends Backbone.View
       
       # set the end time
       @endTime = new Date();
-      @endTime.setMinutes(@endTime.getMinutes() + @minutes)
+      # @endTime.setMinutes(@endTime.getMinutes() + @minutes)
+      @endTime.setSeconds(@endTime.getSeconds() + 30)
       
       # setTimeout =>
       #   masterRouter.measureTab.finish()
