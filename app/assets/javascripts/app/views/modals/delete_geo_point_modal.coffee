@@ -20,6 +20,7 @@ class App.Views.DeleteGeoPointModal extends Backbone.View
           s.set
             markedForDelete: true
           segmentsToDelete.push s
+          $("#segment-layer #segment-line-#{s.cid}}").remove()
           _.each s.getGeoPointOnSegments(), (gpos) =>
             gpos.set
               markedForDelete: true

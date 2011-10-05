@@ -6,7 +6,7 @@ class Api::MapEditsController < Api::ApiController
     
     # Backbone shouldn't be sending all of this, but for now it is, 
     # so we want to ignore these extra attributes
-    ['selected'].each do |attr|
+    ['selected', 'moved'].each do |attr|
       geoPoints.map! { |gp| gp.except attr }
       segments.map! { |s| s.except attr }
     end

@@ -71,8 +71,9 @@ class App.Views.GeoPointLayer extends Backbone.View
           d.get 'selected'
       # move
       @reapplyTransform()
-      # move segments
-      masterRouter.segment_layer.reapplyTransform()
+      # if latitude or longitude has changed, move segments
+      if geo_point.changedAttributes().latitude? or geo_point.changedAttributes().longitude?
+        masterRouter.new_segment_layer.change()
           
     # remove old elements
     geoPointMarkers.exit().remove()

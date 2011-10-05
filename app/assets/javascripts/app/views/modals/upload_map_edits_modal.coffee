@@ -23,14 +23,19 @@ class App.Views.UploadMapEditsModal extends Backbone.View
       geo_point_on_segments: geo_point_on_segments
     ,
       success: ->
+        masterRouter.map_edits.reset()
+        $('#upload-map-edits-modal').modal('hide').remove()
+        masterRouter.modals = []
+        masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/map", true
+        
+        masterRouter.geo_points.reset()
+        masterRouter.geo_point_on_segments.reset()
+        masterRouter.segments.reset()
+        
         masterRouter.geo_points.fetch
           success: ->
             masterRouter.geo_point_on_segments.fetch
               success: -> 
                 masterRouter.segments.fetch()
-        masterRouter.map_edits.reset()
-        $('#upload-map-edits-modal').modal('hide').remove()
-        masterRouter.modals = []
-        masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/map", true
       error: (model, error) ->
-        alert error
+        alert "Error uploading edits to the server: #{error}"

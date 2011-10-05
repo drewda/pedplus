@@ -8,7 +8,5 @@ class App.Collections.GeoPoints extends Backbone.Collection
       features: _.compact @map (gp) -> gp.geojson()
   selected: ->
     @filter (gp) -> gp.get 'selected'
-  selectAll: ->
-    @each (gp) -> gp.select()
   selectNone: ->
-    @each (gp) -> gp.deselect()
+    _.each @selected(), (gp) -> gp.deselect()

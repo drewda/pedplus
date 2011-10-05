@@ -33,8 +33,8 @@ class App.Models.Segment extends Backbone.Model
       if masterRouter.currentRouteName.startsWith "mapConnectGeoPoint"
         return
       else
-        @doSelect()
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/segment/#{@cid}", true)
+        @doSelect()
     else if masterRouter.currentRouteName == "measure" or
             masterRouter.currentRouteName.startsWith "measureSelectedSegment" or
             masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
@@ -46,7 +46,9 @@ class App.Models.Segment extends Backbone.Model
     @collection.selectNone()
     masterRouter.geo_points.selectNone()
     @set
-      selected: true
+       selected: true
+    console.log "doSelect-#{@cid}"
+    $("#segment-line-#{@cid}").svg().addClass('selected') #.attr "stroke-width", masterRouter.segment_layer.segmentSelectedStrokeWidth
   deselect: ->
     if masterRouter.currentRouteName.startsWith "map"
       if masterRouter.currentRouteName == "mapConnectGeoPoint:#{@cid}"
@@ -58,6 +60,7 @@ class App.Models.Segment extends Backbone.Model
             masterRouter.currentRouteName.startsWith "measureSelectedSegment" or
             masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
       # note that we do not want to allow selected when at the "measureEnterCountSession" route
+      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure", true)
       @doDeselect()
   doDeselect: ->
     # if this Segment is not already selected, then we want its 
@@ -67,6 +70,9 @@ class App.Models.Segment extends Backbone.Model
       selected: false
     , 
       silent: !alreadySelected
+    console.log "doDeselect-#{@cid}"
+    if alreadySelected
+      $("#segment-line-#{@cid}").svg().removeClass('selected').attr "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
   toggle: ->
     if @get 'selected'
       @deselect()

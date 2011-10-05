@@ -8,7 +8,5 @@ class App.Collections.Segments extends Backbone.Collection
       features: _.compact @map (s) -> s.geojson()
   selected: ->
     @filter (s) -> s.get 'selected'
-  selectAll: ->
-    @each (s) -> s.select()
   selectNone: ->
-    @each (s) -> s.deselect()
+    _.each @selected(), (s) -> s.doDeselect()

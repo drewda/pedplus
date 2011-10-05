@@ -61,8 +61,10 @@ class App.Views.Map extends Backbone.View
     
     if showSegmentLayer
       masterRouter.segment_layer.enable()
+      masterRouter.new_segment_layer.enable()
     else
       masterRouter.segment_layer.disable()
+      masterRouter.new_segment_layer.disable()
     
     # remove click listeners
     $('#osm-layer').unbind 'click'
@@ -168,7 +170,12 @@ class App.Views.Map extends Backbone.View
     masterRouter.map_edits.add mapEdit
     mapEdit.set
       geo_points: [geoPointToMove.unset 'geo_point_on_segments']
-    masterRouter.segments.trigger "change"
+    
+    # TODO:
+    _.each geoPointToMove.getSegments(), (s) =>
+      $("#segment-layer #segment-line-#{s.cid}").remove()
+      s.set
+        moved: true
     
     # for some reason the selected styling is removed from the GeoPoint, so we'll kludge it in
     $("#geo-point-circle-#{geoPointToMove.cid}").svg().addClass("selected").attr "r", masterRouter.geo_point_layer.geoPointSelectedRadius

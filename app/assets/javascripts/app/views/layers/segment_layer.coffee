@@ -2,94 +2,79 @@ class App.Views.SegmentLayer extends Backbone.View
   initialize: ->
     @segmentDefaultStrokeWidth = @options.segmentDefaultStrokeWidth
     @segmentSelectedStrokeWidth = @options.segmentSelectedStrokeWidth
-    
+   
     @segments = @options.segments
-  enable: ->  
-    @segments.bind 'reset',  @change, this
-    @segments.bind 'change', @change, this
-    @segments.bind 'add',    @change, this
-    @segments.bind 'remove', @change, this
+    
+    @layer = null
+  enable: ->
+    @segments.bind 'reset',   @render, this
+    # @segments.bind 'add',     @render, this
+    # @segments.bind 'remove',  @render, this
+    # @segments.bind 'change',  @render, this
     
     if $('#segment-layer').length == 0
       @render()
-      @change()
   disable: ->
     @segments.unbind()
-    $('#segment-layer').remove()
+    @remove()
+  remove: ->
+    if @layer
+      # map.off "move",    @layer.reload()
+      # map.off "resize",  @layer.reload()
+      map.remove(@layer)
+    if $('#segment-layer').length > 0
+      $('#segment-layer').remove()
   render: ->
-    layer = d3.select("#map-area svg").insert "svg:g", "#geo-point-layer" # behind GeoPoint's
-    layer.attr "id", "segment-layer"
-
-    map.on "move",    @reapplyTransform
-    map.on "resize",  @reapplyTransform
-  pathTransform: (d) ->
-    scale = Math.pow(2, map.zoom()) * 256
-    lp = map.locationPoint
-      lon: 0
-      lat: 0
-    translate = [lp.x, lp.y]
-    projection = d3.geo.mercator().translate(translate).scale(scale)
-    return d3.geo.path().projection projection
-  reapplyTransform: ->
-    d3.select('#segment-layer').selectAll("path")
-      .attr "d", (d) ->
-        pathTransform = masterRouter.segment_layer.pathTransform(d) 
-        pathTransform d.geojson()
-  # layerTransform: ->
-  #   scale = Math.pow(2, map.zoom()) * 256
-  #   translate = map.locationPoint
-  #     lon: 0
-  #     lat: 0
-  #   transformation = "translate(#{translate.x}, #{translate.y}) scale(#{scale})"
-  #   d3.select('#segment-layer').attr "transform", transformation
-  change: (segment) ->
-    # update the bound data
-    segments = @segments.reject (s) => s.get('markedForDelete')
-
-    segmentMarkers = d3.select('#segment-layer').selectAll("g").data segments, (d) =>
-      d.cid
-
-    # enter new elements              
-    segmentMarkers.enter()
-      .append("svg:g")
-      .append("svg:path")
-        .attr "d", (d) ->
-          pathTransform = masterRouter.segment_layer.pathTransform(d) 
-          pathTransform d.geojson()
-        .classed 'selected', (d) ->
-          d.get 'selected'
-        .classed 'connected', (d) ->
-          masterRouter.currentRouteName.startsWith "mapConnectGeoPoint"
-        .attr "stroke-width", (d) ->
-          if d.selected
-            masterRouter.segment_layer.segmentSelectedStrokeWidth
-          # else if connected
-          else
-            masterRouter.segment_layer.segmentDefaultStrokeWidth
-        .classed("segment-line", true)
-        .attr "id", (d) -> 
-          "segment-line-#{d.cid}"
-        .on 'click', (d) -> 
-          d.toggle()
-
-    # if there is a changed Segment, go in and modify it      
-    if segment and !segment.models
-      changedSegmentMarkers = segmentMarkers.filter (d, i) =>
-        d.cid == segment.cid
-      # select
-      changedSegmentMarkers.selectAll('path')
-        .attr "stroke-width", (d) ->
-          if d.get 'selected'
-            masterRouter.segment_layer.segmentSelectedStrokeWidth
-          else
-            masterRouter.segment_layer.segmentDefaultStrokeWidth
-        .classed "selected", (d) ->
-          d.get 'selected'
-      # move is handled by GeoPoint move
-
-    # remove old elements
-    segmentMarkers.exit().remove()                            
-
+    @remove()
+    @layer = po.geoJson()
+              .features(@segments.geojson().features)
+              .id("segment-layer")
+              .tile(false)
+              .scale("fixed")
+              .on "load", (e) ->
+                connectedSegmentCids = []
+                if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/c"
+                  geoPointCid = location.hash.split('/').pop()
+                  connectedSegmentCids = _.map masterRouter.geo_points.getByCid(geoPointCid).getSegments(), (s) => s.cid
+         
+                for f in e.features   
+                  c = f.element
+                  g = f.element = po.svg("g")
+           
+                  g.setAttribute "transform", c.getAttribute("transform")
+         
+                  c.setAttribute "id", "segment-line-#{f.data.cid}"
+                  c.setAttribute "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
+         
+         
+                  if masterRouter.segments.getByCid(f.data.cid).get("selected")
+                    c.setAttribute "class", "segment-line selected"
+                  else if connectedSegmentCids.length > 0
+                    if _.include connectedSegmentCids, f.data.cid
+                      c.setAttribute "class", "segment-line connected"
+                      connectedSegmentCids = _.without connectedSegmentCids, f.data.id
+                    else
+                      c.setAttribute "class", "segment-line"
+                  else
+                    c.setAttribute "class", "segment-line"
+           
+                  if masterRouter.segments.getByCid(f.data.cid).get("markedForDelete")? or
+                     masterRouter.segments.getByCid(f.data.cid).isNew()
+                    $(c).remove()
+                  else
+                    $(c).bind "click", (event) ->
+                      cid = event.currentTarget.id.split('-').pop()
+                      masterRouter.segments.getByCid(cid).toggle()
+                                 
+    map.add(@layer)
+    # reorder the layers: we want SegmentLayer to be under GeoPointLayer
+    #                     and we want both to be under the zoom buttons
+    $('#osm-layer').after($('#segment-layer'))
+    
+    # map.on "move",    @layer.reload()
+    # map.on "resize",  @layer.reload()
+  change: ->
+    # TODO
   setSegmentDefaultStrokeWidth: (segmentDefaultStrokeWidth) ->
     @segmentDefaultStrokeWidth = segmentDefaultStrokeWidth
     @render()

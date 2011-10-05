@@ -50,7 +50,7 @@
     fill: #999;
   }
   
-  #segment-layer {
+  #segment-layer, #new-segment-layer {
     path {
       stroke: #000000;
       opacity: .8;
@@ -66,6 +66,8 @@
   #geo-point-layer {
     circle {
       fill: #000000;
+      stroke: #fff;
+      stroke-width: 2px;
       opacity: .8;
     } 
     circle.selected {

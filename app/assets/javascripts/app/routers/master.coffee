@@ -19,7 +19,7 @@ class App.Routers.Master extends Backbone.Router
     # will be populated by the client-side
     @map_edits = new App.Collections.MapEdits
     
-    # new App.Views.Spinner
+    new App.Views.Spinner
       
     # render views
     @map = new App.Views.Map
@@ -37,6 +37,10 @@ class App.Routers.Master extends Backbone.Router
       geoPointSelectedRadius: 12
       geoPointConnectedRadius: 12
     @segment_layer = new App.Views.SegmentLayer
+      segments: @segments
+      segmentDefaultStrokeWidth: 10
+      segmentSelectedStrokeWidth: 10
+    @new_segment_layer = new App.Views.NewSegmentLayer
       segments: @segments
       segmentDefaultStrokeWidth: 10
       segmentSelectedStrokeWidth: 10
