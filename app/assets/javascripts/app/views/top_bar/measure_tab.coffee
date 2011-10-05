@@ -18,10 +18,10 @@ class App.Views.MeasureTab extends Backbone.View
       @countSession.counts.bind "add", @redrawCounter, this
       @countSession.counts.bind "remove", @redrawCounter, this
     
-    @minutes = 5
-    @millisecondsTotal = @minutes * 60 * 1000
-    @millisecondsRemaining = @millisecondsTotal
-    @endTime = null
+      @minutes = 1
+      @millisecondsTotal = @minutes * 60 * 1000
+      @millisecondsRemaining = @millisecondsTotal
+      @endTime = null
     
     @render()
   template: JST["app/templates/top_bar/measure_tab"]
