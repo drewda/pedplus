@@ -17,4 +17,6 @@ Project.all.each do |project|
   segmentsToRemove = allSegmentIds - segmentsToKeep
   Segment.where(:id => segmentsToRemove).delete_all
   GeoPointOnSegment.where(:segment_id => segmentsToRemove).delete_all
+  
+  p "Project-#{project.id}: #{segmentsToRemove.length} segments deleted"
 end
