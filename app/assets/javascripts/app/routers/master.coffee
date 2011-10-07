@@ -3,12 +3,18 @@ class App.Routers.Master extends Backbone.Router
     # this is how masterRouter will be referred to from other objects
     window.masterRouter = this
     
+    # juggernaut connect to be used for push notifications
+    # as when models are complete
+    @juggernautConnector = new JuggernautConnector
+    
     # initialize collections
     @projects = new App.Collections.Projects
     # injectProjects() # projects will be injected by dashboard.slim
     
     @users = new App.Collections.Users
-    @users.fetch()
+    @users.fetch
+      success: ->
+        masterRouter.juggernautConnector.subscribeToOrganization masterRouter.users.getCurrentUser().get('organization_id')
     
     # will be fetch'ed when the user selects a project
     @segments = new App.Collections.Segments
@@ -18,6 +24,8 @@ class App.Routers.Master extends Backbone.Router
     
     # will be populated by the client-side
     @map_edits = new App.Collections.MapEdits
+    
+    @model_jobs = new App.Collections.ModelJobs
     
     new App.Views.Spinner
       
@@ -29,6 +37,7 @@ class App.Routers.Master extends Backbone.Router
     @topBarTabs = []
     @modals = []
     @projectTab = null
+    @modelTab = null
     @measureTab = null
     @countSessionsTable = null
     
@@ -274,7 +283,7 @@ class App.Routers.Master extends Backbone.Router
     @reset(projectId)
     @routeNameKeeper 'model'
     # @fetchProjectData()
-    new App.Views.ModelTab
+    @modelTab = new App.Views.ModelTab
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects

@@ -9,6 +9,8 @@ class Project < ActiveRecord::Base
   has_many :count_sessions
   has_many :scenarios
   
+  has_many :model_jobs
+  
   accepts_nested_attributes_for :project_members, :allow_destroy => true
   
   def cache_bounding_box

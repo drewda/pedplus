@@ -9,7 +9,8 @@ Pedplus::Application.routes.draw do
                 :segments,
                 :geo_point_on_segments,
                 :scenarios,
-                :segment_in_scenarios
+                :segment_in_scenarios,
+                :model_jobs
       resources :count_sessions do
         resources :counts
       end
@@ -23,5 +24,10 @@ Pedplus::Application.routes.draw do
   namespace :admin do
     root :to => 'site#dashboard'
     resources :users, :organizations, :projects, :subscriptions, :oauth_clients
+  end
+
+  # probably letting all users access, not just admin ones
+  authenticate :user do
+    mount Resque::Server, :at => "/admin/resque"
   end
 end

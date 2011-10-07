@@ -8,3 +8,8 @@ To generate diagrams of the models and controllers (using Railroad) type:
     rake doc:diagrams
     
 In order to do this, you need to have already installed [Graphviz](http://www.graphviz.org/) on your system.
+
+== Dependencies
+* Redis
+* Node.js and npm
+* Juggernaut npm

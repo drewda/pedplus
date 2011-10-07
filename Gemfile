@@ -6,6 +6,9 @@ gem 'mysql2'
 
 gem 'newrelic_rpm'
 
+gem 'resque', :require => "resque/server"
+gem 'juggernaut', :git => 'https://github.com/maccman/juggernaut.git'
+
 gem 'devise'
 gem 'devise_invitable'
 
@@ -16,8 +19,6 @@ gem 'dynamic_form'
 gem 'ejs'
 
 gem 'jquery-rails'
-
-gem 'juggernaut', :git => 'https://github.com/maccman/juggernaut.git'
 
 group :assets do
   gem 'sass-rails'
