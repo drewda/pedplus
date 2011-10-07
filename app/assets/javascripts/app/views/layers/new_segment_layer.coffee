@@ -20,11 +20,11 @@ class App.Views.NewSegmentLayer extends Backbone.View
     layer = d3.select("#map-area svg").insert "svg:g", "#segment-layer" # behind GeoPoint's
     layer.attr "id", "new-segment-layer"
 
-    map.on "move",    @reapplyTransform
-    map.on "resize",  @reapplyTransform
+    masterRouter.map.map.on "move",    @reapplyTransform
+    masterRouter.map.map.on "resize",  @reapplyTransform
   pathTransform: (d) ->
-    scale = Math.pow(2, map.zoom()) * 256
-    lp = map.locationPoint
+    scale = Math.pow(2, masterRouter.map.map.zoom()) * 256
+    lp = masterRouter.map.map.locationPoint
       lon: 0
       lat: 0
     translate = [lp.x, lp.y]
@@ -36,8 +36,8 @@ class App.Views.NewSegmentLayer extends Backbone.View
         pathTransform = masterRouter.new_segment_layer.pathTransform(d)
         pathTransform d.geojson()
   # layerTransform: ->
-  #   scale = Math.pow(2, map.zoom()) * 256
-  #   translate = map.locationPoint
+  #   scale = Math.pow(2, masterRouter.map.map.zoom()) * 256
+  #   translate = masterRouter.map.map.locationPoint
   #     lon: 0
   #     lat: 0
   #   transformation = "translate(#{translate.x}, #{translate.y}) scale(#{scale})"

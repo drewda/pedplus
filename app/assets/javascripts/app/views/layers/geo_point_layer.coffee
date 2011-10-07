@@ -20,10 +20,10 @@ class App.Views.GeoPointLayer extends Backbone.View
     layer = d3.select("#map-area svg").insert "svg:g"
     layer.attr "id", "geo-point-layer"
 
-    map.on "move",    @reapplyTransform
-    map.on "resize",  @reapplyTransform
+    masterRouter.map.map.on "move",    @reapplyTransform
+    masterRouter.map.map.on "resize",  @reapplyTransform
   transform: (d) ->
-    lp = map.locationPoint
+    lp = masterRouter.map.map.locationPoint
       lon: d.get('longitude')
       lat: d.get('latitude')
     return "translate(#{lp.x}, #{lp.y})"

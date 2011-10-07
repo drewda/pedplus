@@ -6,37 +6,54 @@ class App.Views.Map extends Backbone.View
     # and in @checkForDoubleTapBeforeMovingGeoPoint()
     @latestTap = null
     
+    @map = null
+    @osmLayer = null
+    
     @render()
   render: ->
     window.po = org.polymaps
- 
-    window.map = po.map()
+    @map = po.map()
        .container(document.getElementById("map-area").appendChild(po.svg("svg")))
        .add(po.drag())
        .add(po.wheel())
        .add(po.touch())
        .add(po.arrow())
-
-    osmLayer = po.image()
+    @map.add(po.compass().position('top-right'))
+    
+    @osmGrayLayer = po.image()
+                .url(po.url('''http://{S}tile.cloudmade.com
+                /b8f01ac08d4242be9c2876f862c8ef2c
+                /46118/256/{Z}/{X}/{Y}.png''')
+                .hosts(["a.", "b.", "c.", ""]))
+                .id("osm-gray-layer")
+    @map.add(@osmGrayLayer)
+    @osmColorLayer = po.image()
                 .url(po.url('''http://{S}tile.cloudmade.com
                 /b8f01ac08d4242be9c2876f862c8ef2c
                 /997/256/{Z}/{X}/{Y}.png''')
                 .hosts(["a.", "b.", "c.", ""]))
-                .id("osm-layer")
-    map.add(osmLayer)
+                .id("osm-color-layer")
+    @map.add(@osmColorLayer)
     
-    map.add(po.compass().position('top-right'))
+  setOsmLayer: (mode = "color") ->
+    if mode == "color"
+      $('#osm-color-layer').show()
+      $('#osm-gray-layer').hide()
+    else if mode == "gray"
+      $('#osm-color-layer').hide()
+      $('#osm-gray-layer').show()
+
   centerMap: ->
     if currentProject = @projects.getCurrentProject()
       if currentProject.get 'southwest_latitude'
-        map.extent [
+        @map.extent [
           lat: currentProject.get 'northeast_latitude'
           lon: currentProject.get 'northeast_longitude'
         ,
           lat: currentProject.get 'southwest_latitude'
           lon: currentProject.get 'southwest_longitude'
         ]
-        map.zoomBy -1
+        @map.zoomBy -1
       else
         @centerMapAtCurrentPosition()
     else
@@ -44,12 +61,12 @@ class App.Views.Map extends Backbone.View
   centerMapAtCurrentPosition: ->
     if navigator.geolocation
       navigator.geolocation.getCurrentPosition (position) ->
-        map.center
+        masterRouter.map.map.center
           lat: position.coords.latitude
           lon: position.coords.longitude
-        map.zoom 16
+        masterRouter.map.map.zoom 16
     else # Berkeley Way
-      map.center
+      @map.center
         lat: 37.871592
         lon: 122.272747
   resetMap: (showGeoPointLayer, showSegmentLayer) ->
@@ -97,7 +114,7 @@ class App.Views.Map extends Backbone.View
     
     mapEdit = new App.Models.MapEdit
     masterRouter.map_edits.add mapEdit
-    pointLocation = map.pointLocation
+    pointLocation = @map.pointLocation
       x: x
       y: y
     newGeoPoint = new App.Models.GeoPoint
@@ -159,7 +176,7 @@ class App.Views.Map extends Backbone.View
       event.preventDefault()
       x = event.originalEvent.targetTouches[0].pageX - $('#map-area').offset().left
       y = event.originalEvent.targetTouches[0].pageY - $('#map-area').offset().top
-    pointLocation = map.pointLocation
+    pointLocation = @map.pointLocation
       x: x
       y: y
     geoPointToMove = masterRouter.geo_points.selected()[0]

@@ -19,9 +19,9 @@ class App.Views.SegmentLayer extends Backbone.View
     @remove()
   remove: ->
     if @layer
-      # map.off "move",    @layer.reload()
-      # map.off "resize",  @layer.reload()
-      map.remove(@layer)
+      # masterRouter.map.map.off "move",    @layer.reload()
+      # masterRouter.map.map.off "resize",  @layer.reload()
+      masterRouter.map.map.remove(@layer)
     if $('#segment-layer').length > 0
       $('#segment-layer').remove()
   render: ->
@@ -66,13 +66,13 @@ class App.Views.SegmentLayer extends Backbone.View
                       cid = event.currentTarget.id.split('-').pop()
                       masterRouter.segments.getByCid(cid).toggle()
                                  
-    map.add(@layer)
+    masterRouter.map.map.add(@layer)
     # reorder the layers: we want SegmentLayer to be under GeoPointLayer
     #                     and we want both to be under the zoom buttons
     $('#osm-layer').after($('#segment-layer'))
     
-    # map.on "move",    @layer.reload()
-    # map.on "resize",  @layer.reload()
+    # masterRouter.map.map.on "move",    @layer.reload()
+    # masterRouter.map.map.on "resize",  @layer.reload()
   change: ->
     # TODO
   setSegmentDefaultStrokeWidth: (segmentDefaultStrokeWidth) ->

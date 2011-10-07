@@ -109,6 +109,7 @@ class App.Routers.Master extends Backbone.Router
       mode: "open"
       projects: masterRouter.projects
     masterRouter.modals.push projectModal
+    @map.setOsmLayer "color"
     @map.resetMap false, false
     @map.centerMap()
 
@@ -132,6 +133,7 @@ class App.Routers.Master extends Backbone.Router
     masterRouter.topBarTabs.push @projectTab
     @geo_points.selectNone()
     @segments.selectNone()
+    @map.setOsmLayer "color"
     @map.resetMap false, true
     @map.centerMap()
   
@@ -155,6 +157,7 @@ class App.Routers.Master extends Backbone.Router
       map_edits: masterRouter.map_edits
     @geo_points.selectNone()
     @segments.selectNone()
+    @map.setOsmLayer "color"
     @map.resetMap true, true
     @map.mapMode()
     
@@ -169,6 +172,7 @@ class App.Routers.Master extends Backbone.Router
       geoPointId: geoPointId
       mapMode: 'geoPointSelected'
       map_edits: masterRouter.map_edits
+    @map.setOsmLayer "color"
     @map.resetMap true, true
     @map.mapMode()
     
@@ -183,6 +187,7 @@ class App.Routers.Master extends Backbone.Router
       geoPointId: geoPointId
       mapMode: 'geoPointMove'
       map_edits: masterRouter.map_edits
+    @map.setOsmLayer "color"
     @map.resetMap true, true
     @map.moveGeoPointMode()
     
@@ -197,6 +202,7 @@ class App.Routers.Master extends Backbone.Router
       geoPointId: geoPointId
       mapMode: 'geoPointConnect'
       map_edits: masterRouter.map_edits
+    @map.setOsmLayer "color"
     @map.resetMap true, true
     @map.connectGeoPointMode()
     
@@ -214,6 +220,7 @@ class App.Routers.Master extends Backbone.Router
     deleteGeoPointModal = new App.Views.DeleteGeoPointModal
         geoPointId: geoPointId
     masterRouter.modals.push deleteGeoPointModal
+    @map.setOsmLayer "color"
     @map.resetMap true, true
     
   mapSelectedSegment: (projectId, segmentId) ->
@@ -227,6 +234,7 @@ class App.Routers.Master extends Backbone.Router
       segmentId: segmentId
       mapMode: 'segmentSelected'
       map_edits: masterRouter.map_edits
+    @map.setOsmLayer "color"
     @map.resetMap true, true
     
   mapDeleteSegment: (projectId, segmentId) ->
@@ -243,6 +251,7 @@ class App.Routers.Master extends Backbone.Router
     deleteSegmentModal = new App.Views.DeleteSegmentModal
         segmentId: segmentId
     masterRouter.modals.push deleteSegmentModal
+    @map.setOsmLayer "color"
     @map.resetMap true, true
       
   mapUploadEdits: (projectId) ->
@@ -258,6 +267,8 @@ class App.Routers.Master extends Backbone.Router
       projectId: projectId
       projects: masterRouter.projects
     masterRouter.modals.push uploadMapEditsModal
+    @map.setOsmLayer "color"
+    @map.resetMap true, true
 
   model: (projectId) ->
     @reset(projectId)
@@ -267,6 +278,8 @@ class App.Routers.Master extends Backbone.Router
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects
+    @map.setOsmLayer "gray"
+    @map.resetMap false, true
 
   measure: (projectId) ->
     @reset(projectId, 200)
@@ -277,6 +290,7 @@ class App.Routers.Master extends Backbone.Router
       projectId: projectId
       projects: masterRouter.projects
       mode: "measure"
+    @map.setOsmLayer "gray"
     @map.resetMap false, true  
     @geo_points.selectNone()
     @segments.selectNone()
@@ -376,6 +390,8 @@ class App.Routers.Master extends Backbone.Router
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects
+    @map.setOsmLayer "gray"
+    @map.resetMap false, true 
     
   help: (projectId) ->
     @reset(projectId)
