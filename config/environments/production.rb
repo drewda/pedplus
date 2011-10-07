@@ -48,4 +48,8 @@ Pedplus::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
+  
+  # juggernaut host
+  config.juggernaut_host = "pedplus.s3sol.com"
+  config.juggernaut_port = "8080"
 end
