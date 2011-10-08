@@ -84,16 +84,16 @@ class App.Views.Map extends Backbone.View
       masterRouter.new_segment_layer.disable()
     
     # remove click listeners
-    $('#osm-layer').unbind 'click'
-    $('#osm-layer').unbind 'dblclick'
-    $('#osm-layer').unbind 'touchstart'
+    $('#osm-color-layer, #osm-gray-layer').unbind 'click'
+    $('#osm-color-layer, #osm-gray-layer').unbind 'dblclick'
+    $('#osm-color-layer, #osm-gray-layer').unbind 'touchstart'
     
     # remove coloring -- if coming from connectGeoPointMode
     $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
     $(".segment-line.connected").svg().removeClass("connected")
   mapMode: ->
-    $('#osm-layer').bind 'dblclick', (event) => @drawGeoPoint(event, false)
-    $('#osm-layer').bind 'touchstart', (event) => @checkForDoubleTapBeforeDrawingGeoPoint(event)
+    $('#osm-color-layer').bind 'dblclick', (event) => @drawGeoPoint(event, false)
+    $('#osm-color-layer').bind 'touchstart', (event) => @checkForDoubleTapBeforeDrawingGeoPoint(event)
   checkForDoubleTapBeforeDrawingGeoPoint: (event) ->
     # only log taps with one touch
     # because taps with two touches are probably
@@ -157,8 +157,8 @@ class App.Views.Map extends Backbone.View
     
     newGeoPoint.select()    
   moveGeoPointMode: ->  
-    $('#osm-layer').bind 'dblclick', (event) => @moveGeoPoint(event, false)
-    $('#osm-layer').bind 'touchstart', (event) => @checkForDoubleTapBeforeMovingGeoPoint(event)
+    $('#osm-color-layer').bind 'dblclick', (event) => @moveGeoPoint(event, false)
+    $('#osm-color-layer').bind 'touchstart', (event) => @checkForDoubleTapBeforeMovingGeoPoint(event)
   checkForDoubleTapBeforeMovingGeoPoint: (event) ->
     # only log taps with one touch
     # because taps with two touches are probably

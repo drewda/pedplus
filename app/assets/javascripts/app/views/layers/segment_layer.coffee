@@ -69,7 +69,7 @@ class App.Views.SegmentLayer extends Backbone.View
     masterRouter.map.map.add(@layer)
     # reorder the layers: we want SegmentLayer to be under GeoPointLayer
     #                     and we want both to be under the zoom buttons
-    $('#osm-layer').after($('#segment-layer'))
+    $('#osm-color-layer').after($('#segment-layer'))
     
     # masterRouter.map.map.on "move",    @layer.reload()
     # masterRouter.map.map.on "resize",  @layer.reload()
