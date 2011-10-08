@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111007022721) do
+ActiveRecord::Schema.define(:version => 20111008011257) do
 
   create_table "count_sessions", :force => true do |t|
     t.integer  "segment_id"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(:version => 20111007022721) do
     t.integer  "seconds_to_run"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "project_version", :default => 1
   end
 
   add_index "model_jobs", ["project_id"], :name => "index_model_jobs_on_project_id"
@@ -121,6 +122,7 @@ ActiveRecord::Schema.define(:version => 20111007022721) do
     t.decimal  "southwest_longitude", :precision => 15, :scale => 10
     t.decimal  "northeast_latitude",  :precision => 15, :scale => 10
     t.decimal  "northeast_longitude", :precision => 15, :scale => 10
+    t.integer  "version"
   end
 
   add_index "projects", ["organization_id"], :name => "index_projects_on_organization_id"

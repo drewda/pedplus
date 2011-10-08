@@ -1,5 +1,6 @@
 class Api::MapEditsController < Api::ApiController
   def upload    
+    projectId = params['project_id'] # we're assuming uploads are for only one project
     geoPoints = params['geo_points']
     segments = params['segments']
     geoPointOnSegments = params['geo_point_on_segments']
@@ -61,11 +62,18 @@ class Api::MapEditsController < Api::ApiController
       end
     end
     
+    project = Project.find(projectId)
+    
     # update project's bounding box
     # we'll assume that data is only being uplaoded for one project
-    Project.find(geoPoints.first[:project_id]).cache_bounding_box if geoPoints.length > 0
+    project.cache_bounding_box if geoPoints.length > 0
+    
+    # increment the project's version
+    project.increment!(:version)
     
     json = {
+      projectId: projectId,
+      projectVersion: project.version,
       geoPoints: geoPoints,
       segments: segments,
       geoPointOnSegments: geoPointOnSegments

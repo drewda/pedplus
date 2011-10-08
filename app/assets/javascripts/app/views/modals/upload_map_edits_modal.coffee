@@ -18,14 +18,20 @@ class App.Views.UploadMapEditsModal extends Backbone.View
     mapEdit = new App.Models.MapEdit
     masterRouter.map_edits.add mapEdit
     mapEdit.save
+      project_id: masterRouter.projects.getCurrentProjectId()
       segments: segments
       geo_points: geo_points
       geo_point_on_segments: geo_point_on_segments
     ,
-      success: ->
+      success: (returnedMapEdit) ->
         masterRouter.map_edits.reset()
         $('#upload-map-edits-modal').modal('hide').remove()
         masterRouter.modals = []
+        
+        # update the project's version number
+        masterRouter.projects.getCurrentProject().set
+          version: returnedMapEdit.get('projectVersion')
+        
         masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/map", true
         
         masterRouter.geo_points.reset()
