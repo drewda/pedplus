@@ -13,3 +13,17 @@ In order to do this, you need to have already installed [Graphviz](http://www.gr
 * Redis
 * Node.js and npm
 * Juggernaut npm
+
+* Python 2.7
+  pip install networkx
+  pip install PyYAML
+  apt-get install python-mysqldb
+  
+* god
+  
+  
+== Install
+change config.juggernaut_host in config/environments/production.rb
+
+redis daemonize ?????
+http://stackoverflow.com/questions/5822097/monitoring-redis-with-god-monitoring-conditions/5844417#5844417

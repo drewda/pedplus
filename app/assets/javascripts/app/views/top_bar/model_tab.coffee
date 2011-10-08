@@ -5,6 +5,9 @@ class App.Views.ModelTab extends Backbone.View
     
     @projects.bind "reset", @render, this
 
+    @permeabilityAnalysisAgainstProjectVersion = null
+    @proximityAnalysisAgainstProjectVersion = null
+
     @topBar.render 'model'
     
     @render()
@@ -12,27 +15,58 @@ class App.Views.ModelTab extends Backbone.View
   render: ->
     $('#tab-area').empty().html @template
     
-    $('#run-permeability-analysis').bind "click", @beginPermeabilityAnalysis
-    $('run-proximity-analysis').bind "click", @beginProximityAnalysis
+    $('#permeability-analysis-button').bind "click", @permeabilityButton
+    $('#proximity-analysis-button').bind "click", @beginProximityAnalysis
     
-  beginPermeabilityAnalysis: (event) ->
+  permeabilityButton: (event) ->
+    if @permeabilityAnalysisAgainstProjectVersion == masterRouter.projects.getCurrentProject().get('version') and masterRouter.map_edits.length == 0
+      
+      masterRouter.modelTab.showPermeabilityAnalysis()
+    else
+      masterRouter.modelTab.beginPermeabilityAnalysis()
+    
+  showPermeabilityAnalysis: ->
+    masterRouter.map.modelMode "permeability"
+    
+  beginPermeabilityAnalysis: ->
+    $('#permeability-analysis-button').addClass('primary').text 'Running Permeability Analysis'
+    
     modelJob = masterRouter.model_jobs.create
       project_id: masterRouter.projects.getCurrentProjectId()
       kind: 'permeability'
+      project_version: masterRouter.projects.getCurrentProject().get('version')
     ,
       success: ->
-        $('#run-permeability-analysis').unbind()
-        $('#run-permeability-analysis').addClass('disabled')
-        $('#run-proximity-analysis').removeClass('primary').addClass('disabled')
-        $('#spinner').fadeIn()
-        # don't forget to do something when the ModelJob returns
-  endPermeabilityAnalysis: ->
-    $('#spinner').fadeOut()
-    # $('#run-permeability-analysis').bind "click", @beginPermeabilityAnalysis 
-    # are we sure we want to let them recompute?
-    $('#run-permeability-analysis').removeClass('disabled')
-    # what about the other button?
-  
+        $('#permeability-analysis-button').unbind()
+        $('#permeability-analysis-button').addClass('disabled')
+        $('#proximity-analysis-button').removeClass('primary').addClass('disabled')
+        masterRouter.map.enableSegmentWorkingAnimation()
+      error: ->
+        alert 'Error starting permeability analysis.'
+        
+  endPermeabilityAnalysis: (modelJobId) ->
+    masterRouter.model_jobs.fetch
+      success: ->
+        $('#permeability-analysis-button').bind "click", @permeabilityButton
+        $('#permeability-analysis-button').removeClass('disabled').addClass('primary').text 'Permeability Analysis'
+        masterRouter.map.disableSegmentWorkingAnimation()
+        
+        modelJob = masterRouter.model_jobs.get(modelJobId)
+        
+        masterRouter.modelTab.permeabilityAnalysisAgainstProjectVersion = modelJob.get('project_version')
+        
+        output = modelJob.get('output') # this is JSON
+        outputJson = JSON.parse(output)
+        
+        _.each outputJson, (pv) =>
+          masterRouter.segments.get(pv.segment_id).set
+            permeabilityValue: pv.permeability
+            permeabilityClass: pv.breakNum
+
+        masterRouter.map.modelMode "permeability"
+      error: ->
+        alert 'Error fetching the results of the permeability analysis from the server.'
+        
   beginProximityAnalysis: (event) ->
     # TODO
     

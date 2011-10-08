@@ -1,3 +1,3 @@
 development: localhost:6379
 test: localhost:6379
-production: virginia.s3sol.com:6379
+production: localhost:6379

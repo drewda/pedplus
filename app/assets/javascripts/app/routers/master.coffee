@@ -289,6 +289,7 @@ class App.Routers.Master extends Backbone.Router
       projects: masterRouter.projects
     @map.setOsmLayer "gray"
     @map.resetMap false, true
+    masterRouter.segments.selectNone()
 
   measure: (projectId) ->
     @reset(projectId, 200)

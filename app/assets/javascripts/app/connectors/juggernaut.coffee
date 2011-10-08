@@ -6,7 +6,9 @@ class JuggernautConnector
   onData: (data) ->
     console.log "Got data: #{data}"
     if data.startsWith "modelJob-complete-"
-      id = data.split('-').pop
-      masterRouter.model_jobs.fetch
-        success: ->
-          masterRouter.modelTab.endPermeabilityAnalysis()
+      id = data.split('-').pop()
+      masterRouter.modelTab.endPermeabilityAnalysis(id)
+    else if data.startsWith "notice:-:"
+      message = data.split(':-:').last
+      $('#activity-report').append("<p>#{message}")
+      

@@ -1,26 +1,14 @@
-# http://stackoverflow.com/questions/4913349/haversine-formula-in-python-bearing-and-distance-between-two-gps-points/4913653#4913653
-from math import *
-def haversine(lon1, lat1, lon2, lat2):
-    """
-    Calculate the great circle distance between two points 
-    on the earth (specified in decimal degrees)
-    """
-    # convert decimal degrees to radians 
-    lon1, lat1, lon2, lat2 = map(radians, [lon1, lat1, lon2, lat2])
-    # haversine formula 
-    dlon = lon2 - lon1 
-    dlat = lat2 - lat1 
-    a = sin(dlat/2)**2 + cos(lat1) * cos(lat2) * sin(dlon/2)**2
-    c = 2 * asin(sqrt(a)) 
-    km = 6367 * c
-    return km
-
-
 # import libraries
 import sys
 import MySQLdb
 import networkx as nx
+# import matplotlib.pyplot as plt
 import itertools
+import json
+import yaml
+
+import haversine
+import jenks
 
 # get project id: the one argument passed in to this script
 projectId = sys.argv[1]
@@ -29,7 +17,18 @@ projectId = sys.argv[1]
 G = nx.Graph()
 
 # establish connection to database
-conn = MySQLdb.connect(host="localhost", user="root", passwd="", db="pedplus_development")
+dbConfig = yaml.load(file('../../config/database.yml', 'r'))
+if dbConfig.get('development'):
+  user = dbConfig.get('development').get('username')
+  passwd = dbConfig.get('development').get('password')
+  db = dbConfig.get('development').get('database')
+elif dbConfig.get('production'):
+  user = dbConfig.get('production').get('username')
+  passwd = dbConfig.get('production').get('password')
+  db = dbConfig.get('production').get('database')
+if passwd == None:
+  passwd = ""
+conn = MySQLdb.connect(host="localhost", user=user, passwd=passwd, db=db)
 cursor = conn.cursor()
 
 # connect and create nodes (which correspond with segments)
@@ -47,7 +46,6 @@ for connectionSet in cursor.fetchall():
       # print "edge from " + combo[0] + " to: " + combo[1]
 
 # draw network plot
-# import matplotlib.pyplot as plt
 # nx.draw(G)
 # plt.savefig("path.png")
 # nx.write_dot(G,'path.dot')
@@ -65,7 +63,7 @@ for segment in cursor.fetchall():
   permeabilityValues[segmentId] = 0
   longitudes = segment[1].split(',')
   latitudes = segment[2].split(',')
-  length = haversine(float(longitudes[0]), float(latitudes[0]), float(longitudes[1]), float(latitudes[1])) # km
+  length = haversine.haversine(float(longitudes[0]), float(latitudes[0]), float(longitudes[1]), float(latitudes[1])) # km
   segmentLengths[segmentId] = length
 
 # compute permeability
@@ -74,5 +72,9 @@ for origin, paths in shortestPaths.iteritems():
     multipliedDistance = segmentLengths[int(path[0])] * segmentLengths[int(path[-1])]
     for segment in path:
       permeabilityValues[int(segment)] = permeabilityValues[int(segment)] + multipliedDistance
-      
-print permeabilityValues
+
+breaks = jenks.getJenksBreaks(permeabilityValues.values(), 5)
+
+permeabilityValues = [{'segment_id': segment, 'breakNum': jenks.classify(permeability, breaks), 'permeability': permeability} for segment, permeability in permeabilityValues.items()]
+
+print json.dumps(permeabilityValues)

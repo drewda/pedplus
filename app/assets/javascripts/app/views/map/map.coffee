@@ -9,6 +9,8 @@ class App.Views.Map extends Backbone.View
     @map = null
     @osmLayer = null
     
+    @segmentWorkingAnimation = null
+    
     @render()
   render: ->
     window.po = org.polymaps
@@ -88,9 +90,10 @@ class App.Views.Map extends Backbone.View
     $('#osm-color-layer, #osm-gray-layer').unbind 'dblclick'
     $('#osm-color-layer, #osm-gray-layer').unbind 'touchstart'
     
-    # remove coloring -- if coming from connectGeoPointMode
-    $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
-    $(".segment-line.connected").svg().removeClass("connected")
+    # remove coloring
+    # $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
+    $(".geo-point-circle").svg().removeClass("connected").removeClass("selected")
+    $(".segment-line").svg().removeClass("connected").removeClass("selected").css("stroke", '')
   mapMode: ->
     $('#osm-color-layer').bind 'dblclick', (event) => @drawGeoPoint(event, false)
     $('#osm-color-layer').bind 'touchstart', (event) => @checkForDoubleTapBeforeDrawingGeoPoint(event)
@@ -204,3 +207,22 @@ class App.Views.Map extends Backbone.View
     $("#geo-point-circle-#{geoPointToConnect.cid}").svg().addClass "connected"
     for s in geoPointToConnect.getSegments()
       $("#segment-line-#{s.cid}").svg().addClass "connected"
+      
+  modelMode: (modelKind) ->
+    redColors = ['#FCBBA1', '#FC9272', '#FB6A4A', '#EF3B2C', '#CB181D', '#99000D']
+    
+    if modelKind == "permeability"
+      masterRouter.segments.each (s) =>
+        console.log s.get('permeabilityClass')
+        $("#segment-line-#{s.cid}").svg().css('stroke', redColors[s.get('permeabilityClass') - 1])
+      
+    else if modelKind == "proximity"
+      console.log "prox"
+      
+  enableSegmentWorkingAnimation: ->
+    @segmentWorkingAnimation = setInterval "masterRouter.map.doSegmentWorkingAnimation()", 500
+  disableSegmentWorkingAnimation: ->
+    @segmentWorkingAnimation = clearInterval @segmentWorkingAnimation
+  doSegmentWorkingAnimation: ->
+    $('.segment-line').svg().css 'stroke', (index, value) =>
+      "rgb(#{Math.floor(Math.random() * 256)}, 0, 0)"

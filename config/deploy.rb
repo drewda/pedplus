@@ -61,6 +61,38 @@ namespace :db do
   end
 end
 
+# GOD
+# see http://www.tatvartha.com/2010/09/monitoring-rails-processes-apache-passenger-delayed_job-using-god-and-capistrano-2/
+namespace :god do
+  task :start, :roles => :app do
+    god_config_file = "#{latest_release}/config/pedplus.god"
+    sudo "god --log-level debug -c #{god_config_file}"
+  end
+  task :stop, :roles => :app do
+   sudo "god terminate" rescue nil
+ end
+ task :restart, :roles => :app do
+   god.stop
+   god.start
+  end
+  task :status, :roles => :app do
+   sudo "god status"
+  end
+  task :log, :roles => :app do
+   sudo "tail -f /var/log/messages"
+  end
+ task :deploy_config, :roles => :app do
+    god_config_file = "#{latest_release}/config/omt.god"
+    god_script_template = File.dirname(__FILE__) + "/deploy/pedplus.god.erb"
+    data = ERB.new(IO.read(god_script_template)).result(binding)
+    sudo "god load #{god_config_file}"
+  end
+  task :redeploy, :roles => :app do
+    god.deploy_config
+    god.load_config
+  end
+end
+
 after "deploy:setup",           "db:setup"   unless fetch(:skip_db_setup, false)
 after "deploy:finalize_update", "db:symlink"
 
