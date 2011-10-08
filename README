@@ -17,9 +17,11 @@ In order to do this, you need to have already installed [Graphviz](http://www.gr
 * Python 2.7
   pip install networkx
   pip install PyYAML
-  apt-get install python-mysqldb
+  sudo apt-get install python-mysqldb
   
-* god
+* god:
+  sudo apt-get install god
+  for init script, see http://openmonkey.com/2008/05/27/god-init-script-for-debian-ubuntu-systems/
   
   
 == Install

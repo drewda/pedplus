@@ -42,6 +42,8 @@ namespace :deploy do
   desc "Restart Application"
   task :restart, :roles => :app do
     run "touch #{current_release}/tmp/restart.txt"
+    # Restart the resque workers
+    run "cd #{current_release} && bundle exec rake environment queue:restart_workers"
   end
 end
 
@@ -69,23 +71,30 @@ namespace :god do
     sudo "god --log-level debug -c #{god_config_file}"
   end
   task :stop, :roles => :app do
-   sudo "god terminate" rescue nil
- end
- task :restart, :roles => :app do
-   god.stop
-   god.start
+    sudo "god terminate" rescue nil
+  end
+  task :restart, :roles => :app do
+    god.stop
+    god.start
   end
   task :status, :roles => :app do
-   sudo "god status"
+    sudo "god status"
   end
   task :log, :roles => :app do
-   sudo "tail -f /var/log/messages"
+    sudo "tail -f /var/log/messages"
   end
- task :deploy_config, :roles => :app do
-    god_config_file = "#{latest_release}/config/omt.god"
-    god_script_template = File.dirname(__FILE__) + "/deploy/pedplus.god.erb"
-    data = ERB.new(IO.read(god_script_template)).result(binding)
+  task :deploy_config, :roles => :app do
+    location = fetch(:template_dir, "config/deploy") + '/pedplus.god.erb'
+    template = File.read(location)
+    config = ERB.new(template)
+    run "mkdir -p #{shared_path}/config" 
+    put config.result(binding), "#{shared_path}/config/pedplus.god"
+
+    god_config_file = "#{shared_path}/config/pedplus.god"
     sudo "god load #{god_config_file}"
+  end
+  task :symlink_config, :except => { :no_release => true } do
+    run "ln -nfs #{shared_path}/config/pedplus.god #{current_release}/config/pedplus.god" 
   end
   task :redeploy, :roles => :app do
     god.deploy_config
@@ -95,6 +104,11 @@ end
 
 after "deploy:setup",           "db:setup"   unless fetch(:skip_db_setup, false)
 after "deploy:finalize_update", "db:symlink"
+
+
+after "deploy:setup", "god:deploy_config"
+after "deploy:finalize_update", "god:symlink_config"
+before "deploy:restart", "god:restart"
 
 before "deploy:restart", "bundle:install"
 before "deploy:migrate", "bundle:install"
