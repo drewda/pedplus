@@ -67,18 +67,21 @@ end
 # see http://www.tatvartha.com/2010/09/monitoring-rails-processes-apache-passenger-delayed_job-using-god-and-capistrano-2/
 namespace :god do
   task :start, :roles => :app do
-    god_config_file = "#{latest_release}/config/pedplus.god"
+    god_config_file = "#{shared_path}/config/pedplus.god"
+    sudo "service god start"
     sudo "god --log-level debug -c #{god_config_file}"
   end
   task :stop, :roles => :app do
-    sudo "god terminate" rescue nil
+    sudo "service god stop"
   end
   task :restart, :roles => :app do
-    god.stop
-    god.start
+    sudo "service god stop"
+    god_config_file = "#{shared_path}/config/pedplus.god"
+    sudo "service god start"
+    sudo "god --log-level debug -c #{god_config_file}"
   end
   task :status, :roles => :app do
-    sudo "god status"
+    sudo "service god status"
   end
   task :log, :roles => :app do
     sudo "tail -f /var/log/messages"

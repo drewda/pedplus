@@ -2,8 +2,8 @@
 RAILS_ROOT = "<%= latest_release %>"
 RAILS_ENV = "production"
 SHARED_PATH = "<%= shared_path %>"
-# USER = "<%= user %>"
-# GROUP = "<%= user %>"
+USER = "<%= user %>"
+GROUP = "<%= user %>"
 RUBY_PATH = "/home/passenger/.rbenv/bin"
 GOD_ENVIRONMENT = {
   'RAILS_ROOT' => RAILS_ROOT,
@@ -13,37 +13,37 @@ GOD_ENVIRONMENT = {
 
 # Redis
 # see http://stackoverflow.com/questions/5822097/monitoring-redis-with-god-monitoring-conditions
-God.watch do |w|
-  w.name = "redis-server"
-  w.interval = 30.seconds
-  w.start = "/etc/init.d/redis-server start"
-  w.stop = "/etc/init.d/redis-server stop"
-  w.restart = "/etc/init.d/redis-server restart"
-  w.start_grace = 10.seconds
-  w.restart_grace = 10.seconds
-
-  # determine the state on startup
-  w.transition(:init, { true => :up, false => :start }) do |on|
-    on.condition(:process_running) do |c|
-      c.running = true
-    end
-  end
-  
-  # start if process is not running
-  w.transition(:up, :start) do |on|
-    on.condition(:process_running) do |c|
-      c.running = false
-    end
-  end
-  
-  # restart if lost
-  w.start_if do |start|
-    start.condition(:process_running) do |c|
-      c.interval = 5.seconds
-      c.running = false
-    end
-  end
-end
+# God.watch do |w|
+#   w.name = "redis-server"
+#   w.interval = 30.seconds
+#   w.start = "/etc/init.d/redis-server start"
+#   w.stop = "/etc/init.d/redis-server stop"
+#   w.restart = "/etc/init.d/redis-server restart"
+#   w.start_grace = 10.seconds
+#   w.restart_grace = 10.seconds
+# 
+#   # determine the state on startup
+#   w.transition(:init, { true => :up, false => :start }) do |on|
+#     on.condition(:process_running) do |c|
+#       c.running = true
+#     end
+#   end
+#   
+#   # start if process is not running
+#   w.transition(:up, :start) do |on|
+#     on.condition(:process_running) do |c|
+#       c.running = false
+#     end
+#   end
+#   
+#   # restart if lost
+#   w.start_if do |start|
+#     start.condition(:process_running) do |c|
+#       c.interval = 20.seconds
+#       c.running = false
+#     end
+#   end
+# end
 
 # JUGGERNAUT
 # see https://gist.github.com/1055322
@@ -53,13 +53,11 @@ JUGGERNAUT_PORT = "9001"
 God.watch do |w|
   w.name = "juggernaut"
   w.interval = 20
-  w.start = "start-stop-daemon --start --quiet --umask 007 --pidfile #{JUGGERNAUT_PID} --exec #{JUGGERNAUT_DAEMON}"
+  w.start = "start-stop-daemon --start --quiet --umask 007 --pidfile #{JUGGERNAUT_PID} --exec #{JUGGERNAUT_DAEMON} -- --port #{JUGGERNAUT_PORT}"
   w.stop = "start-stop-daemon --stop --retry 10 --quiet --oknodo --pidfile #{JUGGERNAUT_PID} --exec #{JUGGERNAUT_DAEMON} -- --port #{JUGGERNAUT_PORT}"
   w.start_grace = 10.seconds
   w.restart_grace = 10.seconds
   w.pid_file = JUGGERNAUT_PID
-  # w.uid = "#{USER}"
-  # w.gid = "#{GROUP}"
   
   # determine the state on startup
   w.transition(:init, { true => :up, false => :start }) do |on|
@@ -78,7 +76,7 @@ God.watch do |w|
   # restart if lost
   w.start_if do |start|
     start.condition(:process_running) do |c|
-      c.interval = 5.seconds
+      c.interval = 20.seconds
       c.running = false
     end
   end
@@ -86,18 +84,19 @@ end
 
 # RESQUE WORKERS
 # see https://github.com/defunkt/resque/blob/master/examples/god/resque.god
-num_workers = RAILS_ENV == 'production' ? 2 : 2
+num_workers = RAILS_ENV == 'production' ? 1 : 1
 num_workers.times do |num|
   God.watch do |w|
+    w.uid = "#{USER}"
+    w.gid = "#{GROUP}"
+    
     w.dir      = RAILS_ROOT
     w.name     = "resque-#{num}"
     w.group    = 'resque'
     w.interval = 30.seconds
     w.env      = {"QUEUE"=>"*", "RAILS_ENV"=>RAILS_ENV}
-    w.start    = "cd #{RAILS_ROOT} && bundle exec rake environment resque:work"
-
-    # w.uid = "#{USER}"
-    # w.gid = "#{GROUP}"
+    w.start    = "/home/passenger/.rbenv/bin/rbenv init && cd #{RAILS_ROOT} && bundle exec rake environment resque:work"
+    w.log      = "#{SHARED_PATH}/log/resque_god.log"
 
     # restart if memory gets too high
     w.transition(:up, :restart) do |on|
@@ -118,14 +117,14 @@ num_workers.times do |num|
     w.transition([:start, :restart], :up) do |on|
       on.condition(:process_running) do |c|
         c.running = true
-        c.interval = 5.seconds
+        c.interval = 30.seconds
       end
 
       # failsafe
       on.condition(:tries) do |c|
-        c.times = 5
+        c.times = 3
         c.transition = :start
-        c.interval = 5.seconds
+        c.interval = 30.seconds
       end
     end
 
