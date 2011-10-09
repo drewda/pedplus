@@ -463,7 +463,7 @@ class App.Routers.Master extends Backbone.Router
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects
-    @map.setOsmLayer "gray"
+    @map.setOsmLayer "color"
     @map.resetMap false, true 
     
   help: (projectId) ->

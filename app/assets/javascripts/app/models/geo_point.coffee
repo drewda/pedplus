@@ -98,5 +98,3 @@ class App.Models.GeoPoint extends Backbone.Model
       masterRouter.geo_point_on_segments.add gposCurrentGeoPoint
       masterRouter.geo_point_on_segments.add gposTargetGeoPoint
       masterRouter.segments.add newSegment
-      
-      console.log newSegment
