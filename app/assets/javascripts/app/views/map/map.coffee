@@ -92,7 +92,7 @@ class App.Views.Map extends Backbone.View
     
     # remove coloring
     # $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
-    $(".geo-point-circle").svg().removeClass("connected").removeClass("selected")
+    # $(".geo-point-circle").svg().removeClass("connected").removeClass("selected")
     $(".segment-line").svg().removeClass("connected").removeClass("selected").css("stroke", '')
   mapMode: ->
     $('#osm-color-layer').bind 'dblclick', (event) => @drawGeoPoint(event, false)
