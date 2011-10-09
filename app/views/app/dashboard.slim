@@ -6,19 +6,19 @@
 
 - content_for :body do
   .container-fluid
-    #activity-box
-      ul.tabs
-        li.dropdown(data-dropdown="dropdown")
-          a.dropdown-toggle = current_user.full_name
-          ul.dropdown-menu
-            li
-              a Settings
-            li.divider
-            li
-              = link_to "Sign Out", destroy_user_session_path, :method => :delete
-        li#message-button
-          a(href="#message/new") M
-      #activity-report
+    / #activity-box
+    /   ul.tabs
+    /     li.dropdown(data-dropdown="dropdown")
+    /       a.dropdown-toggle = current_user.full_name
+    /       ul.dropdown-menu
+    /         li
+    /           a Settings
+    /         li.divider
+    /         li
+    /           = link_to "Sign Out", destroy_user_session_path, :method => :delete
+    /     li#message-button
+    /       a(href="#message/new") M
+    /   #activity-report
     #top-bar
     #map-area
     #spinner

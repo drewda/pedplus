@@ -1,7 +1,10 @@
 <div id="measure-tab">
   <div id="count-bar">
     <% if (mode == "measure" || mode == "selectedSegment" || mode == "selectedCountSession") { %>
-    <h3>Count Sessions</h3>
+    <h6 style="float: left;">
+      <a class="btn primary">Measured Counts</a> 
+      <a href="#project/<%= projectId %>/measure/predictions" class="btn">Predicted Counts</a> 
+    </h6>
     <div id="count-buttons">
       <% if (segmentId) { %>
         <h6><a href="#project/<%= projectId %>/measure/segment/<%= segmentId %>/count_session/new" class="btn primary">Count At Selected Segment</a></h6>
@@ -28,5 +31,18 @@
       <button id="count-plus-one-button" class="btn primary large">+ 1</button>
       <button id="count-plus-five-button" class="btn primary large">+ 5</button>
     </div>
+  <% } else if (mode == "predictions") { %>
+    <h6 style="float: left;">
+      <a href="#project/<%= projectId %>/measure" class="btn">Measured Counts</a> 
+      <a class="btn primary">Predicted Counts</a> 
+    </h6>
+    <div style="float: right;">
+        <h6><em>Click a point on the plot to see the corresponding segment on the map.</em></h6>
+    </div>
+    <% if (projectId == 4) { %>
+      <div align="center"><img src="/media/redlands-synthesized-measures.png"/></div>
+    <% } else { %>
+      <h6 align="center">Not computed for this project.</h6>
+    <% } %>
   <% } %>
 </div>

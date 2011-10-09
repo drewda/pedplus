@@ -2,11 +2,36 @@ class App.Views.ModelTab extends Backbone.View
   initialize: ->
     @topBar = @options.topBar
     @projects = @options.projects
+    @modelJobId = @options.modelJobId
+    @mode = @options.mode
+    
+    @modelTabMode = ""
+    @renderData = {}
+    
+    if @mode == "model"
+      if masterRouter.model_jobs.getModelsForCurrentVersion("permeability").length > 0
+        permeabilityModelJob = masterRouter.model_jobs.getModelsForCurrentVersion("permeability").pop()
+        @modelTabMode = "modelExistingPermeability"
+        @renderData =
+          modelTabMode: @modelTabMode
+          permeabilityModelJobId: permeabilityModelJob.id
+          projectId: masterRouter.projects.getCurrentProjectId()
+      else
+        @modelTabMode = "modelNotYetPermeability"
+        @renderData =
+          modelTabMode: @modelTabMode
+          projectId: masterRouter.projects.getCurrentProjectId()
+    else if @mode == "modelPermeability"
+      @modelJob = masterRouter.model_jobs.get(@modelJobId)
+      
+      @loadAndShowPermeability(@modelJob)
+      
+      @modelTabMode = "modelShowPermeability"
+      @renderData = 
+        modelTabMode: @modelTabMode
+        projectId: masterRouter.projects.getCurrentProjectId()
     
     @projects.bind "reset", @render, this
-
-    @permeabilityAnalysisAgainstProjectVersion = null
-    @proximityAnalysisAgainstProjectVersion = null
     
     @modelJob = null
 
@@ -15,19 +40,24 @@ class App.Views.ModelTab extends Backbone.View
     @render()
   template: JST["app/templates/top_bar/model_tab"]
   render: ->
-    $('#tab-area').empty().html @template
+    $('#tab-area').empty().html @template @renderData
     
     $('#permeability-analysis-button').bind "click", @permeabilityButton
-    $('#proximity-analysis-button').bind "click", @beginProximityAnalysis
+    # $('#proximity-analysis-button').bind "click", @beginProximityAnalysis
     
   permeabilityButton: (event) ->
-    if @permeabilityAnalysisAgainstProjectVersion == masterRouter.projects.getCurrentProject().get('version') and masterRouter.map_edits.length == 0
-      
-      masterRouter.modelTab.showPermeabilityAnalysis()
-    else
+    if @modelTabMode == "modelNotYetPermeability"
       masterRouter.modelTab.beginPermeabilityAnalysis()
     
-  showPermeabilityAnalysis: ->
+  loadAndShowPermeability: (modelJob) ->
+    output = modelJob.get('output') # this is JSON
+    outputJson = JSON.parse(output)
+    
+    _.each outputJson, (pv) =>
+      masterRouter.segments.get(pv.segment_id).set
+        permeabilityValue: pv.permeability
+        permeabilityClass: pv.breakNum
+
     masterRouter.map.modelMode "permeability"
     
   beginPermeabilityAnalysis: ->
@@ -57,27 +87,9 @@ class App.Views.ModelTab extends Backbone.View
     
   endPermeabilityAnalysis: (modelJobId) ->
     masterRouter.model_jobs.fetch
-      success: ->
-        $('#permeability-analysis-button').bind "click", @permeabilityButton
-        $('#permeability-analysis-button').removeClass('disabled').addClass('primary').text 'Permeability Analysis'
+      success: (modelJob) ->
         masterRouter.map.disableSegmentWorkingAnimation()
-        
-        modelJob = masterRouter.model_jobs.get(modelJobId)
-        
-        masterRouter.modelTab.permeabilityAnalysisAgainstProjectVersion = modelJob.get('project_version')
-        
-        output = modelJob.get('output') # this is JSON
-        outputJson = JSON.parse(output)
-        
-        _.each outputJson, (pv) =>
-          masterRouter.segments.get(pv.segment_id).set
-            permeabilityValue: pv.permeability
-            permeabilityClass: pv.breakNum
-
-        masterRouter.map.modelMode "permeability"
+        masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/model/permeability/#{modelJob.id}", true
       error: ->
         alert 'Error fetching the results of the permeability analysis from the server.'
-        
-  beginProximityAnalysis: (event) ->
-    # TODO
     

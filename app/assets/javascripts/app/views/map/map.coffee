@@ -20,7 +20,6 @@ class App.Views.Map extends Backbone.View
        .add(po.wheel())
        .add(po.touch())
        .add(po.arrow())
-    @map.add(po.compass().position('top-right'))
     
     @osmGrayLayer = po.image()
                 .url(po.url('''http://{S}tile.cloudmade.com
@@ -36,6 +35,8 @@ class App.Views.Map extends Backbone.View
                 .hosts(["a.", "b.", "c.", ""]))
                 .id("osm-color-layer")
     @map.add(@osmColorLayer)
+    
+    @map.add(po.compass().position('top-right'))
     
   setOsmLayer: (mode = "color") ->
     if mode == "color"
@@ -213,11 +214,11 @@ class App.Views.Map extends Backbone.View
     
     if modelKind == "permeability"
       masterRouter.segments.each (s) =>
-        console.log s.get('permeabilityClass')
-        $("#segment-line-#{s.cid}").svg().css('stroke', redColors[s.get('permeabilityClass') - 1])
+        console.log redColors[s.get('permeabilityClass') - 1]
+        $("#segment-line-#{s.cid}").svg().attr('stroke', redColors[s.get('permeabilityClass') - 1])
       
-    else if modelKind == "proximity"
-      console.log "prox"
+    # else if modelKind == "proximity"
+    #   console.log "prox"
       
   measureMode: ->
     blueColors = ['#C6DBEF', '#9ECAE1', '#6BAED6', '#4292C6', '#2171B5', '#084594']

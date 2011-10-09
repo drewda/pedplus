@@ -1,6 +1,20 @@
 <div id="model-tab">
-  <h6>
-    <a id="permeability-analysis-button" class="btn">Run Permeability Analysis</a> 
-    <a id="proximity-analysis-button" class="btn">Run Proximity Analysis</a> 
+  <h6 style="float: left;">
+    <% if (modelTabMode == "modelExistingPermeability") { %>
+      <a href="#project/<%= projectId %>/model/permeability/<%= permeabilityModelJobId %>" class="btn">Permeability Analysis</a> 
+      <a class="btn">Proximity Analysis</a> 
+    <% } else if (modelTabMode == "modelNotYetPermeability") { %>
+      <a id="permeability-analysis-button" class="btn">Permeability Analysis</a> 
+      <a id="proximity-analysis-button" class="btn">Proximity Analysis</a>
+    <% } else if (modelTabMode == "modelShowPermeability") { %>
+      <a href="#project/<%= projectId %>/model" class="btn primary">Permeability Analysis</a> 
+      <a class="btn">Proximity Analysis</a>
+    <% } %>
+  </h6>
+  <h6 style="float: right;">
+    Walking Radius 
+    <a class="btn">10 minutes</a>
+    <a class="btn">30 minutes</a> 
+    <a class="btn primary">no radius</a>
   </h6>
 </div>

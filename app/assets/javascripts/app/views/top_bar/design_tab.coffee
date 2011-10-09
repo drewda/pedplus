@@ -3,11 +3,15 @@ class App.Views.DesignTab extends Backbone.View
     @topBar = @options.topBar
     @projects = @options.projects
     
+    @renderData =
+      projectName: masterRouter.projects.getCurrentProject().get('name')
+      projectId: masterRouter.projects.getCurrentProjectId()
+    
     @projects.bind "reset", @render, this
 
-    @topBar.render 'modify'
+    @topBar.render 'design'
     
     @render()
-  template: JST["app/templates/top_bar/modify_tab"]
+  template: JST["app/templates/top_bar/design_tab"]
   render: ->
-    $('#tab-area').empty().html @template
+    $('#tab-area').empty().html @template @renderData

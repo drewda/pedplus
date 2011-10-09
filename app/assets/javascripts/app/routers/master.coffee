@@ -83,20 +83,24 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/map/segment/delete/:segment_id"       : "mapDeleteSegment"
     "project/:project_id/map/upload_edits"                     : "mapUploadEdits"
 
-    "project/:project_id/model" : "model"
-    "project/:project_id/model/permeability/:model_job" : "modelPermeability" ###########
+    "project/:project_id/model"                         : "model"
+    "project/:project_id/model/permeability/:model_job" : "modelPermeability"
 
     "project/:project_id/measure"                                         : "measure"
+    "project/:project_id/measure/predictions"                             : "measurePredictions"    
     "project/:project_id/measure/segment/:segment_id"                     : "measureSelectedSegment"
     "project/:project_id/measure/segment/:segment_id/count_session/new"   : "measureNewCountSession"
     "project/:project_id/measure/count_session/:count_session_id"         : "measureSelectedCountSession"
     "project/:project_id/measure/count_session/enter/:count_session_id"   : "measureEnterCountSession"
     "project/:project_id/measure/count_session/delete/:count_session_id"  : "measureDeleteCountSession"
     
-    "project/:project_id/opportunity" : "opportunity"
+    "project/:project_id/opportunity"             : "opportunity"
+    # "project/:project_id/opportunity/:segment_id" : "opportunitySelectedSegment"
 
-    "project/:project_id/design" : "design"
-    
+    "project/:project_id/design"                              : "design"
+    # "project/:project_id/design/scenario/new"                 : "designScenarioNew"
+    # "project/:project_id/design/scenario/edit/:scenario_id}"  : "designScenarioEdit"
+    "project/:project_id/design/scenario/:scenario_id}"       : "designScenarioView"
     
     "project/:project_id/help" : "help"
 
@@ -294,6 +298,21 @@ class App.Routers.Master extends Backbone.Router
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects
+      mode: "model"
+    @map.setOsmLayer "gray"
+    @map.resetMap false, true
+    masterRouter.segments.selectNone()
+    
+  modelPermeability: (projectId, modelJobId) ->
+    @reset(projectId)
+    @routeNameKeeper 'modelPermeability'
+    # @fetchProjectData()
+    @modelTab = new App.Views.ModelTab
+      topBar: masterRouter.topBar
+      projectId: projectId
+      projects: masterRouter.projects
+      modelJobId: modelJobId
+      mode: "modelPermeability"
     @map.setOsmLayer "gray"
     @map.resetMap false, true
     masterRouter.segments.selectNone()
@@ -316,6 +335,20 @@ class App.Routers.Master extends Backbone.Router
         count_sessions: masterRouter.count_sessions
     else
       @countSessionTable.render()
+  
+  measurePredictions: (projectId) ->
+    @reset(projectId, 590)
+    @routeNameKeeper 'measurePredictions'
+    # @fetchProjectData()
+    @measureTab = new App.Views.MeasureTab
+      topBar: masterRouter.topBar
+      projectId: projectId
+      projects: masterRouter.projects
+      mode: "predictions"
+    @map.setOsmLayer "gray"
+    @map.resetMap false, true  
+    @geo_points.selectNone()
+    @segments.selectNone()
   
   measureSelectedSegment: (projectId, segmentId) ->
     @reset(projectId, 200)
@@ -399,11 +432,34 @@ class App.Routers.Master extends Backbone.Router
     else
       @countSessionTable.render()
 
+  opportunity: (projectId) ->
+    @reset(projectId, 590)
+    @routeNameKeeper 'opportunity'
+    # @fetchProjectData
+    @opportunityTab = new App.Views.OpportunityTab
+      topBar: masterRouter.topBar
+      projectId: projectId
+      projects: masterRouter.projects
+    @map.setOsmLayer "gray"
+    @map.resetMap false, true
+    
+  # opportunitySelectedSegment: (projectId, segmentId) ->
+  #   @reset(projectId)
+  #   @routeNameKeeper 'opportunity'
+  #   # @fetchProjectData
+  #   @opportunityTab = new App.Views.OpportunityTab
+  #     topBar: masterRouter.topBar
+  #     projectId: projectId
+  #     projects: masterRouter.projects
+  #     segmentId: segmentId
+  #   @map.setOsmLayer "gray"
+  #   @map.resetMap false, true
+
   design: (projectId) ->
-    @reset(projectId)
+    @reset(projectId, 160)
     @routeNameKeeper 'design'
     # @fetchProjectData
-    new App.Views.DesignTab
+    @designTab = new App.Views.DesignTab
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects

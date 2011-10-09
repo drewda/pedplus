@@ -2,7 +2,7 @@
   z-index: 1;
   position: absolute;
   top: 0;
-  left: 155px;
+  left: 0px;
   right: 75px;
 /*  width: 70%;*/
   height: 90px; // also used in App.Routers.Master.reset()
@@ -10,6 +10,7 @@
   border: 1px solid rgba(0,0,0,.2);
   padding: 4px;
   -webkit-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
+  -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
   
   ul.pills {
     margin-bottom: 6px;
@@ -19,7 +20,7 @@
     }
   }
   
-  #help-pill {
+  #help-pill, #sign-out-pill {
     float: right;
   }
   
@@ -94,6 +95,20 @@
       }
       #count-plus-five-button {
         float: right;
+      }
+    }
+  }
+  #design-tab {
+    table {
+      border: 0;
+      padding: 0;
+      th {
+        border: 0;
+        padding: 0;
+      }
+      td {
+        border: 0;
+        padding: 0;
       }
     }
   }
