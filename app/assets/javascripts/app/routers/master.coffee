@@ -32,7 +32,7 @@ class App.Routers.Master extends Backbone.Router
     # render views
     @map = new App.Views.Map
       projects: @projects
-    new App.Views.ActivityBox
+    # new App.Views.ActivityBox
     @topBar = new App.Views.TopBar
     @topBarTabs = []
     @modals = []
@@ -327,7 +327,7 @@ class App.Routers.Master extends Backbone.Router
       projects: masterRouter.projects
       mode: "measure"
     @map.setOsmLayer "gray"
-    @map.resetMap false, true  
+    @map.resetMap false, true
     @geo_points.selectNone()
     @segments.selectNone()
     if !@countSessionTable

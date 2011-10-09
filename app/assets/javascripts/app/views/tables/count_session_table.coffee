@@ -19,6 +19,11 @@ class App.Views.CountSessionTable extends Backbone.View
           model: cs
         @countSessionRows.push csr
     , this
+    
+    $('.count-session-row').bind "click", (event) =>
+      id = event.currentTarget.id.split('-').pop()
+      segmentId = masterRouter.count_sessions.get(id).get('segment_id')
+      masterRouter.segments.get(segmentId).toggle()
   remove: ->
     _.each @countSessionRows, (csr) =>
       csr.remove()

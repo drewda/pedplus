@@ -95,7 +95,7 @@ class App.Views.Map extends Backbone.View
     $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
     # $(".geo-point-circle").svg().removeClass("connected").removeClass("selected")
     $(".segment-line").svg().removeClass("connected selected red1 red2 red3 red4 red5").css("stroke", '')
-    masterRouter.segment_layer.layer.reload()
+    masterRouter.segment_layer.layer.reload() if masterRouter.segment_layer.layer?
   mapMode: ->
     $('#osm-color-layer').bind 'dblclick', (event) => @drawGeoPoint(event, false)
     $('#osm-color-layer').bind 'touchstart', (event) => @checkForDoubleTapBeforeDrawingGeoPoint(event)
@@ -222,7 +222,10 @@ class App.Views.Map extends Backbone.View
     #   console.log "prox"
       
   measureMode: ->
-    blueColors = ['#C6DBEF', '#9ECAE1', '#6BAED6', '#4292C6', '#2171B5', '#084594']
+    masterRouter.segments.each (s) =>
+      colorClass = s.get('measuredClass')
+      $("#segment-line-#{s.cid}").svg().removeClass("black").addClass("blue#{colorClass}")
+    masterRouter.segment_layer.layer.reload()
   
   enableSegmentWorkingAnimation: ->
     @segmentWorkingAnimation = setInterval "masterRouter.map.doSegmentWorkingAnimation()", 500

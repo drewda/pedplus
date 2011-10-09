@@ -22,6 +22,26 @@ class App.Views.MeasureTab extends Backbone.View
       @millisecondsTotal = @minutes * 60 * 1000
       @millisecondsRemaining = @millisecondsTotal
       @endTime = null
+    else
+      countTotals = masterRouter.count_sessions.pluck('count_total')
+      min = _.min countTotals
+      max = _.max countTotals
+      fullRange = max - min
+      classRange = fullRange / 5
+      breaks = [min, min + classRange, min + classRange * 2, min + classRange * 3, min + classRange * 2, max]
+      masterRouter.count_sessions.each (cs) =>
+        value = cs.get('count_total')
+        for i in [0..breaks.length]
+          if value <= breaks[i]
+            b = i
+            break
+        masterRouter.segments.get(cs.get('segment_id')).set
+          measuredClass: b    
+      masterRouter.segments.each (s) =>
+        if !s.get('measuredClass')
+          s.set
+            measuredClass: 0
+      masterRouter.map.measureMode()
     
     @render()
   template: JST["app/templates/top_bar/measure_tab"]

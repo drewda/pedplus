@@ -47,8 +47,9 @@ class App.Models.Segment extends Backbone.Model
     masterRouter.geo_points.selectNone()
     @set
        selected: true
-    console.log "doSelect-#{@cid}"
-    $("#segment-line-#{@cid}").svg().addClass('selected') #.attr "stroke-width", masterRouter.segment_layer.segmentSelectedStrokeWidth
+    $("#segment-line-#{@cid}").svg()
+      .removeClass('red0 red1 red2 red3 red4 red5 blue0 blue1 blue2 blue3 blue4 blue5')
+      .addClass('selected')
   deselect: ->
     if masterRouter.currentRouteName.startsWith "map"
       if masterRouter.currentRouteName == "mapConnectGeoPoint:#{@cid}"
@@ -70,7 +71,6 @@ class App.Models.Segment extends Backbone.Model
       selected: false
     , 
       silent: !alreadySelected
-    console.log "doDeselect-#{@cid}"
     if alreadySelected
       $("#segment-line-#{@cid}").svg().removeClass('selected').attr "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
   toggle: ->

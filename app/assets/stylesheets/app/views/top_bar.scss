@@ -50,6 +50,9 @@
         border: 0;
         padding: 0;
         padding-top: 6px;
+        tr.selected {
+          background-color: #55ee33;
+        }
         th {
           border: 0;
           padding: 0;
