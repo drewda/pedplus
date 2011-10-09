@@ -1,14 +1,15 @@
 # ssh options
-ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "passenger@virginia.s3sol.com")]
+ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "passenger@pedpluspower.s3sol.com")]
+# ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "s3sol.pem")]
 
 # bundler bootstrap
 require 'bundler/capistrano'
 
 # main details
 set :application, "pedplus"
-role :web, "virginia.s3sol.com"
-role :app, "virginia.s3sol.com"
-role :db,  "virginia.s3sol.com", :primary => true
+role :web, "pedpluspower.s3sol.com"
+role :app, "pedpluspower.s3sol.com"
+role :db,  "pedpluspower.s3sol.com", :primary => true
 
 # server details
 default_run_options[:pty] = true

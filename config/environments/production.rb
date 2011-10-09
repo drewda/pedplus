@@ -51,5 +51,5 @@ Pedplus::Application.configure do
   
   # juggernaut host
   config.juggernaut_host = "pedplus.s3sol.com"
-  config.juggernaut_port = "9001"
+  config.juggernaut_port = "8080"
 end
