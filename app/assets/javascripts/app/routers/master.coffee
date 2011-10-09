@@ -5,7 +5,7 @@ class App.Routers.Master extends Backbone.Router
     
     # juggernaut connect to be used for push notifications
     # as when models are complete
-    @juggernautConnector = new JuggernautConnector
+    # @juggernautConnector = new JuggernautConnector
     
     # initialize collections
     @projects = new App.Collections.Projects
@@ -14,7 +14,7 @@ class App.Routers.Master extends Backbone.Router
     @users = new App.Collections.Users
     @users.fetch
       success: ->
-        masterRouter.juggernautConnector.subscribeToOrganization masterRouter.users.getCurrentUser().get('organization_id')
+        # masterRouter.juggernautConnector.subscribeToOrganization masterRouter.users.getCurrentUser().get('organization_id')
     
     # will be fetch'ed when the user selects a project
     @segments = new App.Collections.Segments
@@ -37,8 +37,11 @@ class App.Routers.Master extends Backbone.Router
     @topBarTabs = []
     @modals = []
     @projectTab = null
+    @mapTab = null
     @modelTab = null
     @measureTab = null
+    @opportunityTab = null
+    @designTab = null
     @countSessionsTable = null
     
     @geo_point_layer = new App.Views.GeoPointLayer
@@ -81,6 +84,7 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/map/upload_edits"                     : "mapUploadEdits"
 
     "project/:project_id/model" : "model"
+    "project/:project_id/model/permeability/:model_job" : "modelPermeability" ###########
 
     "project/:project_id/measure"                                         : "measure"
     "project/:project_id/measure/segment/:segment_id"                     : "measureSelectedSegment"
@@ -88,8 +92,11 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/measure/count_session/:count_session_id"         : "measureSelectedCountSession"
     "project/:project_id/measure/count_session/enter/:count_session_id"   : "measureEnterCountSession"
     "project/:project_id/measure/count_session/delete/:count_session_id"  : "measureDeleteCountSession"
+    
+    "project/:project_id/opportunity" : "opportunity"
 
-    "project/:project_id/modify" : "modify"
+    "project/:project_id/design" : "design"
+    
     
     "project/:project_id/help" : "help"
 
@@ -392,11 +399,11 @@ class App.Routers.Master extends Backbone.Router
     else
       @countSessionTable.render()
 
-  modify: (projectId) ->
+  design: (projectId) ->
     @reset(projectId)
-    @routeNameKeeper 'modify'
+    @routeNameKeeper 'design'
     # @fetchProjectData
-    new App.Views.ModifyTab
+    new App.Views.DesignTab
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects
@@ -448,5 +455,6 @@ class App.Routers.Master extends Backbone.Router
           masterRouter.geo_point_on_segments.fetch
             success: -> 
               masterRouter.segments.fetch()
+      masterRouter.model_jobs.fetch()
     if masterRouter.count_sessions.length == 0
       masterRouter.count_sessions.fetch()

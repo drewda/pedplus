@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111008011257) do
+ActiveRecord::Schema.define(:version => 20111009033555) do
 
   create_table "count_sessions", :force => true do |t|
     t.integer  "segment_id"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20111008011257) do
     t.datetime "updated_at"
     t.integer  "project_id"
     t.integer  "user_id"
+    t.integer  "count_total"
   end
 
   add_index "count_sessions", ["project_id"], :name => "index_count_sessions_on_project_id"
