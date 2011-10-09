@@ -69,16 +69,16 @@ end
 namespace :god do
   task :start, :roles => :app do
     god_config_file = "#{shared_path}/config/pedplus.god"
-    sudo "service god start"
+    sudo "sudo god start"
     sudo "god --log-level debug -c #{god_config_file}"
   end
   task :stop, :roles => :app do
-    sudo "service god stop"
+    sudo "sudo god stop"
   end
   task :restart, :roles => :app do
-    sudo "service god stop"
+    sudo "sudo god stop"
     god_config_file = "#{shared_path}/config/pedplus.god"
-    sudo "service god start"
+    sudo "sudo god start"
     sudo "god --log-level debug -c #{god_config_file}"
   end
   task :status, :roles => :app do
