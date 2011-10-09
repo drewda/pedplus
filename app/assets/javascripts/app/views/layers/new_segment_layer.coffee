@@ -63,6 +63,7 @@ class App.Views.NewSegmentLayer extends Backbone.View
                     pathTransform = masterRouter.new_segment_layer.pathTransform(d)
                     pathTransform d.geojson()
                   .classed("segment-line", true)
+                  .classed("black", true)
                   .classed 'selected', (d) =>
                     d.get 'selected'
                   .classed 'connected', (d) =>
