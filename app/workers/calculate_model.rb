@@ -21,9 +21,11 @@ class CalculateModel
       
       # tell the browser
       # so that it can refetch the results of the ModelJob
-      channel = "organization-#{modelJob.project.organization.id}"
-      message = "modelJob-complete-#{modelJob.id}"
-      Juggernaut.publish channel, message
+      # channel = "organization-#{modelJob.project.organization.id}"
+      # message = "modelJob-complete-#{modelJob.id}"
+      # Juggernaut.publish channel, message
+      
+      # for now we'll just have the browser poll
       
     elsif modelJob.kind == "proximity"
       # TODO

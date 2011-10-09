@@ -6,6 +6,7 @@ import networkx as nx
 import itertools
 import json
 import yaml
+import os
 
 import haversine
 import jenks
@@ -17,17 +18,20 @@ projectId = sys.argv[1]
 G = nx.Graph()
 
 # establish connection to database
-dbConfig = yaml.load(file('../../config/database.yml', 'r'))
-if dbConfig.get('development'):
-  user = dbConfig.get('development').get('username')
-  passwd = dbConfig.get('development').get('password')
-  db = dbConfig.get('development').get('database')
-elif dbConfig.get('production'):
-  user = dbConfig.get('production').get('username')
-  passwd = dbConfig.get('production').get('password')
-  db = dbConfig.get('production').get('database')
-if passwd == None:
-  passwd = ""
+# dbConfig = yaml.load(file(os.path.join('..', 'config', 'database.yml'), 'r'))
+# if dbConfig.get('development'):
+#   user = dbConfig.get('development').get('username')
+#   passwd = dbConfig.get('development').get('password')
+#   db = dbConfig.get('development').get('database')
+# elif dbConfig.get('production'):
+#   user = dbConfig.get('production').get('username')
+#   passwd = dbConfig.get('production').get('password')
+#   db = dbConfig.get('production').get('database')
+# if passwd == None:
+#   passwd = ""
+user = "root"
+passwd = ""
+db = "pedplus_development"
 conn = MySQLdb.connect(host="localhost", user=user, passwd=passwd, db=db)
 cursor = conn.cursor()
 

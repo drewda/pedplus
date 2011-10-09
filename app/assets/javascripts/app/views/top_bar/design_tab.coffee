@@ -1,4 +1,4 @@
-class App.Views.ModifyTab extends Backbone.View
+class App.Views.DesignTab extends Backbone.View
   initialize: ->
     @topBar = @options.topBar
     @projects = @options.projects

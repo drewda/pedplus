@@ -7,6 +7,8 @@ class App.Views.ModelTab extends Backbone.View
 
     @permeabilityAnalysisAgainstProjectVersion = null
     @proximityAnalysisAgainstProjectVersion = null
+    
+    @modelJob = null
 
     @topBar.render 'model'
     
@@ -31,19 +33,28 @@ class App.Views.ModelTab extends Backbone.View
   beginPermeabilityAnalysis: ->
     $('#permeability-analysis-button').addClass('primary').text 'Running Permeability Analysis'
     
-    modelJob = masterRouter.model_jobs.create
+    @modelJob = masterRouter.model_jobs.create
       project_id: masterRouter.projects.getCurrentProjectId()
       kind: 'permeability'
       project_version: masterRouter.projects.getCurrentProject().get('version')
     ,
-      success: ->
+      success: (model) ->
         $('#permeability-analysis-button').unbind()
         $('#permeability-analysis-button').addClass('disabled')
         $('#proximity-analysis-button').removeClass('primary').addClass('disabled')
         masterRouter.map.enableSegmentWorkingAnimation()
+        @permeabilityPoll = setInterval 'masterRouter.modelTab.pollForPermeability()', 5000
+      , this
       error: ->
         alert 'Error starting permeability analysis.'
-        
+  
+  pollForPermeability: ->
+    @modelJob.fetch
+      success: (model) ->
+        if model.get('output')
+          clearInterval(@permeabilityPoll)
+          masterRouter.modelTab.endPermeabilityAnalysis(model.id)
+    
   endPermeabilityAnalysis: (modelJobId) ->
     masterRouter.model_jobs.fetch
       success: ->
