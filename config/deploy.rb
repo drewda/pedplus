@@ -1,5 +1,5 @@
 # ssh options
-ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "passenger@pedpluspower.s3sol.com")]
+ssh_options[:keys] = [File.join(ENV["HOME"], ".ssh", "passenger@virginia.s3sol.com")]
 
 # bundler bootstrap
 require 'bundler/capistrano'
