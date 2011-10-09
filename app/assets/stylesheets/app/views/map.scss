@@ -52,9 +52,11 @@
   
   #segment-layer, #new-segment-layer {
     path {
-      stroke: #000000;
       opacity: .8;
       stroke-linecap: round;
+    }
+    path.black {
+      stroke: #000000;
     }
     path.selected {
       stroke: #55ee33;
@@ -62,6 +64,21 @@
     }
     path.connected {
       stroke: #429BF8;
+    }
+    path.red1 {
+      stroke: #FC9272;
+    }
+    path.red2 {
+      stroke: #FB6A4A;
+    }
+    path.red3 {
+      stroke: #EF3B2C;
+    }
+    path.red4 {
+      stroke: #CB181D;
+    }
+    path.red5 {
+      stroke: #99000D;
     }
   }
   #geo-point-layer {

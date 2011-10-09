@@ -67,16 +67,19 @@ class App.Views.SegmentLayer extends Backbone.View
 
       c.removeAttribute "class"
 
-      if masterRouter.segments.getByCid(f.data.cid).get("selected")
-        c.setAttribute "class", "segment-line selected"
+      if masterRouter.currentRouteName.startsWith "modelPermeability"
+        colorClass = masterRouter.segments.getByCid(f.data.cid).get('permeabilityClass')
+        c.setAttribute "class", "red#{colorClass}"
+      else if masterRouter.segments.getByCid(f.data.cid).get("selected")
+        c.setAttribute "class", "segment-line selected black"
       else if connectedSegmentCids.length > 0
         if _.include connectedSegmentCids, f.data.cid
-          c.setAttribute "class", "segment-line connected"
+          c.setAttribute "class", "segment-line connected black"
           connectedSegmentCids = _.without connectedSegmentCids, f.data.id
         else
-          c.setAttribute "class", "segment-line"
+          c.setAttribute "class", "segment-line black"
       else
-        c.setAttribute "class", "segment-line"
+        c.setAttribute "class", "segment-line black"
   
   change: ->
     # TODO

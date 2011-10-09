@@ -94,7 +94,8 @@ class App.Views.Map extends Backbone.View
     # remove coloring
     $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
     # $(".geo-point-circle").svg().removeClass("connected").removeClass("selected")
-    $(".segment-line").svg().removeClass("connected").removeClass("selected").css("stroke", '')
+    $(".segment-line").svg().removeClass("connected selected red1 red2 red3 red4 red5").css("stroke", '')
+    masterRouter.segment_layer.layer.reload()
   mapMode: ->
     $('#osm-color-layer').bind 'dblclick', (event) => @drawGeoPoint(event, false)
     $('#osm-color-layer').bind 'touchstart', (event) => @checkForDoubleTapBeforeDrawingGeoPoint(event)
@@ -210,12 +211,12 @@ class App.Views.Map extends Backbone.View
       $("#segment-line-#{s.cid}").svg().addClass "connected"
       
   modelMode: (modelKind) ->
-    redColors = ['#FCBBA1', '#FC9272', '#FB6A4A', '#EF3B2C', '#CB181D', '#99000D']
     
     if modelKind == "permeability"
       masterRouter.segments.each (s) =>
-        console.log redColors[s.get('permeabilityClass') - 1]
-        $("#segment-line-#{s.cid}").svg().attr('stroke', redColors[s.get('permeabilityClass') - 1])
+        colorClass = s.get('permeabilityClass')
+        $("#segment-line-#{s.cid}").svg().removeClass("black").addClass("red#{colorClass}")
+      masterRouter.segment_layer.layer.reload()
       
     # else if modelKind == "proximity"
     #   console.log "prox"
