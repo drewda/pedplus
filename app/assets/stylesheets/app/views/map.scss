@@ -54,11 +54,11 @@
     path {
       stroke: #000000;
       opacity: .8;
-/*      stroke-linecap: round;*/
+      stroke-linecap: round;
     }
     path.selected {
       stroke: #55ee33;
-      stroke-dasharray: 20 10;
+/*      stroke-dasharray: 20 10;*/
     }
     path.connected {
       stroke: #429BF8;
