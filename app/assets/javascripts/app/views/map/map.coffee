@@ -91,7 +91,7 @@ class App.Views.Map extends Backbone.View
     $('#osm-color-layer, #osm-gray-layer').unbind 'touchstart'
     
     # remove coloring
-    # $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
+    $(".geo-point-circle.connected").svg().removeClass("connected").addClass("selected")
     # $(".geo-point-circle").svg().removeClass("connected").removeClass("selected")
     $(".segment-line").svg().removeClass("connected").removeClass("selected").css("stroke", '')
   mapMode: ->
