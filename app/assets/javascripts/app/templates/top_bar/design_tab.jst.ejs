@@ -1,19 +1,4 @@
 <div id="design-tab">
   <h3 style="float: left;"><%= projectName %></h3>
-  <h6 style="float: right;"><a class="btn primary">New Scenario</a></h6>
-  
-  <% if (projectId == 4) { %>
-    <table style="clear: both; float: left; width: 60%;">
-      <tr>
-        <td><h6>Drive grid through mall: partially</h6></td>
-        <td><h6><a href="" class="btn">Show</a> <a href="" class="btn">Edit</a> <a href="" class="btn">Delete</a></td>
-      </tr>
-      <tr>
-        <td><h6>Drive grid through mall: completely</h6></td>
-        <td><h6><a href="" class="btn">Show</a> <a href="" class="btn">Edit</a> <a href="" class="btn">Delete</a></td>
-      </tr>
-    </table>
-  <% } else { %>
-    <h6 align="center">Scenarios are not available for this project.</h6>
-  <% } %>
+  <h6 style="float: right;"><a href="#project/<%= projectId %>/map" class="btn">New Scenario</a></h6>
 </div>

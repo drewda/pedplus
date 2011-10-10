@@ -46,7 +46,7 @@ class App.Views.ModelTab extends Backbone.View
     # $('#proximity-analysis-button').bind "click", @beginProximityAnalysis
     
   permeabilityButton: (event) ->
-    if @modelTabMode == "modelNotYetPermeability"
+    if masterRouter.modelTab.modelTabMode == "modelNotYetPermeability"
       masterRouter.modelTab.beginPermeabilityAnalysis()
     
   loadAndShowPermeability: (modelJob) ->
@@ -73,6 +73,7 @@ class App.Views.ModelTab extends Backbone.View
         $('#permeability-analysis-button').addClass('disabled')
         $('#proximity-analysis-button').removeClass('primary').addClass('disabled')
         masterRouter.map.enableSegmentWorkingAnimation()
+        masterRouter.spinner.disable()
         @permeabilityPoll = setInterval 'masterRouter.modelTab.pollForPermeability()', 5000
       , this
       error: ->
@@ -83,13 +84,14 @@ class App.Views.ModelTab extends Backbone.View
       success: (model) ->
         if model.get('output')
           clearInterval(@permeabilityPoll)
+          masterRouter.spinner.enable()
           masterRouter.modelTab.endPermeabilityAnalysis(model.id)
     
   endPermeabilityAnalysis: (modelJobId) ->
     masterRouter.model_jobs.fetch
       success: (modelJob) ->
         masterRouter.map.disableSegmentWorkingAnimation()
-        masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/model/permeability/#{modelJob.id}", true
+        masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/model/permeability/#{modelJobId}", true
       error: ->
         alert 'Error fetching the results of the permeability analysis from the server.'
     

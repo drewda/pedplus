@@ -27,7 +27,7 @@ class App.Routers.Master extends Backbone.Router
     
     @model_jobs = new App.Collections.ModelJobs
     
-    new App.Views.Spinner
+    @spinner = new App.Views.Spinner
       
     # render views
     @map = new App.Views.Map
@@ -456,7 +456,7 @@ class App.Routers.Master extends Backbone.Router
   #   @map.resetMap false, true
 
   design: (projectId) ->
-    @reset(projectId, 160)
+    @reset(projectId)
     @routeNameKeeper 'design'
     # @fetchProjectData
     @designTab = new App.Views.DesignTab
