@@ -87,10 +87,6 @@ def getGVF( dataList, numClass ):
     SDCM += preSDCM
   return (SDAM - SDCM)/SDAM
   
-
-[0, 1.5139876360890145, 1.5139876360890145, 1.5139876360890145, 1.5139876360890145, 1.8203788088996669]
-  
-  
 # written by Drew
 # used after running getJenksBreaks()
 def classify(value, breaks):
