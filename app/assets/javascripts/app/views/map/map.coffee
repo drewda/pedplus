@@ -21,18 +21,17 @@ class App.Views.Map extends Backbone.View
        .add(po.touch())
        .add(po.arrow())
     
-    @osmGrayLayer = po.image()
-                .url(po.url('''http://{S}tile.cloudmade.com
-                /b8f01ac08d4242be9c2876f862c8ef2c
-                /46118/256/{Z}/{X}/{Y}.png''')
-                .hosts(["a.", "b.", "c.", ""]))
-                .id("osm-gray-layer")
-    @map.add(@osmGrayLayer)
+    ### 
+    URBPED-16: disable gray layer for now, as MapQuest does not provide differently styled tiles
+    if/when we switch to Esri base maps, they have a gray tile set that we can use:
+    http://www.esri.com/news/releases/11-4qtr/new-esri-basemap-highlights-thematic-content.html
+    ###
+    # @osmGrayLayer = po.image()
+    #             .url(po.url('http://otile{S}.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png').hosts(["1", "2", "3", "4"]))
+    #             .id("osm-gray-layer")
+    # @map.add(@osmGrayLayer)
     @osmColorLayer = po.image()
-                .url(po.url('''http://{S}tile.cloudmade.com
-                /b8f01ac08d4242be9c2876f862c8ef2c
-                /997/256/{Z}/{X}/{Y}.png''')
-                .hosts(["a.", "b.", "c.", ""]))
+                .url(po.url('http://otile{S}.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png').hosts(["1", "2", "3", "4"]))
                 .id("osm-color-layer")
     @map.add(@osmColorLayer)
     
@@ -40,11 +39,13 @@ class App.Views.Map extends Backbone.View
     
   setOsmLayer: (mode = "color") ->
     if mode == "color"
-      $('#osm-color-layer').show()
-      $('#osm-gray-layer').hide()
+      # $('#osm-color-layer').show()
+      # $('#osm-gray-layer').hide()
+      $('#osm-color-layer').css('opacity', '1.0')
     else if mode == "gray"
-      $('#osm-color-layer').hide()
-      $('#osm-gray-layer').show()
+      # $('#osm-color-layer').hide()
+      # $('#osm-gray-layer').show()
+      $('#osm-color-layer').css('opacity', '.5')
 
   centerMap: ->
     if currentProject = @projects.getCurrentProject()
