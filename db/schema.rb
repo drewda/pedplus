@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111009033555) do
+ActiveRecord::Schema.define(:version => 20111119193503) do
 
   create_table "count_sessions", :force => true do |t|
     t.integer  "segment_id"
@@ -44,6 +44,17 @@ ActiveRecord::Schema.define(:version => 20111009033555) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "geo_point_in_scenarios", :force => true do |t|
+    t.integer  "scenario_id"
+    t.integer  "geo_point_id"
+    t.string   "status"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "geo_point_in_scenarios", ["geo_point_id"], :name => "index_geo_point_in_scenarios_on_geo_point_id"
+  add_index "geo_point_in_scenarios", ["scenario_id"], :name => "index_geo_point_in_scenarios_on_scenario_id"
 
   create_table "geo_point_on_segments", :force => true do |t|
     t.integer "geo_point_id"
@@ -152,6 +163,10 @@ ActiveRecord::Schema.define(:version => 20111009033555) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "project_id"
+    t.decimal  "start_longitude", :precision => 15, :scale => 10
+    t.decimal  "start_latitude",  :precision => 15, :scale => 10
+    t.decimal  "end_longitude",   :precision => 15, :scale => 10
+    t.decimal  "end_latitude",    :precision => 15, :scale => 10
   end
 
   add_index "segments", ["project_id"], :name => "index_segments_on_project_id"

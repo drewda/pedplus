@@ -137,6 +137,10 @@ class App.Views.Map extends Backbone.View
       
       newSegment = new App.Models.Segment
         project_id: @projects.getCurrentProjectId()
+        start_longitude: previousGeoPoint.get "longitude"
+        start_latitude: previousGeoPoint.get "latitude"
+        end_longitude: newGeoPoint.get "longitude"
+        end_latitude: newGeoPoint.get "latitude"
       mapEdit.set
         segments: [newSegment]
       
@@ -186,19 +190,36 @@ class App.Views.Map extends Backbone.View
       x: x
       y: y
     geoPointToMove = masterRouter.geo_points.selected()[0]
+    geoPointToMoveOldLongitude = geoPointToMove.get 'longitude'
+    geoPointToMoveOldLatitude = geoPointToMove.get 'latitude'
     geoPointToMove.set
       longitude: pointLocation.lon
       latitude: pointLocation.lat
+    
+    # move the connected segments
+    _.each geoPointToMove.getSegments(), (s) =>
+      $("#segment-layer #segment-line-#{s.cid}").remove()
+      # figure out whether it's the start or the end coordinates that need to be
+      # changed for the segment
+      if Number(s.get "start_longitude") == Number(geoPointToMoveOldLongitude) and 
+         Number(s.get "start_latitude") == Number(geoPointToMoveOldLatitude)
+        s.set
+          moved: true
+          start_longitude: pointLocation.lon
+          start_latitude: pointLocation.lat
+      else if Number(s.get "end_longitude") == Number(geoPointToMoveOldLongitude) and 
+              Number(s.get "end_latitude") == Number(geoPointToMoveOldLatitude)
+        s.set
+          moved: true
+          end_longitude: pointLocation.lon
+          end_latitude: pointLocation.lat
+
+    # create a MapEdit (the record that will be sent to the server)
     mapEdit = new App.Models.MapEdit
     masterRouter.map_edits.add mapEdit
     mapEdit.set
       geo_points: [geoPointToMove.unset 'geo_point_on_segments']
-    
-    # TODO:
-    _.each geoPointToMove.getSegments(), (s) =>
-      $("#segment-layer #segment-line-#{s.cid}").remove()
-      s.set
-        moved: true
+      segments: geoPointToMove.getSegments()
     
     # for some reason the selected styling is removed from the GeoPoint, so we'll kludge it in
     $("#geo-point-circle-#{geoPointToMove.cid}").svg().addClass("selected").attr "r", masterRouter.geo_point_layer.geoPointSelectedRadius

@@ -50,6 +50,7 @@ class App.Views.SegmentLayer extends Backbone.View
       c.setAttribute "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
       
       if masterRouter.segments.getByCid(f.data.cid).get("markedForDelete")? or
+        masterRouter.segments.getByCid(f.data.cid).get("moved")? or
          masterRouter.segments.getByCid(f.data.cid).isNew()
         $(c).remove()
       else

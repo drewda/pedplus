@@ -15,7 +15,7 @@ class App.Models.Segment extends Backbone.Model
   geojson: ->
     if @get('markedForDelete') 
       return null
-    else if @getGeoPoints()?.length == 2
+    else # if @getGeoPoints()?.length == 2
       geojson =
         id: @attributes.id
         cid: @cid
@@ -23,10 +23,10 @@ class App.Models.Segment extends Backbone.Model
         geometry:
           type: "LineString"
           coordinates: [
-            [ Number @getGeoPoints()[0].get 'longitude'
-              Number @getGeoPoints()[0].get 'latitude' ]
-            [ Number @getGeoPoints()[1].get 'longitude'
-              Number @getGeoPoints()[1].get 'latitude' ]
+            [ Number @get 'start_longitude'
+              Number @get 'start_latitude' ]
+            [ Number @get 'end_longitude'
+              Number @get 'end_latitude' ]
           ]
   select: ->
     if masterRouter.currentRouteName.startsWith "map"

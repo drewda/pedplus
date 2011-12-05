@@ -68,6 +68,10 @@ class App.Models.GeoPoint extends Backbone.Model
       # create the Segment
       newSegment = new App.Models.Segment
         project_id: masterRouter.projects.getCurrentProjectId()
+        start_longitude: currentGeoPoint.get "longitude"
+        start_latitude: currentGeoPoint.get "latitude"
+        end_longitude: targetGeoPoint.get "longitude"
+        end_latitude: targetGeoPoint.get "latitude"
       mapEdit.set
         segments: [newSegment]
       # create the first GeoPointOnSegment
