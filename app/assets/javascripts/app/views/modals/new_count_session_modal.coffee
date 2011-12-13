@@ -6,7 +6,7 @@ class App.Views.NewCountSessionModal extends Backbone.View
   render: ->
     $('body').append @template @options
     $('#new-count-session-modal').modal
-      backdrop: "static" # TODO: this doesn't seem to be working
+      backdrop: "static"
       show: true
     $('#start-count-session-now-button').bind "click", (event) =>
       countSession = new App.Models.CountSession

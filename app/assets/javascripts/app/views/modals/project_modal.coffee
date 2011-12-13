@@ -7,7 +7,7 @@ class App.Views.ProjectModal extends Backbone.View
   render: ->
     $('body').append @template @options
     $('#project-modal').modal
-      backdrop: "static" # TODO: this doesn't seem to be working
+      backdrop: "static"
       show: true
   update: ->
     $('#project-modal').html @template @options
