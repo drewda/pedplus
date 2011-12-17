@@ -70,7 +70,7 @@ class App.Routers.Master extends Backbone.Router
     "message/new" : "messageNew"
     
     "project/open"                  : "projectOpen"
-    "project/new"                   : "projectNew"
+    "project/admin"                 : "projectAdmin"
     "project/:project_id"           : "project"
     "project/:project_id/settings"  : "projectSettings"
     
@@ -133,11 +133,11 @@ class App.Routers.Master extends Backbone.Router
     @map.resetMap false, false
     @map.centerMap()
 
-  projectNew: ->
+  projectAdmin: ->
     @reset()
-    @routeNameKeeper 'projectNew'
+    @routeNameKeeper 'projectAdmin'
     projectModal = new App.Views.ProjectModal
-      mode: "new"
+      mode: "admin"
       projects: masterRouter.projects
     masterRouter.modals.push projectModal
 

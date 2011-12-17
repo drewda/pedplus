@@ -1,0 +1,12 @@
+#project-modal.admin {
+  width: 1000px;
+  height: 700px;
+  margin-left: -500px;
+  margin-top: -350px;
+  #admin-iframe {
+    width: 100%;
+    height: 600px;
+    border: 0px;
+    overflow-y: auto;
+  }
+}

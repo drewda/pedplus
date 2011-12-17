@@ -1,9 +1,9 @@
-<div id="project-modal" class="modal">
+<div id="project-modal" class="modal <%= mode %>">
   <div class="modal-header">
     <ul class="pills">
       <li><h3>Projects</h3></li>
-      <li <% if (mode == "new") { %>class="active"<% } %> style="float: right;">
-        <a href="#project/new">New</a>
+      <li <% if (mode == "admin") { %>class="active"<% } %> style="float: right;">
+        <a href="#project/admin">Admin</a>
       </li>
       <li <% if (mode == "open") { %>class="active"<% } %> style="float: right;">
         <a href="#project/open">Open</a>
@@ -17,17 +17,10 @@
         <p><a href="#project/<%= p.id %>"><%= p.get('name') %></a></p>
       <% });%>
     <% } %>
-    <% if (mode == "new") { %>
-    <div id="project-new-content">
-      <p><span class="label notice">Notice</span> For the time being, please use the <a href="/admin/projects">administrator interface</a> to create projects.</p>
+    <% if (mode == "admin") { %>
+    <div id="project-admin-content">
+      <iframe src="/admin" id="admin-iframe" />
     </div>
     <% } %>
   </div>
-  
-  <%  if (mode == "new") { %>
-  <!--<div class="modal-footer">
-    <a href="#" class="btn primary">Create</a>
-    <a href="#project/open" class="btn secondary">Cancel</a>
-  </div>-->
-  <% } %>
 </div>

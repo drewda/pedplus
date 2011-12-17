@@ -21,7 +21,7 @@ class Admin::ProjectsController < Admin::AdminController
     respond_to do |format|
       if @project.save
         flash[:success] = "<strong>#{@project.name}</strong> project created."
-        format.html { redirect_to(admin_project_url(@project)) }
+        format.html { redirect_to(edit_admin_project_url(@project)) }
       else
         format.html { render :action => "new" }
       end
