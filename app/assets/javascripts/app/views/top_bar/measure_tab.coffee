@@ -15,8 +15,11 @@ class App.Views.MeasureTab extends Backbone.View
     
     if @mode == "enterCountSession"
       @countSession = masterRouter.count_sessions.get @options.countSessionId
-      @countSession.counts.bind "add", @redrawCounter, this
-      @countSession.counts.bind "remove", @redrawCounter, this
+      
+      # initialize the array that will hold timestamps for the counts
+      # in the future this may be a few arrays, one for each class of count
+      # like male, female, etc.
+      @countSessionDates = []
     
       @minutes = 5
       @millisecondsTotal = @minutes * 60 * 1000
@@ -51,7 +54,7 @@ class App.Views.MeasureTab extends Backbone.View
     if @options.mode == "enterCountSession"
       # don't show the pills to navigate to other modes
       $('#top-bar .pills').remove()
-      
+            
       @countSession.set
         start: new Date
       
@@ -75,40 +78,37 @@ class App.Views.MeasureTab extends Backbone.View
       # plusTwoBeep = new Audio "/media/audio/plus_two_beep.mp3"
       # minusOneBeep = new Audio "/media/audio/minus_one_beep.mp3"
       
-      $('#stop-count-session-cancel-button').bind "click", (event) =>
-        countSession = masterRouter.count_sessions.selected()[0]
-        countSession.destroy
+      $('#stop-count-session-cancel-button').on "click", $.proxy =>
+        @countSessionDates = []
+        @countSession.destroy
           success: ->
             masterRouter.count_sessions.remove countSession
             masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/segment/#{masterRouter.segments.selected()[0].cid}", true
+      , this
         
-      $('#count-plus-one-button').bind "click", (event) =>
-        @countSession = masterRouter.count_sessions.selected()[0]
-        count = new App.Models.Count
-        count.set
-          count_session_id: @countSession.id
-          at: new Date
-        @countSession.counts.add count
+      $('#count-plus-one-button').on "click", $.proxy =>
+        @countSessionDates.push Date() # add the current datetime to the list
+        @redrawCounter()
         # plusOneBeep.src = plusOneBeep.src
         # plusOneBeep.play()
+      , this
       
-      $('#count-plus-five-button').bind "click", (event) =>
-        @countSession = masterRouter.count_sessions.selected()[0]
+      $('#count-plus-five-button').on "click", $.proxy =>
         for num in [1..5]
-          count = new App.Models.Count
-          count.set
-            count_session_id: @countSession.id
-            at: new Date
-          @countSession.counts.add count
+          @countSessionDates.push Date() # add the current datetime to the list
+        @redrawCounter()
         # plusTwoBeep.src = plusTwoBeep.src
         # plusTwoBeep.play()
+      , this
       
-      $('#count-minus-one-button').bind "click", (event) =>
-        @countSession.counts.remove @countSession.counts.last()
+      $('#count-minus-one-button').on "click", $.proxy =>
+        @countSessionDates.pop()
+        @redrawCounter()
         # minusOneBeep.src = minusOneBeep.src
         # minusOneBeep.play()
+      , this
   redrawCounter: ->
-    $('#counter').html "#{@countSession.counts.length} <h6>people</h6>"
+    $('#counter').html "#{@countSessionDates.length} <h6>people</h6>"
   redrawTimer: ->
     @millisecondsRemaining = @millisecondsRemaining - 1000
     minutes = Math.floor (@millisecondsRemaining / (60 * 1000))
@@ -120,6 +120,12 @@ class App.Views.MeasureTab extends Backbone.View
     countSession = masterRouter.count_sessions.selected()[0]
     countSession.set
       stop: new Date
+    _.each @countSessionDates, (cdt) ->
+      count = new App.Models.Count
+      count.set
+        count_session_id: countSession.id
+        at: cdt
+      countSession.counts.add count
     countSession.uploadCounts
       success: ->
         masterRouter.count_sessions.fetch()
