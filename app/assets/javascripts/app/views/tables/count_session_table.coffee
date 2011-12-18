@@ -11,19 +11,22 @@ class App.Views.CountSessionTable extends Backbone.View
   render: ->
     # render the table
     $('#count-session-table-wrapper').html @template
+    $('#count-session-table').dataTable
+      'bLengthChange': false
+      'bInfo': false
+      'bFilter': false
+      'sPaginationType': 'bootstrap'
+      'aoColumns': [
+        { 'sTitle': 'Start Time' }
+        { 'sTitle': 'Duration (minutes)' }
+        { 'sTitle': 'Total Pedestrians Counted' }
+      ]
+      'aaData': @count_sessions.arrayForDataTables()
     
-    # fill the table
-    @count_sessions.each (cs) =>
-      if !cs.isNew()
-        csr = new App.Views.CountSessionRow
-          model: cs
-        @countSessionRows.push csr
-    , this
-    
-    $('.count-session-row').bind "click", (event) =>
-      id = event.currentTarget.id.split('-').pop()
-      segmentId = masterRouter.count_sessions.get(id).get('segment_id')
-      masterRouter.segments.get(segmentId).toggle()
+    # $('.count-session-row').bind "click", (event) =>
+    #   id = event.currentTarget.id.split('-').pop()
+    #   segmentId = masterRouter.count_sessions.get(id).get('segment_id')
+    #   masterRouter.segments.get(segmentId).toggle()
   remove: ->
     _.each @countSessionRows, (csr) =>
       csr.remove()

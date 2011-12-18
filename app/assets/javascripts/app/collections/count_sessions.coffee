@@ -8,3 +8,9 @@ class App.Collections.CountSessions extends Backbone.Collection
     @each (cs) -> cs.select()
   selectNone: ->
     @each (cs) -> cs.deselect()
+  arrayForDataTables: ->
+    # columns: start, duration (minutes), total count
+    array = []
+    @each (cs) =>
+      array.push [cs.get('start'), cs.get('duration'), cs.get('count_total')]
+    return array
