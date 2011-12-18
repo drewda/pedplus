@@ -8,6 +8,8 @@
 //= require jquery-svgdom
 //= require bootstrap-dropdown
 //= require bootstrap-modal
+//= require xdate
+//= require datatables
 
 // http://stackoverflow.com/questions/646628/javascript-startswith
 String.prototype.startsWith = function (str){

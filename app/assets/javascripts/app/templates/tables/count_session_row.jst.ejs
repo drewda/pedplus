@@ -1,6 +1,6 @@
 <tr id="count-session-row-<%= id %>" class="count-session-row">
-  <td><%= start %></td>
-  <td><%= stop %></td>
+  <td><%= XDate(start).toString("d MMM yyyy h:mm tt") %> (<%= duration / 60 %> minutes)</td>
   <td><%= count_total %><!-- rather than "total_count" which is a method --></td>
   <!--<td>peds/hour</td>-->
+  <td><!-- buttons --></td>
 </tr>

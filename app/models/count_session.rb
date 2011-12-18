@@ -9,4 +9,8 @@ class CountSession < ActiveRecord::Base
   def total_count
     counts.length
   end
+  
+  def duration
+    stop - start # seconds
+  end
 end
