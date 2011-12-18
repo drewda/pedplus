@@ -61,6 +61,11 @@ class App.Routers.Master extends Backbone.Router
     @currentRouteName = ""
     
     @timers = []
+    
+    # global session variables
+    # used in DeleteGeoPointModal and DeleteSegmentModal
+    @hideDeleteGeoPointConfirmation = false
+    @hideDeleteSegmentConfirmation = false
 
   routes:
     ".*" : "index"
