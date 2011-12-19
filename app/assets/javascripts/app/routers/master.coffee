@@ -323,7 +323,7 @@ class App.Routers.Master extends Backbone.Router
     masterRouter.segments.selectNone()
 
   measure: (projectId) ->
-    @reset(projectId, 200)
+    @reset(projectId, 260)
     @routeNameKeeper 'measure'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab

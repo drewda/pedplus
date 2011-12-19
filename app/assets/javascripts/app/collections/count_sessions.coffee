@@ -12,5 +12,5 @@ class App.Collections.CountSessions extends Backbone.Collection
     # columns: start, duration (minutes), total count
     array = []
     @each (cs) =>
-      array.push [cs.get('start'), cs.get('duration'), cs.get('count_total')]
+      array.push [XDate(cs.get('start')), cs.get('duration'), cs.get('count_total')]
     return array

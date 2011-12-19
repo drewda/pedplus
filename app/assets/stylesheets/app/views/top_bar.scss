@@ -43,27 +43,35 @@
         text-align: right;
       }
     }
-/*    #count-session-table-wrapper {
-      height: 120px;
-      width: 100%;
-      overflow-y: scroll;
-      #count-session-table {
-        border: 0;
-        padding: 0;
-        padding-top: 6px;
-        tr.selected {
-          background-color: #55ee33;
+    #count-session-table-wrapper {
+      table {
+        margin: 0;
+        clear: both;
+      }
+      #table-footer {
+        clear: both;
+        margin: 0;
+        #info {
+          float: left;
+          padding-top: 8px;
+          width: 250px;
+          .dataTables_info {
+            /* should look like h6 */
+            font-size: 13px;
+            font-weight: bold;
+            color: #bfbfbf;
+            text-transform: uppercase;
+          }
         }
-        th {
-          border: 0;
-          padding: 0;
+        #pagination {
+          float: right;
+          margin: 0;
+          .pagination {
+            margin: 0;
+          }
         }
-        td {
-          border: 0;
-          padding: 0;
-        }
-      } 
-    }*/
+      }
+    }
     #count-session-entry {
       clear: both;
       #timer {

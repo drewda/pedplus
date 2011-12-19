@@ -12,16 +12,20 @@ class App.Views.CountSessionTable extends Backbone.View
     # render the table
     $('#count-session-table-wrapper').html @template
     $('#count-session-table').dataTable
-      'bLengthChange': false
-      'bInfo': false
-      'bFilter': false
-      'sPaginationType': 'bootstrap'
-      'aoColumns': [
-        { 'sTitle': 'Start Time' }
-        { 'sTitle': 'Duration (minutes)' }
-        { 'sTitle': 'Total Pedestrians Counted' }
+      "sDom": "t<'#table-footer'<'#info'i><'#pagination'p>>"
+      "bLengthChange": false
+      "bFilter": false
+      "sPaginationType": "bootstrap"
+      "iDisplayLength": 4
+      # "bScrollInfinite": true
+      # "bScrollCollapse": true
+      # "sScrollY": "100px"
+      "aoColumns": [
+        { "sTitle": "Start Time" , "sWidth": "33%" }
+        { "sTitle": "Duration (minutes)" }
+        { "sTitle": "Total Pedestrians Counted" }
       ]
-      'aaData': @count_sessions.arrayForDataTables()
+      "aaData": @count_sessions.arrayForDataTables()
     
     # $('.count-session-row').bind "click", (event) =>
     #   id = event.currentTarget.id.split('-').pop()
