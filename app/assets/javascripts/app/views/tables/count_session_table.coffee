@@ -21,7 +21,7 @@ class App.Views.CountSessionTable extends Backbone.View
       # "bScrollCollapse": true
       # "sScrollY": "100px"
       "aoColumns": [
-        { "sTitle": "Start Time" , "sWidth": "33%" }
+        { "sTitle": "Start Time" , "sWidth": "33%", "fnRender": (oObj) => XDate(oObj.aData[0]).toString("d MMM yyyy h:mm tt") }
         { "sTitle": "Duration (minutes)" }
         { "sTitle": "Total Pedestrians Counted" }
       ]
