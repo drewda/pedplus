@@ -30,8 +30,13 @@ segments[0..firstQuarter].each do |s|
     :project => project,
     :start => Time.now,
     :stop => Time.now,
-    :count_total => synthesizedCount
+    :user => User.find(1)
   )
+    (1..synthesizedCount).each do |i|
+      Count.create(
+        :count_session => cs
+      )
+    end
     
   # synthesizedCount.times do |i|
   #   cs.counts.create(:at => Time.now)
@@ -40,7 +45,7 @@ segments[0..firstQuarter].each do |s|
   sd = Hash.new
   sd['segment_id'] = s.id
   sd['permeability'] = pv['permeability']
-  sd['count_total'] = synthesizedCount
+  sd['counts_count'] = synthesizedCount
   sd['kind'] = 'permeability'
   
   synthesizedData.push(sd)
@@ -57,7 +62,8 @@ segments[(firstQuarter + 1)..secondQuarter].each do |s|
     :project => project,
     :start => Time.now,
     :stop => Time.now,
-    :count_total => randomCount
+    :user => User.find(1),
+    :counts_count => randomCount
   )
   
   # randomCount.times do |i|
@@ -67,7 +73,7 @@ segments[(firstQuarter + 1)..secondQuarter].each do |s|
   sd = Hash.new
   sd['segment_id'] = s.id
   sd['permeability'] = pv['permeability']
-  sd['count_total'] = randomCount
+  sd['counts_count'] = randomCount
   sd['kind'] = 'random'
   
   synthesizedData.push(sd)
@@ -80,15 +86,15 @@ segments[(secondQuarter + 1)..(total - 1)].each do |s|
   sd = Hash.new
   sd['segment_id'] = s.id
   sd['permeability'] = pv['permeability']
-  sd['count_total'] = 0
+  sd['counts_count'] = 0
   sd['kind'] = 'noChange'
   
   synthesizedData.push(sd)
 end
 
 CSV.open("synthesized_data" + Time.new.strftime("%e%b%Y") + ".csv", "w") do |csv|
-  csv << ["segment_id", "permeability", "count_total", "kind"]
+  csv << ["segment_id", "permeability", "counts_count", "kind"]
   synthesizedData.each do |sd|
-    csv << [sd['segment_id'], sd['permeability'], sd['count_total'], sd['kind']]
+    csv << [sd['segment_id'], sd['permeability'], sd['counts_count'], sd['kind']]
   end
 end
