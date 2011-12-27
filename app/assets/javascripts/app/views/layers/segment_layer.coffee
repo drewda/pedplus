@@ -81,11 +81,11 @@ class App.Views.SegmentLayer extends Backbone.View
 
         colorClass = masterRouter.segments.getByCid(f.data.cid).get('measuredClass')
         if f.data.id == selectedSegmentId
-          c.setAttribute "class", "segment-line selected"
+          c.setAttribute "class", "selected"
         else if colorClass > 0
-          c.setAttribute "class", "segment-line blue#{colorClass}"
+          c.setAttribute "class", "blue#{colorClass}"
         else
-          c.setAttribute "class", "segment-line black"
+          c.setAttribute "class", "black"
     # else if masterRouter.currentRouteName.startsWith "measurePredictions"
       else if masterRouter.segments.getByCid(f.data.cid).get("selected")
         c.setAttribute "class", "segment-line selected black"
