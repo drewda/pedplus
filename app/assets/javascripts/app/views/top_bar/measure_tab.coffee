@@ -21,7 +21,7 @@ class App.Views.MeasureTab extends Backbone.View
       # like male, female, etc.
       @countSessionDates = []
     
-      @minutes = 1
+      @minutes = 5
       @millisecondsTotal = @minutes * 60 * 1000
       @millisecondsRemaining = @millisecondsTotal
       @endTime = null
