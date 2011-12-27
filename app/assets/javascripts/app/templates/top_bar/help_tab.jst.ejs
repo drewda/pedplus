@@ -1,3 +1,22 @@
-<div id="help-tab">
+<div style="float: left;">
   <h6><em>Turning on help mode will display tutorial information throughout the entire application.</em></h6>
+</div>
+<div id="help-buttons" style="float: right;">
+  <h6><a class="btn" data-controls-modal="about-modal" data-backdrop="static" >About</a></h6>
+</div>
+
+<div id="about-modal" class="modal fade">
+	<div class="modal-header">
+		<a href="#" class="close">×</a>
+		<h3>About PedPlus</h3>
+	</div>
+	<div class="modal-body">
+		<p>PedPlus is &copy; 2011-2012, Strategic Spatial Solutions, Inc. All rights reserved.</p>
+		<p>PedPlus makes use of the following open-source projects:</p>
+		<ul>
+			<li>Ruby on Rails with Resque, Juggernaut, Devise, Geocoder, Slim, EJS, Sass</li>
+			<li>jQuery with JSON2, Underscore, Backbone, XDate, DataTables, CoffeeScript</li>
+			<li>Bootstrap, Polymaps, d3, jQuery SVG</li>
+		</ul>
+	</div>
 </div>
