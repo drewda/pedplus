@@ -3,7 +3,6 @@
 //= require json2
 //= require underscore
 //= require backbone
-//= require backbone-relational
 //= require jquery-svg
 //= require jquery-svgdom
 //= require bootstrap-dropdown
