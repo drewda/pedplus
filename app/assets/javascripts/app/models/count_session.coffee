@@ -5,12 +5,11 @@ class App.Models.CountSession extends Backbone.Model
     @bind "change", =>
       @counts.url = "/api/projects/#{masterRouter.projects.getCurrentProjectId()}/count_sessions/#{@id}/counts"
     , this
-    @bind "destroy", @removeDestroyedModels, this
   select: ->  
     @collection.selectNone() # only want one CountSession selected at a time
     @set
       selected: true
-    masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count_session/#{@cid}", true
+    masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count_session/#{@id}", true
   deselect: ->
     # if masterRouter.currentRouteName == "measureSelectedCountSession:#{@cid}"
     # else if masterRouter.currentRouteName == "measureEnterCountSession:#{@cid}"
@@ -34,5 +33,3 @@ class App.Models.CountSession extends Backbone.Model
     , 
       success: ->
         options.success()
-  removeDestroyedModels: (model) ->
-    @remove model

@@ -356,7 +356,7 @@ class App.Routers.Master extends Backbone.Router
     @segments.selectNone()
   
   measureSelectedSegment: (projectId, segmentId) ->
-    @reset(projectId, 200)
+    @reset(projectId, 260)
     @routeNameKeeper 'measureSelectedSegment'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -372,7 +372,7 @@ class App.Routers.Master extends Backbone.Router
       @countSessionTable.render()
       
   measureNewCountSession: (projectId, segmentId) ->
-    @reset(projectId, 200)
+    @reset(projectId, 260)
     @routeNameKeeper 'measureNewCountSession'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -391,7 +391,7 @@ class App.Routers.Master extends Backbone.Router
       @countSessionTable.render()
       
   measureSelectedCountSession: (projectId, countSessionId) ->
-    @reset(projectId, 200)
+    @reset(projectId, 260)
     @routeNameKeeper 'measureSelectedCountSession'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -420,7 +420,7 @@ class App.Routers.Master extends Backbone.Router
       mode: "enterCountSession"
 
   measureDeleteCountSession: (projectId, countSessionId) ->
-    @reset(projectId, 200)
+    @reset(projectId, 260)
     @routeNameKeeper 'measureDeleteCountSession'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -482,8 +482,9 @@ class App.Routers.Master extends Backbone.Router
   routeNameKeeper: (routeName) ->
     @currentRouteName = routeName
     # if the current URL ends with an ID of the form c#
-    # then we'll attach that after the route name
-    if location.hash.split('/').pop().match(/c\d+/)
+    # or # then we'll attach that after the route name
+    if location.hash.split('/').pop().match(/c\d+/) or
+       location.hash.split('/').pop().match(/\d+/)
       @currentRouteName += ":" + location.hash.split('/').pop()
     
   reset: (projectId, topBarHeight = 90) ->

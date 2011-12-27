@@ -35,12 +35,12 @@ class App.Models.Segment extends Backbone.Model
       else
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/segment/#{@cid}", true)
         @doSelect()
-    else if masterRouter.currentRouteName == "measure" or
-            masterRouter.currentRouteName.startsWith "measureSelectedSegment" or
-            masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
-      # note that we do not want to allow selected when at the "measureEnterCountSession" route
-      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure/segment/#{@cid}", true)
-      @doSelect()
+    else if masterRouter.currentRouteName.startsWith "measure"
+      if masterRouter.currentRouteName.startsWith "measureEnterCountSession"
+        return # we do not want to allow selected when at the "measureEnterCountSession" route
+      else
+        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure/segment/#{@cid}", true)
+        @doSelect()
   doSelect: ->
     # only want one GeoPoint or Segment selected at a time
     @collection.selectNone()

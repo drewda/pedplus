@@ -15,8 +15,6 @@ class App.Views.NewCountSessionModal extends Backbone.View
         user_id: masterRouter.users.getCurrentUser().id
         project_id: masterRouter.projects.getCurrentProjectId()
         segment_id: masterRouter.segments.selected()[0].id
-        total_count: 0 # just because this might trigger a change on a App.Views.CountSessionRow
-                       # we don't actually want to upload that value, as total_count is a method
       ,
         success: ->      
           countSession.select()

@@ -58,7 +58,8 @@ class App.Views.ModelTab extends Backbone.View
         permeabilityValue: pv.permeability
         permeabilityClass: pv.breakNum
 
-    masterRouter.map.modelMode "permeability"
+    # reloading SegmentLayer will draw the coloring
+    masterRouter.segment_layer.layer.reload()
     
   beginPermeabilityAnalysis: ->
     $('#permeability-analysis-button').addClass('primary').text 'Running Permeability Analysis'

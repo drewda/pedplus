@@ -11,6 +11,7 @@
 //= require xdate
 //= require jquery-datatables
 //= require jquery-datatables-bootstrap
+//= require jquery-datatables-tabletools
 
 // http://stackoverflow.com/questions/646628/javascript-startswith
 String.prototype.startsWith = function (str){
@@ -23,3 +24,33 @@ Backbone.Model.prototype.toJSON = function() {
   cid : this.cid
  });
 }
+
+// enable boolean sorting in jquery-datatables
+// http://www.datatables.net/forums/discussion/1067/bug-javascript-error-on-sort-with-booleans-in-column/p1
+var fnConvertToString = function(value){
+  return (value + '').toLowerCase();
+};
+     
+var fnEquals = function(lhs, rhs){
+  if (lhs < rhs){
+    return -1;
+  }
+    else if (lhs > rhs){
+      return 1;
+    }
+    return 0;
+   };
+     
+var fnCompareString = function(lhs, rhs){
+  var lhs = fnConvertToString(lhs);
+  var rhs = fnConvertToString(rhs);
+  return fnEquals(lhs, rhs);
+};
+     
+$.fn.dataTableExt.oSort[ 'string-asc' ] = function(lhs, rhs){
+  return fnCompareString(lhs, rhs);
+};
+     
+$.fn.dataTableExt.oSort[ 'string-desc' ] = function(lhs, rhs){
+  return fnCompareString(lhs, rhs) * -1;
+};

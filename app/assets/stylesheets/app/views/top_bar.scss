@@ -47,6 +47,9 @@
       table {
         margin: 0;
         clear: both;
+		    tr.selected td {
+          background-color: #55ee33;
+        }
       }
       #table-footer {
         clear: both;
