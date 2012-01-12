@@ -1,26 +1,34 @@
-<div id="project-modal" class="modal <%= mode %>">
+<div id="project-modal" class="modal">
   <div class="modal-header">
     <ul class="pills">
-      <li><h3>Projects</h3></li>
-      <li <% if (mode == "admin") { %>class="active"<% } %> style="float: right;">
-        <a href="#project/admin">Admin</a>
+      <li><h3><%= project.get('name') %></h3></li>
+      <li <% if (mode == "export") { %>class="active"<% } %> style="float: right;">
+        <a href="#project/<%= project.id %>/export">Export</a>
       </li>
-      <li <% if (mode == "open") { %>class="active"<% } %> style="float: right;">
-        <a href="#project/open">Open</a>
+      <li <% if (mode == "settings") { %>class="active"<% } %> style="float: right;">
+        <a href="#project/<%= project.id %>/settings">Settings</a>
       </li>
     </ul>
   </div>
   
   <div class="modal-body">
-    <% if (mode == "open") { %>
-      <% projects.each(function(p) { %>
-        <p><a href="#project/<%= p.id %>"><%= p.get('name') %></a></p>
-      <% });%>
+    <% if (mode == "settings") { %>
+      <p><span class="label notice">Info</span> There are no settings that you can configure for this project.</p>
+    <% } else if (mode == "export") { %>
+      <h4>Map</h4>
+
+      <h4>Model</h4>
+
+      <h4>Measure<h4>
+
+      <h4>Opportunity</h4>
+      <p><span class="label notice">Info</span> It's not yet possible to export the opportunity map.</p>
+      <h4>Design</h4>
+      <p><span class="label notice">Info</span> It's not yet possible to export scenarios.</p>
     <% } %>
-    <% if (mode == "admin") { %>
-    <div id="project-admin-content">
-      <iframe src="/admin" id="admin-iframe" />
-    </div>
-    <% } %>
+  </div>
+
+  <div class="modal-footer" style="align: right;">
+    <a href="#project/<%= project.id %>" class="btn">Close</a>
   </div>
 </div>

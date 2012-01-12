@@ -78,6 +78,7 @@ class App.Routers.Master extends Backbone.Router
     "project/admin"                 : "projectAdmin"
     "project/:project_id"           : "project"
     "project/:project_id/settings"  : "projectSettings"
+    "project/:project_id/export"    : "projectExport"
     
     "project/:project_id/map"                                  : "map"
     "project/:project_id/map/geo_point/:geo_point_id"          : "mapSelectedGeoPoint"
@@ -130,10 +131,10 @@ class App.Routers.Master extends Backbone.Router
     masterRouter.segments.reset()
     @reset()
     @routeNameKeeper 'projectOpen'
-    projectModal = new App.Views.ProjectModal
+    projectsModal = new App.Views.ProjectsModal
       mode: "open"
       projects: masterRouter.projects
-    masterRouter.modals.push projectModal
+    masterRouter.modals.push projectsModal
     @map.setOsmLayer "color"
     @map.resetMap false, false
     @map.centerMap()
@@ -141,10 +142,10 @@ class App.Routers.Master extends Backbone.Router
   projectAdmin: ->
     @reset()
     @routeNameKeeper 'projectAdmin'
-    projectModal = new App.Views.ProjectModal
+    projectModal = new App.Views.ProjectsModal
       mode: "admin"
       projects: masterRouter.projects
-    masterRouter.modals.push projectModal
+    masterRouter.modals.push projectsModal
 
   project: (projectId) ->
     @reset(projectId)
@@ -165,11 +166,26 @@ class App.Routers.Master extends Backbone.Router
   projectSettings: (projectId) ->
     @reset(projectId)  
     @routeNameKeeper 'projectSettings'
-    # @fetchProjectData()
     @projectTab = new App.Views.ProjectTab
       topBar: masterRouter.topBar
       projectId: projectId
       projects: masterRouter.projects
+    projectModal = new App.Views.ProjectModal
+      mode: "settings"
+      project: masterRouter.projects.getCurrentProject()
+    masterRouter.modals.push projectModal
+
+  projectExport: (projectId) ->
+    @reset(projectId)  
+    @routeNameKeeper 'projectExport'
+    @projectTab = new App.Views.ProjectTab
+      topBar: masterRouter.topBar
+      projectId: projectId
+      projects: masterRouter.projects
+    projectModal = new App.Views.ProjectModal
+      mode: "export"
+      project: masterRouter.projects.getCurrentProject()
+    masterRouter.modals.push projectModal
   
   map: (projectId) ->
     @reset(projectId)
