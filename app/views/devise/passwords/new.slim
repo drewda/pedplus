@@ -1,0 +1,16 @@
+- content_for :body do
+  .row
+    .span4.columns &nbsp;
+    .span4.columns
+      = form_for(resource, :as => resource_name, :url => password_path(resource_name), :html => { :method => :post }) do |f|
+        fieldset
+          legend Forgot your password?
+          = devise_error_messages!
+          .clearfix
+            = f.label :email, "E-mail Address"
+            .input = f.email_field :email, :class => 'span4'
+          .actions = f.submit "Send me reset password instructions", :class => "btn primary"
+      = render :partial => "devise/shared/links"
+    .span4.columns &nbsp;
+
+= render :template => '/devise/layout'

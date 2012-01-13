@@ -1,14 +1,18 @@
-<div id="project-details" style="float: left;">
+<div id="project-details" class="btn-set" style="float: left;">
   <h3 style="float: left;"><%= name %></h3> 
-  <h6 style="float: left; margin-left: 4px;">
-  	<a href="#project/<%= id %>/settings" class="btn">Settings</a>
-  	<a href="#project/<%= id %>/export" class="btn">Export</a>
-  </h6>
+  <div class="btn-group"> 
+    <h6>
+    	<a href="#project/<%= id %>/settings" class="btn">Settings</a>
+    	<a href="#project/<%= id %>/export" class="btn">Export</a>
+    </h6>
+  </div>
 </div>
-<div id="project-buttons" style="float: right;">
-  <h6>Projects 
-    <a href="#project/open" class="btn">Open</a> 
-    <a href="#project/admin" class="btn">Admin</a>
-    <a class="btn">Import</a>
-  </h6>
+<div id="project-buttons" class="btn-set" style="float: right;">
+  <h6>Projects</h6>
+  <div class="btn-group"> 
+    <h6>
+      <a href="#project/open" class="btn">Open</a> 
+      <a href="#project/admin" class="btn">Admin</a>
+    </h6>
+  </div>
 </div>

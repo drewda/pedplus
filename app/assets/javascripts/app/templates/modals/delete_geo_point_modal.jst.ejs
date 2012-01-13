@@ -3,7 +3,7 @@
   
   <div class="modal-body"><p>Deleting this point will also delete any connected segments, along with any count sessions associated with those segments. Are you sure you want to delete this point?</p></div>
   
-  <div class="modal-footer">
+  <div class="modal-footer horizontal-form">
     <h6><a id="delete-geo-point-button" class="btn danger">Yes</a></h6>
     <h6><a href="#project/<%= masterRouter.projects.getCurrentProjectId() %>/map/geo_point/<%= masterRouter.geo_points.selected()[0].cid %>" class="btn secondary">No</a></h6>
     <label style="float: left; text-align: left; width: 300px;"><input type="checkbox" id="hide-delete-geo-point-confirmation" /> <em>Do not show this confirmation again this session.</em></label>

@@ -1,10 +1,12 @@
 <div id="measure-tab">
   <div id="count-bar">
     <% if (mode == "measure" || mode == "selectedSegment" || mode == "selectedCountSession") { %>
-    <h6 style="float: left;">
-      <a class="btn primary">Measured Counts</a> 
-      <a href="#project/<%= projectId %>/measure/predictions" class="btn">Predicted Counts</a> 
-    </h6>
+    <div class="btn-group" style="float: left;">
+      <h6>
+        <a class="btn primary">Measured Counts</a> 
+        <a href="#project/<%= projectId %>/measure/predictions" class="btn">Predicted Counts</a> 
+      </h6>
+    </div>
     <div id="count-buttons">
       <% if (segmentId) { %>
         <h6><a href="#project/<%= projectId %>/measure/segment/<%= segmentId %>/count_session/new" class="btn primary">Count At Selected Segment</a></h6>
@@ -33,10 +35,12 @@
       <button id="count-plus-five-button" class="btn primary large">+ 5</button>
     </div>
   <% } else if (mode == "predictions") { %>
-    <h6 style="float: left;">
-      <a href="#project/<%= projectId %>/measure" class="btn">Measured Counts</a> 
-      <a class="btn primary">Predicted Counts</a> 
-    </h6>
+    <div class="btn-group" style="float: left;">
+      <h6>
+        <a href="#project/<%= projectId %>/measure" class="btn">Measured Counts</a> 
+        <a class="btn primary">Predicted Counts</a> 
+      </h6>
+    </div>
     <div style="float: right;">
         <h6><em>Click a point on the plot to see the corresponding segment on the map.</em></h6>
     </div>

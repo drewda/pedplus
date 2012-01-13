@@ -132,4 +132,19 @@
       display: none;
     }
   }
+
+  .btn-set {
+    h3, h6 {
+      float: left;
+      padding-right: 6px;
+    }
+    .btn-group {
+      float: right;
+      h6 {
+        float: none;
+        padding-right: 0;
+      }
+    }
+    
+  }
 }

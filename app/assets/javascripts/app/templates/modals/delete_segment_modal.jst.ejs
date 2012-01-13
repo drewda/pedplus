@@ -3,7 +3,7 @@
   
   <div class="modal-body"><p>Deleting this segment will also delete any associated count sessions. Are you sure you want to delete this segment?</p></div>
   
-  <div class="modal-footer">
+  <div class="modal-footer horizontal-form">
     <h6><a id="delete-segment-button" class="btn danger">Yes</a></h6>
     <h6><a href="#project/<%= masterRouter.projects.getCurrentProjectId() %>/map/segment/<%= masterRouter.segments.selected()[0].cid %>" class="btn secondary">No</a></h6>
     <label style="float: left; text-align: left; width: 300px;"><input type="checkbox" id="hide-delete-segment-confirmation" /> <em>Do not show this confirmation again this session.</em></label>

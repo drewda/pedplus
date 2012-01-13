@@ -1,3 +1,4 @@
+doctype html
 html
   head
     title PedPlus Admin
@@ -5,12 +6,12 @@ html
     = javascript_include_tag "admin/admin"
     = csrf_meta_tags
   body
-    .topbar
-      .fill
+    .navbar.navbar-fixed
+      .navbar-inner
         .container
           h3
-            = link_to "PedPlus Admin", admin_root_path
-          ul
+            = link_to "PedPlus Admin", admin_root_path, :class => "brand"
+          ul.nav
             li class={"active" if current_page?(admin_organizations_path)} 
               = link_to "Organizations", admin_organizations_path
             li class={"active" if current_page?(admin_users_path)} 
@@ -19,10 +20,12 @@ html
               = link_to "Projects", admin_projects_path
             li class={"active" if current_page?(admin_subscriptions_path)} 
               = link_to "Subscriptions", admin_subscriptions_path
-          ul.nav.secondary-nav
-            li.menu(data-dropdown="dropdown")
-              a.menu(href="#") == "<strong>#{current_user.first_name} #{current_user.last_name}</strong>"
-              ul.menu-dropdown
+          ul.nav.pull-right
+            li.dropdown
+              a.dropdown-toggle(href="#" data-toggle="dropdown") 
+                == "<strong>#{current_user.first_name} #{current_user.last_name}</strong>"
+                | <b class="caret"></b>
+              ul.dropdown-menu
                 li = link_to "Edit Your Profile", admin_user_path(current_user.id)
                 li.divider
                 li = link_to "Sign Out", destroy_user_session_path, :method => :delete

@@ -1,11 +1,11 @@
 - content_for :body do
   = form_for([:admin, @subscription]) do |f|
     .row
-      .span13.columns
+      .span10.columns
         h1 = @subscription.name
-      .span3.columns(align="right")
+      .span2.columns(align="right")
         = f.submit "Save Changes", {:class => "btn primary"}
-    ul.tabs
+    ul.nav.tabs
       li 
         = link_to "View", admin_subscription_path(@subscription.id)
       li.active

@@ -1,8 +1,8 @@
 /*
  *= require bootstrap
  *
+ *= require_tree .
  *= require_self
- *= require_tree . 
 */
 
 html, body, .container-fluid {
@@ -10,4 +10,22 @@ html, body, .container-fluid {
   margin: 0;
   padding: 0;
   overflow: hidden;
+}
+
+/* 
+ * customizations to boostrap.css
+ *
+ * I also replaced docs/assets/img/ with /assets/
+*/
+
+
+h3, h4, h5, h6 {
+  line-height: 36px;
+}
+h6 {
+	font-size: 13px;
+	color: #bfbfbf;
+}
+.btn {
+	padding: 8px 14px;
 }

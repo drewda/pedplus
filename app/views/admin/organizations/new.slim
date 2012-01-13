@@ -45,7 +45,7 @@
               = label(:organization_member, :user_id)
               .input
                 = om_fields.collection_select(:user_id, User.all, :id, :full_name_and_email)
-          .span3.columns(align="right")
+          .span2.columns(align="right")
             h6 Permissions
           .span2.columns(align="center")
             h5 

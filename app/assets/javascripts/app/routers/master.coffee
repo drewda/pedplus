@@ -339,7 +339,7 @@ class App.Routers.Master extends Backbone.Router
     masterRouter.segments.selectNone()
 
   measure: (projectId) ->
-    @reset(projectId, 260)
+    @reset(projectId, 250)
     @routeNameKeeper 'measure'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -358,7 +358,7 @@ class App.Routers.Master extends Backbone.Router
       @countSessionTable.render()
   
   measurePredictions: (projectId) ->
-    @reset(projectId, 590)
+    @reset(projectId, 580)
     @routeNameKeeper 'measurePredictions'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -372,7 +372,7 @@ class App.Routers.Master extends Backbone.Router
     @segments.selectNone()
   
   measureSelectedSegment: (projectId, segmentId) ->
-    @reset(projectId, 260)
+    @reset(projectId, 250)
     @routeNameKeeper 'measureSelectedSegment'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -388,7 +388,7 @@ class App.Routers.Master extends Backbone.Router
       @countSessionTable.render()
       
   measureNewCountSession: (projectId, segmentId) ->
-    @reset(projectId, 260)
+    @reset(projectId, 250)
     @routeNameKeeper 'measureNewCountSession'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -407,7 +407,7 @@ class App.Routers.Master extends Backbone.Router
       @countSessionTable.render()
       
   measureSelectedCountSession: (projectId, countSessionId) ->
-    @reset(projectId, 260)
+    @reset(projectId, 250)
     @routeNameKeeper 'measureSelectedCountSession'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -436,7 +436,7 @@ class App.Routers.Master extends Backbone.Router
       mode: "enterCountSession"
 
   measureDeleteCountSession: (projectId, countSessionId) ->
-    @reset(projectId, 260)
+    @reset(projectId, 250)
     @routeNameKeeper 'measureDeleteCountSession'
     # @fetchProjectData()
     @measureTab = new App.Views.MeasureTab
@@ -454,7 +454,7 @@ class App.Routers.Master extends Backbone.Router
       @countSessionTable.render()
 
   opportunity: (projectId) ->
-    @reset(projectId, 590)
+    @reset(projectId, 580)
     @routeNameKeeper 'opportunity'
     # @fetchProjectData
     @opportunityTab = new App.Views.OpportunityTab
@@ -503,7 +503,7 @@ class App.Routers.Master extends Backbone.Router
        location.hash.split('/').pop().match(/\d+/)
       @currentRouteName += ":" + location.hash.split('/').pop()
     
-  reset: (projectId, topBarHeight = 90) ->
+  reset: (projectId, topBarHeight = 80) ->
     ###
     TODO: if there are any map edits that have not yet been uploaded,
           kick the user back to map mode
