@@ -1,10 +1,15 @@
 class Api::MapEditsController < Api::ApiController
   def upload    
-    projectId = params['project_id'] # we're assuming uploads are for only one project
-    geoPoints = params['geo_points']
-    segments = params['segments']
-    geoPointOnSegments = params['geo_point_on_segments']
+    projectId = params['map_edit']['project_id'] # we're assuming uploads are for only one project
+    geoPoints = params['map_edit']['geo_points']
+    segments = params['map_edit']['segments']
+    geoPointOnSegments = params['map_edit']['geo_point_on_segments']
     
+    # remove the root elements from Backbone's JSON 
+    geoPoints = geoPoints.map { |gp| gp['geo_point'] }
+    segments = segments.map { |s| s['segment'] }
+    geoPointOnSegments = geoPointOnSegments.map { |gpos| gpos['geo_point_on_segment'] }
+
     # Backbone shouldn't be sending all of this, but for now it is, 
     # so we want to ignore these extra attributes
     ['selected', 'moved', 'permeabilityValue', 'permeabilityClass', 'measuredClass'].each do |attr|

@@ -1,10 +1,7 @@
 <div id="projects-modal" class="modal <%= mode %>">
   <div class="modal-header">
-    <ul class="nav pills">
+    <ul class="nav nav-pills">
       <li><h3>Projects</h3></li>
-      <li <% if (mode == "admin") { %>class="active"<% } %> style="float: right;">
-        <a href="#project/admin">Admin</a>
-      </li>
       <li <% if (mode == "open") { %>class="active"<% } %> style="float: right;">
         <a href="#project/open">Open</a>
       </li>
@@ -16,11 +13,6 @@
       <% projects.each(function(p) { %>
         <p><a href="#project/<%= p.id %>"><%= p.get('name') %></a></p>
       <% });%>
-    <% } %>
-    <% if (mode == "admin") { %>
-    <div id="project-admin-content">
-      <iframe src="/admin" id="admin-iframe" />
-    </div>
     <% } %>
   </div>
 </div>

@@ -1,9 +1,9 @@
 <div id="project-details" class="btn-set" style="float: left;">
-  <h3 style="float: left;"><%= name %></h3> 
+  <h3 style="float: left;"><%= get('name') %></h3> 
   <div class="btn-group"> 
     <h6>
-    	<a href="#project/<%= id %>/settings" class="btn">Settings</a>
-    	<a href="#project/<%= id %>/export" class="btn">Export</a>
+    	<a href="#project/<%= id %>/settings" class="btn"><i class="icon-cog"/> Settings</a>
+    	<a href="#project/<%= id %>/export" class="btn"><i class="icon-download-alt"/> Export</a>
     </h6>
   </div>
 </div>
@@ -11,8 +11,7 @@
   <h6>Projects</h6>
   <div class="btn-group"> 
     <h6>
-      <a href="#project/open" class="btn">Open</a> 
-      <a href="#project/admin" class="btn">Admin</a>
+      <a href="#project/open" class="btn"><i class="icon-folder-open"/> Open</a>
     </h6>
   </div>
 </div>

@@ -29,3 +29,9 @@ h6 {
 .btn {
 	padding: 8px 14px;
 }
+[class^="icon-"] {
+  background-image: url('/assets/glyphicons-halflings.png'); 
+}
+.icon-white {
+  background-image: url('/assets/glyphicons-halflings-white.png');
+}

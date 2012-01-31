@@ -1,0 +1,16 @@
+- content_for :head do
+  = javascript_include_tag "app/libraries", "app/app"
+  / = javascript_include_tag "http://#{Rails.configuration.juggernaut_host}:#{Rails.configuration.juggernaut_port}/application.js"
+  = stylesheet_link_tag    "app/app"
+  script
+    | function injectProjects() {
+    == "masterRouter.projects.reset(#{current_user.projects.to_json()});"
+    | }
+
+- content_for :body do
+  .container-fluid
+    #top-bar
+    #map-area
+    #spinner
+
+= render :template => '/app/layout'

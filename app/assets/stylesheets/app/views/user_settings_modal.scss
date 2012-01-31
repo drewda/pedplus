@@ -1,0 +1,16 @@
+#user-settings-modal {
+	#change-password-form {
+		input {
+			/* this should be done by .form-horizontal, but
+				 that's not working with Bootstrap 2.0-wip for
+				 whatever reason */
+			display: inline-block;
+		}
+		#change-password-button {
+			/* reset the button to the default padding, so 
+			   that it lines up nicely with the input fields */
+			padding: 5px 10px 6px;
+			float: right;
+		}	
+	}
+}

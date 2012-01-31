@@ -70,10 +70,6 @@ class App.Routers.Master extends Backbone.Router
   routes:
     ".*" : "index"
     
-    "user/setings" : "userSettings"
-    
-    "message/new" : "messageNew"
-    
     "project/open"                  : "projectOpen"
     "project/admin"                 : "projectAdmin"
     "project/:project_id"           : "project"
@@ -113,14 +109,6 @@ class App.Routers.Master extends Backbone.Router
   index: ->
     masterRouter.navigate 'project/open', true
 
-  userSettings: ->
-    @reset()
-    @routeNameKeeper 'userSettings'
-
-  messageNew: ->
-    @reset()
-    @routeNameKeeper 'messageNew'
-
   projectOpen: ->
     if @projectTab
       @projectTab.remove()
@@ -129,8 +117,8 @@ class App.Routers.Master extends Backbone.Router
     masterRouter.geo_points.reset()
     masterRouter.geo_point_on_segments.reset()
     masterRouter.segments.reset()
-    @reset()
     @routeNameKeeper 'projectOpen'
+    @reset()
     projectsModal = new App.Views.ProjectsModal
       mode: "open"
       projects: masterRouter.projects
@@ -508,16 +496,20 @@ class App.Routers.Master extends Backbone.Router
     TODO: if there are any map edits that have not yet been uploaded,
           kick the user back to map mode
     ###
-    
-    @clearTimers()
-    
-    if projectId
-      masterRouter.projects.setCurrentProjectId projectId
-    $('.modal').modal('hide').remove()
-    $('.modal-backdrop').remove()
-    masterRouter.topBarTabs = []
-    masterRouter.modals = []
-    $('#top-bar').animate {height:"#{topBarHeight}px"}, 400 unless $('#top-bar').height == topBarHeight 
+
+    # if projects have not yet been loaded, kick the user back to the start
+    if @projects.length < 1 and @currentRouteName != "projectOpen"
+      masterRouter.navigate '#', true
+    else
+      @clearTimers()
+      
+      if projectId
+        masterRouter.projects.setCurrentProjectId projectId
+      $('.modal').modal('hide').remove()
+      $('.modal-backdrop').remove()
+      masterRouter.topBarTabs = []
+      masterRouter.modals = []
+      $('#top-bar').animate {height:"#{topBarHeight}px"}, 400 unless $('#top-bar').height == topBarHeight 
     
   clearTimers: ->
     _.each @timers, (t) ->

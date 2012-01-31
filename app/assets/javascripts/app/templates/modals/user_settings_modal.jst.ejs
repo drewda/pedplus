@@ -1,0 +1,25 @@
+<div id="user-settings-modal" class="modal">
+  <div class="modal-header">
+    <a class="close" data-dismiss="modal">×</a>
+    <h3><%= user.full_name() %></h3>
+  </div>
+  
+  <div class="modal-body">
+  	<h4>Contact Information</h4>
+  	<p><strong>E-mail address</strong>: <%= user.get('email') %></p>
+  	<p><strong>Phone number</strong>: <%= user.get('phone_number') %></p>
+  	<% if (user.get('organization_manager') == true) { %>
+  	<p><span class="label notice">Info</span> To change your contact information, please use <a href="/manage">the Management interface</a>.</p>
+  	<% } else { %>
+  	<p><span class="label notice">Info</span> To change your contact information, please contact the manager(s) of your organization subscription.</p>
+  	<% } %>
+    <h4>Password</h4>
+    <form id="change-password-form">
+    	<div id="change-password-control-group" class="control-group">
+	    	<input id="new_password" type="password" class="input-medium" placeholder="New Password">
+	    	<input id="new_password_confirmation" type="password" class="input-medium" placeholder="Confirm New Password">
+	    	<a id="change-password-button" class="btn btn-primary" data-loading-text="Changing Password...">Change Password</a>
+    	</div>
+    </form>
+  </div>
+</div>

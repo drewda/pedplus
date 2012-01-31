@@ -4,7 +4,7 @@
       .span10.columns
         h1 = @project.name
       .span2.columns(align="right")
-        = f.submit "Save Changes", {:class => "btn primary"}
+        = f.submit "Save Changes", {:class => "btn btn-primary"}
     ul.nav.tabs
       li 
         = link_to "View", admin_project_path(@project.id)
@@ -25,7 +25,7 @@
       .clearfix
         = f.label :kind
         .input
-          = f.text_field :kind
+          = f.select :kind, Project.kind_choices
           
     h2 Users
     table.common-table
@@ -47,6 +47,6 @@
               td = pm_fields.check_box :manage
 
   .well(align="left")
-     = button_to "Delete Project", admin_project_path(@project.id), :method => :delete, :class => "btn danger", :confirm => "Are you sure you want to delete #{@project.name}?"
+     = button_to "Delete Project", admin_project_path(@project.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@project.name}?"
      
 = render :template => '/admin/layout'

@@ -1,6 +1,13 @@
 Pedplus::Application.routes.draw do
   root :to => 'app#dashboard'
+  match 'app' => 'app#app'
+  match 'smartphone' => 'app#smartphone'
+  # TODO: add route for /help
   
+  namespace :manage do
+    root :to => 'manage#dashboard'
+  end
+
   namespace :api do
     resources :organizations
     resources :users
@@ -21,6 +28,7 @@ Pedplus::Application.routes.draw do
   
   devise_for :users
   
+  # admin is only for S3Sol internal users
   namespace :admin do
     root :to => 'site#dashboard'
     resources :users, :organizations, :projects, :subscriptions, :oauth_clients

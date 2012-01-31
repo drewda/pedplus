@@ -1,0 +1,47 @@
+/*
+ *= require bootstrap
+ *= require_self
+*/
+#header-row {
+	text-align: center; 
+	padding-top: 100px;
+	padding-left: 20px;
+	padding-right: 20px;
+	padding-bottom: 60px;
+	font-size: 72pt;
+	font-weight: bold;
+}
+#user-row {
+	text-align: center;
+	padding-bottom: 30px;
+	p {
+		font-size: 18pt;
+	}
+}
+#footer-row {
+	text-align: center;
+}
+.dashboard-button {
+	height: 140px;
+	text-align: center;
+	background-position: 50% 70%;
+	background-repeat: no-repeat;
+}
+.dashboard-button:hover {
+	text-decoration: none;
+	h3 {
+		color: #00aeef;
+	}
+}
+#desktop-button {
+  background-image: url('/assets/desktop-icon-gray.png');
+}
+#smartphone-button {
+  background-image: url('/assets/smartphone-icon-gray.png');
+}
+#manage-button {
+  background-image: url('/assets/manage-icon-gray.png');
+}
+#help-button {
+  background-image: url('/assets/help-icon-gray.png');
+}

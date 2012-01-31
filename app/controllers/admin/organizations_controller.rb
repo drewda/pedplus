@@ -5,7 +5,6 @@ class Admin::OrganizationsController < Admin::AdminController
   
   def new
     @organization = Organization.new
-    @organization.organization_members.build
   end
   
   def show

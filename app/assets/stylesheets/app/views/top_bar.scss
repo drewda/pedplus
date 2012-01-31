@@ -13,7 +13,7 @@
   -moz-box-shadow: 0 3px 7px rgba(0, 0, 0, 0.3);
   opacity: .9;
   
-  ul.pills {
+  ul.nav-pills {
     margin-bottom: 6px;
     li {
       font-weight: 400; 
@@ -21,8 +21,20 @@
     }
   }
   
-  #help-pill, #sign-out-pill {
+  #help-pill {
     float: right;
+  }
+
+  #account-pill {
+    float: right;
+    .dropdown-menu {
+      li:first {
+        padding: 6px 15px;
+      }
+      a {
+        padding: 6px 15px;
+      }
+    }
   }
   
   #map-tab {

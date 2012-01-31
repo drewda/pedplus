@@ -3,13 +3,13 @@
     <% if (mode == "measure" || mode == "selectedSegment" || mode == "selectedCountSession") { %>
     <div class="btn-group" style="float: left;">
       <h6>
-        <a class="btn primary">Measured Counts</a> 
+        <a class="btn btn-primary">Measured Counts</a> 
         <a href="#project/<%= projectId %>/measure/predictions" class="btn">Predicted Counts</a> 
       </h6>
     </div>
     <div id="count-buttons">
       <% if (segmentId) { %>
-        <h6><a href="#project/<%= projectId %>/measure/segment/<%= segmentId %>/count_session/new" class="btn primary">Count At Selected Segment</a></h6>
+        <h6><a href="#project/<%= projectId %>/measure/segment/<%= segmentId %>/count_session/new" class="btn btn-primary">Count At Selected Segment</a></h6>
       <% } else { %>
         <h6><em>To start or schedule a count session, select a segment on the map.</em></h6>
       <% } %>
@@ -22,23 +22,23 @@
   <% } else if (mode == "enterCountSession") { %>
     <h3>Entering Counts</h3>
     <div id="count-buttons" style="float: left; margin-left: 6px">
-      <h6><a id="stop-count-session-cancel-button" class="btn danger">Cancel Counting</a></h6>
+      <h6><a id="stop-count-session-cancel-button" class="btn btn-danger">Cancel Counting</a></h6>
     </div>
     <div id="count-session-entry">
-      <button id="count-minus-one-button" class="btn danger large">&ndash; 1</button>
+      <button id="count-minus-one-button" class="btn btn-danger large">&ndash; 1</button>
       <div id="timer">
         <h6 id="minutes"></h6>
         <h6 id="seconds"></h6>
       </div>
       <div id="counter">0 <h6>people</h6></div>
-      <button id="count-plus-one-button" class="btn primary large">+ 1</button>
-      <button id="count-plus-five-button" class="btn primary large">+ 5</button>
+      <button id="count-plus-one-button" class="btn btn-primary large">+ 1</button>
+      <button id="count-plus-five-button" class="btn btn-primary large">+ 5</button>
     </div>
   <% } else if (mode == "predictions") { %>
     <div class="btn-group" style="float: left;">
       <h6>
         <a href="#project/<%= projectId %>/measure" class="btn">Measured Counts</a> 
-        <a class="btn primary">Predicted Counts</a> 
+        <a class="btn btn-primary">Predicted Counts</a> 
       </h6>
     </div>
     <div style="float: right;">

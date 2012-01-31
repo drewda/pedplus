@@ -3,10 +3,16 @@
 //= require json2
 //= require underscore
 //= require backbone
+//= require backbone-rails
+//= require polymaps
+//= require d3
+//= require d3.geo
 //= require jquery-svg
 //= require jquery-svgdom
 //= require bootstrap-dropdown
 //= require bootstrap-modal
+//= require bootstrap-button
+//= require bootbox
 //= require xdate
 //= require jquery-datatables
 //= require jquery-datatables-bootstrap
@@ -19,9 +25,11 @@ String.prototype.startsWith = function (str){
 
 // include local cid in Backbone-produced JSON
 Backbone.Model.prototype.toJSON = function() {
- return _(_.clone(this.attributes)).extend({
-  cid : this.cid
- });
+  var object = new Object;
+  object[this.name] = _(_.clone(this.wrappedAttributes()[this.name])).extend({
+    cid : this.cid
+  });
+  return object;
 }
 
 // enable boolean sorting in jquery-datatables

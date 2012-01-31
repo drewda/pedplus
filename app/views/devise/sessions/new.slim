@@ -1,11 +1,16 @@
 - content_for :body do
+  .row#header-row
+    .span12
+      img(src="/assets/pedplus-icon.png" valign="absmiddle" style="padding-right: 10px;") 
+      | PedCount
   .row
-    .span4.columns &nbsp;
-    .span4.columns
+    .span4.columns.offset4
+      - flash.each do |name, msg| 
+        .alert.alert-error = msg
+
       = form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f|
         fieldset
           legend Sign In
-          = devise_error_messages!
           .clearfix
             = f.label :email, "E-mail Address"
             .input = f.email_field :email, :class => 'span4'
@@ -14,11 +19,15 @@
             .input
               .input-append
                 = f.password_field :password, :class => 'span3'
-                label.add-on(style="width: 70px;")
+                label.add-on(style="width: 69px;")
                   | Save
                   input#user_remember_me(type="checkbox" checked="checked" name="user[remember_me]" value="1")
-          .actions = f.submit "Sign in", :class => "btn primary"
-      = render :partial => "devise/shared/links"
-    .span4.columns &nbsp;
+          .actions 
+            = f.submit "Sign in", :class => "btn btn-primary", :id => 'sign-in-button'
+            = link_to "Forgot your password?", new_password_path(resource_name), :id => 'forgot-password-link'
+  .row#footer-row
+    p 
+      img(src="/assets/s3sol-logo-small.png" alt="S3Sol logo" valign="middle" style="padding-right: 10px;")
+      | a tool by <a href="http://www.s3sol.com/" style="color: #990f17;" >Strategic Spatial Solutions, Inc.</a>
 
 = render :template => '/devise/layout'

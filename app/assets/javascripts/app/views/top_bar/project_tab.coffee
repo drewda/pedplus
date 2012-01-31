@@ -10,7 +10,7 @@ class App.Views.ProjectTab extends Backbone.View
     @render()
   template: JST["app/templates/top_bar/project_tab"]
   render: ->
-    $('#tab-area').html @template @projects.getCurrentProject().toJSON()
+    $('#tab-area').html @template @projects.getCurrentProject()
   remove: ->
     @projects.unbind()
     $('#project-tab').remove()

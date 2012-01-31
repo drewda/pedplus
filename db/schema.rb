@@ -11,7 +11,14 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20111222194011) do
+ActiveRecord::Schema.define(:version => 20120127205334) do
+
+  create_table "count_session_credits", :force => true do |t|
+    t.integer "organization_id"
+    t.string  "payment_method"
+    t.integer "count_session_credits_purchased"
+    t.integer "count_session_credits_used",      :default => 0
+  end
 
   create_table "count_sessions", :force => true do |t|
     t.integer  "segment_id"
@@ -22,6 +29,7 @@ ActiveRecord::Schema.define(:version => 20111222194011) do
     t.datetime "updated_at"
     t.integer  "project_id"
     t.integer  "user_id"
+    t.integer  "count_total"
     t.integer  "counts_count", :default => 0
   end
 
@@ -104,12 +112,14 @@ ActiveRecord::Schema.define(:version => 20111222194011) do
     t.string   "state"
     t.string   "country"
     t.string   "postal_code"
-    t.integer  "subscription_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "owns_pedcount",                      :default => true
+    t.boolean  "owns_pedplus",                       :default => false
+    t.integer  "max_number_of_users",                :default => 1
+    t.integer  "max_number_of_projects",             :default => 1
+    t.integer  "max_number_of_segments_per_project", :default => 1000
   end
-
-  add_index "organizations", ["subscription_id"], :name => "index_organizations_on_subscription_id"
 
   create_table "project_members", :force => true do |t|
     t.integer  "user_id"
@@ -170,16 +180,6 @@ ActiveRecord::Schema.define(:version => 20111222194011) do
   end
 
   add_index "segments", ["project_id"], :name => "index_segments_on_project_id"
-
-  create_table "subscriptions", :force => true do |t|
-    t.string   "name"
-    t.boolean  "uses_ped"
-    t.boolean  "uses_sign"
-    t.integer  "max_users"
-    t.integer  "max_projects"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
 
   create_table "users", :force => true do |t|
     t.string   "first_name"

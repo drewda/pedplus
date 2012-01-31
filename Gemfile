@@ -17,6 +17,7 @@ gem "geocoder"
 
 gem 'slim'
 gem 'dynamic_form'
+gem 'attribute_choices'
 gem 'ejs'
 
 gem 'jquery-rails'

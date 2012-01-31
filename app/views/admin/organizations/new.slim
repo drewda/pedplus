@@ -36,31 +36,8 @@
     
       h2 Subscription
       = f.collection_select(:subscription_id, Subscription.all, :id, :name)
-      
-      h2 Users
-      = f.fields_for :organization_members, @organization.organization_members do |om_fields|
-        .row
-          .span7.columns
-            .clearfix
-              = label(:organization_member, :user_id)
-              .input
-                = om_fields.collection_select(:user_id, User.all, :id, :full_name_and_email)
-          .span2.columns(align="right")
-            h6 Permissions
-          .span2.columns(align="center")
-            h5 
-              ' View?
-              = om_fields.check_box :view
-          .span2.columns(align="center")
-            h5 
-              ' Bill?
-              = om_fields.check_box :bill
-          .span2.columns(align="center")
-            h5 
-              ' Manage?
-              = om_fields.check_box :manage
               
       .row(align="right")
-        = f.submit "Create Organization", {:class => "btn primary"}
+        = f.submit "Create Organization", {:class => "btn btn-primary"}
 
 = render :template => '/admin/layout'

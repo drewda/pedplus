@@ -12,6 +12,10 @@ class Project < ActiveRecord::Base
   has_many :model_jobs
   
   accepts_nested_attributes_for :project_members, :allow_destroy => true
+
+  attribute_choices :kind, 
+                    [['pedcount', 'PedCount'], ['pedplus', 'PedPlus']],
+                    :validate => true
   
   def cache_bounding_box
     southwestLatitude = -Float::INFINITY

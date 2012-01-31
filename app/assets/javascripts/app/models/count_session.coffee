@@ -1,6 +1,7 @@
 class App.Models.CountSession extends Backbone.Model
   name: 'count_session'
-  initialize: ->
+  initialize: (args) ->
+    @maybeUnwrap(args); # relevant to backbone-rails.js
     @counts = new App.Collections.Counts
     @bind "change", =>
       @counts.url = "/api/projects/#{masterRouter.projects.getCurrentProjectId()}/count_sessions/#{@id}/counts"
