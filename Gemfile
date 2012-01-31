@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.1.3'
+gem 'rails', '3.2.1'
 
 gem 'mysql2'
 
@@ -18,6 +18,7 @@ gem "geocoder"
 gem 'slim'
 gem 'dynamic_form'
 gem 'attribute_choices'
+gem 'country_select'
 gem 'ejs'
 
 gem 'jquery-rails'
