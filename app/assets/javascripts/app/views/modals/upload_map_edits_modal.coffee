@@ -37,11 +37,14 @@ class App.Views.UploadMapEditsModal extends Backbone.View
         masterRouter.geo_points.reset()
         masterRouter.geo_point_on_segments.reset()
         masterRouter.segments.reset()
+        masterRouter.count_sessions.reset()
         
         masterRouter.geo_points.fetch
           success: ->
             masterRouter.geo_point_on_segments.fetch
               success: -> 
-                masterRouter.segments.fetch()
+                masterRouter.segments.fetch
+                  success: ->
+                    masterRouter.count_sessions.fetch()
       error: (model, error) ->
         alert "Error uploading edits to the server: #{error}"

@@ -20,7 +20,7 @@ class Api::MapEditsController < Api::ApiController
     geoPoints.each do |gpLocal|
       if gpLocal['id']
         if gpLocal['markedForDelete']
-          GeoPoint.where(:id => gpLocal['id']).delete_all
+          GeoPoint.find(gpLocal['id']).destroy
         else
           cid = gpLocal.delete 'cid'
           GeoPoint.find(gpLocal['id']).update_attributes gpLocal
@@ -37,7 +37,9 @@ class Api::MapEditsController < Api::ApiController
     segments.each do |sLocal|
       if sLocal['id']
         if sLocal['markedForDelete']
-          Segment.where(:id => sLocal['id']).delete_all
+          # the segment may be deleted when a geopoint is destroyed, but just
+          # in case we will check to see if it still needs to be deleted
+          s.destroy if s = Segment.find_by_id(sLocal['id'])
         else
           cid = sLocal.delete 'cid'
           Segment.find(sLocal['id']).update_attributes sLocal # TODO: check
@@ -53,7 +55,9 @@ class Api::MapEditsController < Api::ApiController
     end
     geoPointOnSegments.each do |gposLocal|
       if gposLocal['geo_point_id'] and gposLocal['markedForDelete']
-        GeoPointOnSegment.where(:id => gposLocal['id']).delete_all
+        # the gpos will probably be deleted when the segment is destroyed,
+        # but just in case we will check to see if it still needs to be deleted
+        gpos.destroy if gpos = GeoPointOnSegment.find_by_id(gposLocal['id'])
       else
         if !gposLocal['markedForDelete']
           if gposLocal['geo_point_id']
