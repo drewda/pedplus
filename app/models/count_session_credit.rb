@@ -1,3 +1,3 @@
-class CountSessionCredit < ActiveModel::Base
+class CountSessionCredit < ActiveRecord::Base
 	belongs_to :organization
 end
