@@ -1,9 +1,9 @@
 /* ===========================================================
  * bootstrap-tooltip.js v2.0.0
- * http://twitter.github.com/bootstrap/javascript.html#tooltip
+ * http://twitter.github.com/bootstrap/javascript.html#tooltips
  * Inspired by the original jQuery.tipsy by Jason Frame
  * ===========================================================
- * Copyright 2011 Twitter, Inc.
+ * Copyright 2012 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,7 +115,7 @@
         }
 
         placement = typeof this.options.placement == 'function' ?
-          thing.call(this, $tip[0], this.$element[0]) :
+          this.options.placement.call(this, $tip[0], this.$element[0]) :
           this.options.placement
 
         inside = /in/.test(placement)

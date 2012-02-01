@@ -2,7 +2,7 @@
  * bootstrap-alert.js v2.0.0
  * http://twitter.github.com/bootstrap/javascript.html#alerts
  * ==========================================================
- * Copyright 2011 Twitter, Inc.
+ * Copyright 2012 Twitter, Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,20 +36,25 @@
 
   , close: function ( e ) {
       var $this = $(this)
-        , selector = $this.attr('data-target') || $this.attr('href')
-        , $parent = $(selector)
+        , selector = $this.attr('data-target')
+        , $parent
 
+      if (!selector) {
+        selector = $this.attr('href')
+        selector = selector && selector.replace(/.*(?=#[^\s]*$)/, '') //strip for ie7
+      }
+
+      $parent = $(selector)
       $parent.trigger('close')
 
       e && e.preventDefault()
 
-      $parent.length || ($parent = $this.hasClass('alert-message') ? $this : $this.parent())
+      $parent.length || ($parent = $this.hasClass('alert') ? $this : $this.parent())
 
       $parent.removeClass('in')
 
       function removeElement() {
         $parent.remove()
-
         $parent.trigger('closed')
       }
 
