@@ -57,8 +57,12 @@
     }
     #count-session-table-wrapper {
       table {
+        width: 100%;
         margin: 0;
         clear: both;
+        th {
+          text-align: left;
+        }
 		    tr.selected td {
           background-color: #55ee33;
         }
