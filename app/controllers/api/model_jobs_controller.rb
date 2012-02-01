@@ -8,6 +8,8 @@ class Api::ModelJobsController < Api::ApiController
   end
 
   def create
+    params[:model_job].delete 'cid'
+
     @model_job = ModelJob.new params[:model_job]
     @model_job.project = Project.find(params[:project_id])
     
