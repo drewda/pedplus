@@ -28,4 +28,15 @@ Pedplus::Application.configure do
   # juggernaut host
   config.juggernaut_host = "localhost"
   config.juggernaut_port = "8080"
+
+  # for pry (as a replacement for irb)
+  # https://gist.github.com/941174
+  silence_warnings do
+    begin
+      require 'pry'
+      IRB = Pry
+    rescue LoadError
+    end
+  end
+
 end

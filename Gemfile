@@ -39,4 +39,5 @@ end
 
 group :development do
   gem 'drewda-railroad', '~> 0.5.3'
+  gem 'pry'
 end
