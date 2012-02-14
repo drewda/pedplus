@@ -3,7 +3,7 @@
     h1 Projects
   .span2.columns(align="right")
     = link_to "Create Project", new_admin_project_path, :class => "btn"
-table.common-table
+table.table.table-striped
   thead
     tr
       th Name
@@ -16,4 +16,4 @@ table.common-table
         td = link_to p.name, admin_project_path(p.id)
         td = p.kind_display
         td = link_to p.organization.name, admin_organization_path(p.organization.id)
-        td = p.project_members.collect{|m| m.user.full_name}.to_sentence
+        td = p.project_members.where(:view => true).collect{|m| m.user.full_name}.to_sentence

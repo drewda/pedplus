@@ -6,8 +6,11 @@ html
     = javascript_include_tag "admin/admin"
     = csrf_meta_tags
   body
-    .navbar.navbar-fixed
+    .navbar.navbar-fixed-top
       .navbar-inner
+        .alert-danger
+          h4 style="text-align: center;" 
+            span.label.label-important for S3Sol internal use only 
         .container
           h3
             = link_to "PedPlus Admin", admin_root_path, :class => "brand"
@@ -18,11 +21,9 @@ html
               = link_to "Users", admin_users_path
             li class={"active" if current_page?(admin_projects_path)} 
               = link_to "Projects", admin_projects_path
-            li class={"active" if current_page?(admin_subscriptions_path)} 
-              = link_to "Subscriptions", admin_subscriptions_path
           ul.nav.pull-right
             li.dropdown
-              a.dropdown-toggle(href="#" data-toggle="dropdown") 
+              a.dropdown-toggle data-toggle="dropdown"
                 == "<strong>#{current_user.first_name} #{current_user.last_name}</strong>"
                 | <b class="caret"></b>
               ul.dropdown-menu
@@ -32,19 +33,15 @@ html
     .container
       .section
       - if flash[:success]
-        .alert-message.success.fade.in(data-alert="alert")
+        .alert.alert-success.fade.in(data-alert="alert")
           == flash[:success]
-          a.close(href="#") x
       - if flash[:info]
-        .alert-message.info.fade.in(data-alert="alert")
+        .alert.alert-info.fade.in(data-alert="alert")
           == flash[:info]
-          a.close(href="#") x
       - if flash[:error]
-        .alert-message.error.fade.in(data-alert="alert")
+        .alert.alert-error.fade.in(data-alert="alert")
           == flash[:error]
-          a.close(href="#") x
       - if flash[:warning]
-        .alert-message.warning.fade.in(data-alert="alert")
+        .alert.fade.in(data-alert="alert")
           == flash[:warning]
-          a.close(href="#") x
       == yield(:body)

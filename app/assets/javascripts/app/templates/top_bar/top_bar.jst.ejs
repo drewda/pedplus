@@ -1,13 +1,14 @@
 <ul class="nav nav-pills">
-    <li id="project-pill"><a href="#project/<%= projectId %>">Project</a></li>
-    <li id="map-pill"><a href="#project/<%= projectId %>/map">Map</a></li>
-    <% if (projectKind == 'pedplus') { %>
-    <li id="model-pill"><a href="#project/<%= projectId %>/model">Model</a></li>
+    <li id="project-pill"><a href="#project/<%= currentProject.id %>">Project</a></li>
+    <% if (currentProject.get('permissions_for_current_user').map == true) { %>
+    <li id="map-pill"><a href="#project/<%= currentProject.id %>/map">Map</a></li>
+    <% } if (currentProject.get('kind') == 'pedplus') { %>
+    <li id="model-pill"><a href="#project/<%= currentProject.id %>/model">Model</a></li>
     <% } %>
-    <li id="measure-pill"><a href="#project/<%= projectId %>/measure">Measure</a></li>
-    <% if (projectKind == 'pedplus') { %>
-    <li id="opportunity-pill"><a href="#project/<%= projectId %>/opportunity">Opportunity</a></li>
-    <li id="design-pill"><a href="#project/<%= projectId %>/design">Design</a></li>
+    <li id="measure-pill"><a href="#project/<%= currentProject.id %>/measure">Measure</a></li>
+    <% if (currentProject.get('kind') == 'pedplus') { %>
+    <li id="opportunity-pill"><a href="#project/<%= currentProject.id %>/opportunity">Opportunity</a></li>
+    <li id="design-pill"><a href="#project/<%= currentProject.id %>/design">Design</a></li>
     <% } %>
     <li id="account-pill" class="dropdown">
     	<a class="dropdown-toggle" data-toggle="dropdown">
@@ -25,6 +26,6 @@
     		<li><a id="sign-out-link"><i class="icon-off"/> Sign Out</a></li>
     	</ul>
     </li>
-    <li id="help-pill"><a href="#project/<%= projectId %>/help">Help</a></li>
+    <li id="help-pill"><a href="#project/<%= currentProject.id %>/help">Help</a></li>
 </ul>
 <div id="tab-area"></div>

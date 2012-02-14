@@ -24,12 +24,17 @@
           li.span4
             a.thumbnail.dashboard-button#smartphone-button(href="/smartphone")
               h3 Smartphone Applications
-          li.span4
-            a.thumbnail.dashboard-button#manage-button(href="/management")
-              h3 Management
-          li.span4
-            a.thumbnail.dashboard-button#help-button(href="/help")
-              h3 Help + Documentation
+          - if current_user.organization_manager
+            li.span4
+              a.thumbnail.dashboard-button#manage-button(href="/manage")
+                h3 Management
+            li.span4
+              a.thumbnail.dashboard-button#help-button(href="/help")
+                h3 Help + Documentation
+          - else
+            li.span8
+              a.thumbnail.dashboard-button#help-button(href="/help")
+                h3 Help + Documentation
     .row#footer-row
       p 
         img(src="/assets/s3sol-logo-small.png" alt="S3Sol logo" valign="middle" style="padding-right: 10px;")

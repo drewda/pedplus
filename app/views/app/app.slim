@@ -4,7 +4,7 @@
   = stylesheet_link_tag    "app/app"
   script
     | function injectProjects() {
-    == "masterRouter.projects.reset(#{current_user.projects.to_json()});"
+    == "masterRouter.projects.reset(#{@projects.to_json(:methods => [:permissions_for_current_user])})"
     | }
 
 - content_for :body do

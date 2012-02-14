@@ -10,9 +10,13 @@
   
   <div class="modal-body">
     <% if (mode == "open") { %>
+      <ul class="unstyled">
       <% projects.each(function(p) { %>
-        <p><a href="#project/<%= p.id %>"><%= p.get('name') %></a></p>
-      <% });%>
+        <li><a href="#project/<%= p.id %>"><%= p.get('name') %></a></li>
+      <% }); if (projects.length == 0) { %>
+        <li>You have access to no projects.</li>
+      <% } %>
+    </ul>
     <% } %>
   </div>
 </div>

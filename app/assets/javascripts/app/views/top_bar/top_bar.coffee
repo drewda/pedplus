@@ -2,8 +2,7 @@ class App.Views.TopBar extends Backbone.View
   template: JST["app/templates/top_bar/top_bar"]
   render: (mode) ->
     $('#top-bar').empty().html @template
-      projectId: masterRouter.projects.getCurrentProjectId()
-      projectKind: masterRouter.projects.getCurrentProject().get 'kind'
+      currentProject: masterRouter.projects.getCurrentProject()
       currentUser: masterRouter.users.getCurrentUser()
     $("##{mode}-pill").addClass('active')
 

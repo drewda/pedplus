@@ -1,7 +1,7 @@
 class Organization < ActiveRecord::Base
-  has_many :users
-  has_many :projects
-  has_many :count_session_credits
+  has_many :users, :dependent => :destroy
+  has_many :projects, :dependent => :destroy
+  has_many :count_session_credits, :dependent => :destroy
   
   accepts_nested_attributes_for :users
   
@@ -34,5 +34,13 @@ class Organization < ActiveRecord::Base
 
   def use_a_count_session_credit
     # TODO
+  end
+
+  def manager_users
+    self.users.where(:organization_manager => true)
+  end
+
+  def billing_users
+    self.users.where(:organization_billing => true)
   end
 end

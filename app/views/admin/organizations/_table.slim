@@ -1,19 +1,22 @@
 .row
-  .span10.columns
+  .span10
     h1 Organizations
-  .span2.columns(align="right")
+  .span2(align="right")
     = link_to "Create Organization", new_admin_organization_path, :class => "btn"
-table.common-table
+table.table.table-striped
   thead
     tr
       th Name
       th City, State, Country
-      th Subscription
+      th Software Package
+      th Max number of map segments per project
+      th Count session credits available
   tbody
     - @organizations.each do |o|
       tr
-        td = link_to o.name, admin_organization_path(o.id)
+        td 
+          strong = link_to o.name, admin_organization_path(o.id)
         td = "#{o.city}, #{o.state}, #{o.country}"
-        td
-          - if o.subscription
-            = link_to o.subscription.name, admin_subscription_path(o.subscription.id)
+        td = o.software_package
+        td = o.max_number_of_segments_per_project
+        td = o.count_session_credits_available

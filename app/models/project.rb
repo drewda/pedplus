@@ -47,4 +47,17 @@ class Project < ActiveRecord::Base
       :northeast_longitude => northeastLongitude
     )
   end
+
+  # used in Api::UsersController
+  attr_accessor :current_user
+  def permissions_for_current_user
+    projectMembership = self.project_members.where(:user_id => current_user.id).first
+    return {
+      "view" => projectMembership.view,
+      "count" => projectMembership.count,
+      "plan" => projectMembership.plan,
+      "map" => projectMembership.map,
+      "manage" => projectMembership.manage
+    }
+  end
 end

@@ -1,0 +1,18 @@
+.row.manage-table-header
+  .span10.columns
+    h1 Projects
+    h4 = "#{pluralize @organization.projects.length, 'projects'} out of #{@organization.max_number_of_projects} credits"
+  .span2.columns(align="right")
+    = link_to "Create Project", new_manage_project_path, :class => "btn"
+table.table.table-striped
+  thead
+    tr
+      th Name
+      th Kind
+      th Members(s)
+  tbody
+    - @projects.each do |p|
+      tr
+        td = link_to p.name, manage_project_path(p.id)
+        td = p.kind_display
+        td = p.project_members.where(:view => true).collect{|m| m.user.full_name}.to_sentence

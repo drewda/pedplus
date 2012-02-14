@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120127205334) do
+ActiveRecord::Schema.define(:version => 20120214064642) do
 
   create_table "count_session_credits", :force => true do |t|
     t.integer "organization_id"
@@ -119,16 +119,19 @@ ActiveRecord::Schema.define(:version => 20120127205334) do
     t.integer  "max_number_of_users",                :default => 1
     t.integer  "max_number_of_projects",             :default => 1
     t.integer  "max_number_of_segments_per_project", :default => 1000
+    t.string   "time_zone",                          :default => "Pacific Time (US & Canada)"
   end
 
   create_table "project_members", :force => true do |t|
     t.integer  "user_id"
     t.integer  "project_id"
-    t.boolean  "view"
-    t.boolean  "edit"
     t.boolean  "manage"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "view"
+    t.boolean  "count",      :default => false
+    t.boolean  "map"
+    t.boolean  "plan"
   end
 
   add_index "project_members", ["project_id"], :name => "index_project_members_on_project_id"
@@ -189,8 +192,6 @@ ActiveRecord::Schema.define(:version => 20120127205334) do
     t.integer  "organization_id"
     t.boolean  "organization_billing"
     t.boolean  "organization_manager"
-    t.boolean  "orgup_admin"
-    t.boolean  "orgup_api"
     t.string   "encrypted_password",     :limit => 128, :default => "", :null => false
     t.string   "invitation_token",       :limit => 60
     t.datetime "invitation_sent_at"
@@ -208,6 +209,7 @@ ActiveRecord::Schema.define(:version => 20120127205334) do
     t.string   "last_sign_in_ip"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "s3sol_admin"
   end
 
   add_index "users", ["invitation_token"], :name => "index_users_on_invitation_token"

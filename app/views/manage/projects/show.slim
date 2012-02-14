@@ -1,0 +1,40 @@
+- content_for :body do
+  = form_for([:manage, @project]) do |f|
+    h1 = @project.name
+
+    ul.nav.nav-tabs
+      li.active
+        a View
+      li
+        = link_to "Edit", edit_manage_project_path(@project.id)
+
+    p
+      ' Name:
+      strong = @project.name
+    p
+      ' Kind
+      strong = @project.kind_display
+
+    h2 Users
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th E-mail Address
+          th View?
+          th Count?
+          th Plan?
+          th Map?
+          th Manage?
+      tbody
+        - @project.project_members.each do |pm|
+          tr
+            td = link_to pm.user.full_name, manage_user_path(pm.user.id)
+            td = pm.user.email
+            td == pm.view ? "<i class='icon-ok'/>" : ""
+            td == pm.count ? "<i class='icon-ok'/>" : ""
+            td == pm.plan ? "<i class='icon-ok'/>" : ""
+            td == pm.map ? "<i class='icon-ok'/>" : ""
+            td == pm.manage ? "<i class='icon-ok'/>" : ""
+            
+= render :template => '/manage/layout'

@@ -1,19 +1,14 @@
 - content_for :body do
   = form_for([:admin, @user]) do |f|
-    .row
-      .span10.columns
-        h1 = @user.full_name
-      .span2.columns(align="right")
-        = f.submit "Save Changes", {:class => "btn btn-primary"}
-
-    ul.nav.tabs
+    h1 = @user.full_name
+    ul.nav.nav-tabs
       li
         = link_to "View", admin_user_path(@user.id)
       li.active
         a Edit
         
     - if f.error_messages
-      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+      = f.error_messages :class => "alert alert-error", :header_tag => :strong
     fieldset
       .clearfix
         = f.label :email
@@ -23,42 +18,29 @@
         = f.label :phone_number
         .input
           = f.telephone_field :phone_number, :class => "large"
-      = f.label :orgup_admin, "Is an OrgUP administrator?", :class => "checkbox"
-      = f.check_box :orgup_admin
-      = f.label :orgup_api, "Has access to OrgUP API?", :class => "checkbox"
-      = f.check_box :orgup_api
+      = f.label :s3sol_admin, "Is an S3Sol administrator?", :class => "checkbox"
+      = f.check_box :s3sol_admin
 
-      .row
-        .span4.columns
-          .clearfix
-            = f.label :organization
-            .input
-              = f.collection_select(:organization_id, Organization.all, :id, :name)
-        .span3.offset5.columns(align="right")
-          h6 Permissions
-        .span2.columns(align="center")
-          h5 
-            ' Billing?
-            = f.check_box :organization_billing
-        .span2.columns(align="center")
-          h5 
-            ' Manager?
-            = f.check_box :organization_manager
+      .clearfix
+        = f.label :organization
+        .input
+          = f.collection_select(:organization_id, Organization.all, :id, :name)
+      h4 Permissions
+      h5 
+        ' Billing?
+        = f.check_box :organization_billing
+      h5 
+        ' Manager?
+        = f.check_box :organization_manager
+    .row(align="right")
+      = f.submit "Save Changes", {:class => "btn btn-primary"}
             
-  = form_for([:admin, @user]) do |f|
-    .row
-      .span6.columns
-        .clearfix
-          = f.label :password
-          .input
-            = f.password_field :password, :class => "large"
-      .span6.columns
-        .clearfix
-          = f.label :password_confirmation, "Confirmation"
-          .input
-            = f.password_field :password_confirmation, :class => "large"
-      .span4.columns(align="right")
-        = f.submit "Change Password", {:class => "btn btn-primary"}
+  = form_for([:admin, @user], :html => {:class => 'form-inline'}) do |f|
+    = f.label :password
+    = f.password_field :password, :class => "large"
+    = f.label :password_confirmation, "Confirmation"
+    = f.password_field :password_confirmation, :class => "large"
+    = f.submit "Change Password", {:class => "btn btn-primary"}
                   
   .well(align="left")
     = button_to "Delete User", admin_user_path(@user.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@user.full_name}?"

@@ -1,0 +1,43 @@
+- content_for :body do
+  h1 = @user.full_name
+  ul.nav.nav-tabs
+    li.active 
+      a View
+    li = link_to "Edit", edit_manage_user_path(@user.id)
+  p
+    ' E-mail address:
+    strong  = @user.email
+  p
+    ' Phone number:
+    strong = @user.phone_number unless @user.phone_number.nil?
+
+  p
+    ' Billing? 
+    == @user.organization_billing ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+
+  p
+    ' Manager? 
+    == @user.organization_manager ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+  p &nbsp;
+  table.table.table-striped
+    thead
+      tr
+        th Project
+        th Kind
+        th View?
+        th Count?
+        th Plan?
+        th Map?
+        th Manage?
+    tbody
+      - @user.organization.projects.each do |p|
+        tr
+          td = p.name
+          td = p.kind_display
+          td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).view ? "<i class='icon-ok'></i>" : ""
+          td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).count ? "<i class='icon-ok'></i>" : ""
+          td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).plan ? "<i class='icon-ok'></i>" : ""
+          td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).map ? "<i class='icon-ok'></i>" : ""
+          td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).manage ? "<i class='icon-ok'></i>" : ""
+
+= render :template => '/manage/layout'

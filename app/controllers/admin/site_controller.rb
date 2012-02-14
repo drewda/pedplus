@@ -3,6 +3,5 @@ class Admin::SiteController < Admin::AdminController
     @organizations = Organization.all
     @users = User.all
     @projects = Project.all
-    @subscriptions = Subscription.all
   end
 end

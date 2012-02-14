@@ -1,18 +1,14 @@
 - content_for :body do
   = form_for([:admin, @organization]) do |f|
-    .row
-      .span10.columns
-        h1 = @organization.name
-      .span2.columns(align="right")
-        = f.submit "Save Changes", {:class => "btn btn-primary"}
-    ul.nav.tabs
+    h1 = @organization.name
+    ul.nav.nav-tabs
       li 
         = link_to "View", admin_organization_path(@organization.id)
       li.active
         a Edit
 
     - if f.error_messages
-      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+      = f.error_messages :class => "alert alert-error", :header_tag => :strong
     fieldset
       .clearfix
         = f.label :name
@@ -42,12 +38,27 @@
         = f.label :country
         .input
           = f.country_select(:country, ["United States"])
-    
-      h2 Subscription
-      = f.collection_select(:subscription_id, Subscription.all, :id, :name)
+      .clearfix
+        = f.label :time_zone
+        .input
+          = f.time_zone_select(:time_zone, ActiveSupport::TimeZone.us_zones, :default => "Pacific Time (US & Canada)")
+
+    h2 Subscription
+    p
+      ' Owns PedCount?
+      = f.check_box :owns_pedcount
+      br
+      ' Owns PedPlus?
+      = f.check_box :owns_pedplus
+      br
+      ' Max number of map segments per project:
+      = f.text_field :max_number_of_segments_per_project
+      br
+      ' Count session credits available: 
+      strong TODO: code interface for managing credits
 
     h2 Users
-    table.common-table
+    table.table.table-striped
       thead
         tr
           th Name
@@ -63,20 +74,10 @@
               td = u.email
               td = u_fields.check_box :organization_billing
               td = u_fields.check_box :organization_manager
+
+    .row(align="right")
+      = f.submit "Save Changes", {:class => "btn btn-primary"}
     
-    h2 Projects
-    table.common-table
-      thead
-        tr
-          th Name
-          th Kind
-          th Created
-      tbody
-        - @organization.projects.each do |p|
-          tr
-            td = link_to p.name, admin_project_path(p.id)
-            td = p.kind
-            td = p.created_at
   .well(align="left")
      = button_to "Delete Organization", admin_organization_path(@organization.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@organization.name}?"
 

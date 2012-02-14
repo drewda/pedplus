@@ -3,7 +3,7 @@
     h1 Create Project
         
     - if f.error_messages
-      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+      = f.error_messages :class => "alert alert-error", :header_tag => :strong
     fieldset
       .clearfix
         = f.label :organization

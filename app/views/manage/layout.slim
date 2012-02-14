@@ -1,0 +1,52 @@
+doctype html
+html
+  head
+    title PedCount Manage
+    = stylesheet_link_tag "manage/manage"
+    = javascript_include_tag "manage/manage"
+    = csrf_meta_tags
+  body
+    .navbar.navbar-fixed
+      .navbar-inner
+        .container
+          h3
+            = link_to "#{current_user.organization.name} Management", manage_root_path, :class => "brand"
+          ul.nav
+            li class={"active" if current_page?(manage_root_path)} 
+              = link_to "Organization", manage_root_path
+            li class={"active" if current_page?(manage_users_path)} 
+              = link_to "Users", manage_users_path
+            li class={"active" if current_page?(manage_projects_path)} 
+              = link_to "Projects", manage_projects_path
+          ul.nav.pull-right
+            li.dropdown
+              a.dropdown-toggle data-toggle="dropdown"
+                strong style="color: white;" Account
+                b class="caret"
+              ul.dropdown-menu
+                li style="text-align: center;"
+                  strong = current_user.full_name
+                li.divider
+                li
+                  a href="/"
+                    i.icon-th-large
+                    |  Dashboard
+                li
+                  a href="/users/sign_out"
+                    i.icon-off
+                    |  Sign Out
+    .container
+      .section
+      - if flash[:success]
+        .alert.alert-success.fade.in(data-alert="alert")
+          == flash[:success]
+      - if flash[:info]
+        .alert.alert-info.fade.in(data-alert="alert")
+          == flash[:info]
+      - if flash[:error]
+        .alert.alert-error.fade.in(data-alert="alert")
+          == flash[:error]
+      - if flash[:warning]
+        .alert.fade.in(data-alert="alert")
+          == flash[:warning]
+      == yield(:body)

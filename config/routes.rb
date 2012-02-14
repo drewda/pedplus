@@ -3,9 +3,10 @@ Pedplus::Application.routes.draw do
   match 'app' => 'app#app'
   match 'smartphone' => 'app#smartphone'
   # TODO: add route for /help
-  
   namespace :manage do
-    root :to => 'manage#dashboard'
+    root :to => 'site#dashboard'
+    resources :users, :projects
+    resources :organizations, :only => [:show, :edit, :update]
   end
 
   namespace :api do
@@ -31,7 +32,7 @@ Pedplus::Application.routes.draw do
   # admin is only for S3Sol internal users
   namespace :admin do
     root :to => 'site#dashboard'
-    resources :users, :organizations, :projects, :subscriptions, :oauth_clients
+    resources :users, :organizations, :projects, :oauth_clients
   end
 
   # probably letting all users access, not just admin ones

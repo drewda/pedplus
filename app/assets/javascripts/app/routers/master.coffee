@@ -7,9 +7,10 @@ class App.Routers.Master extends Backbone.Router
     # as when models are complete
     # @juggernautConnector = new JuggernautConnector
     
-    # initialize collections
+    ###
+    # COLLECTIONS
+    ###
     @projects = new App.Collections.Projects
-    # injectProjects() # projects will be injected by dashboard.slim
     
     @users = new App.Collections.Users
     @users.fetch
@@ -17,22 +18,24 @@ class App.Routers.Master extends Backbone.Router
         # masterRouter.juggernautConnector.subscribeToOrganization masterRouter.users.getCurrentUser().get('organization_id')
     
     # will be fetch'ed when the user selects a project
+    # in project()
     @segments = new App.Collections.Segments
     @geo_points = new App.Collections.GeoPoints
     @geo_point_on_segments = new App.Collections.GeoPointOnSegments
+    # will be fetch'ed in measure()
     @count_sessions = new App.Collections.CountSessions
     
     # will be populated by the client-side
     @map_edits = new App.Collections.MapEdits
-    
     @model_jobs = new App.Collections.ModelJobs
     
+    ###
+    # VIEWS
+    ###
     @spinner = new App.Views.Spinner
       
-    # render views
     @map = new App.Views.Map
       projects: @projects
-    # new App.Views.ActivityBox
     @topBar = new App.Views.TopBar
     @topBarTabs = []
     @modals = []
@@ -42,7 +45,6 @@ class App.Routers.Master extends Backbone.Router
     @measureTab = null
     @opportunityTab = null
     @designTab = null
-    @countSessionsTable = null
     
     @geo_point_layer = new App.Views.GeoPointLayer
       geo_points: @geo_points
@@ -58,20 +60,25 @@ class App.Routers.Master extends Backbone.Router
       segmentDefaultStrokeWidth: 10
       segmentSelectedStrokeWidth: 10
     
+    ### 
+    # GLOBAL SESSION VARIABLES
+    # default values will be set in projectOpen()
+    ###
+    # used in DeleteGeoPointModal and DeleteSegmentModal
+    @hideDeleteGeoPointConfirmation = null
+    @hideDeleteSegmentConfirmation = null
+    # used in MeasureTab
+    @mostRecentMeasureSubTab = null
+
+    # we'll store the current route name using routeNameKeeper()
     @currentRouteName = ""
     
     @timers = []
-    
-    # global session variables
-    # used in DeleteGeoPointModal and DeleteSegmentModal
-    @hideDeleteGeoPointConfirmation = false
-    @hideDeleteSegmentConfirmation = false
 
   routes:
     ".*" : "index"
     
     "project/open"                  : "projectOpen"
-    "project/admin"                 : "projectAdmin"
     "project/:project_id"           : "project"
     "project/:project_id/settings"  : "projectSettings"
     "project/:project_id/export"    : "projectExport"
@@ -88,13 +95,22 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/model"                         : "model"
     "project/:project_id/model/permeability/:model_job" : "modelPermeability"
 
-    "project/:project_id/measure"                                         : "measure"
-    "project/:project_id/measure/predictions"                             : "measurePredictions"    
-    "project/:project_id/measure/segment/:segment_id"                     : "measureSelectedSegment"
-    "project/:project_id/measure/segment/:segment_id/count_session/new"   : "measureNewCountSession"
-    "project/:project_id/measure/count_session/:count_session_id"         : "measureSelectedCountSession"
-    "project/:project_id/measure/count_session/enter/:count_session_id"   : "measureEnterCountSession"
-    "project/:project_id/measure/count_session/delete/:count_session_id"  : "measureDeleteCountSession"
+    "project/:project_id/measure"                                             : "measure"
+
+    "project/:project_id/measure/plan"                                        : "measurePlan"
+    "project/:project_id/measure/plan/assistant/parameters"                   : "measurePlanAssistantParameters"
+    "project/:project_id/measure/plan/assistant/segments"                     : "measurePlanAssistantSegments"
+    "project/:project_id/measure/plan/segment_id/:segment_id"                 : "measurePlanSelectedSegment"
+    "project/:project_id/measure/plan/count_session/:count_session_id"        : "measurePlanSelectedCountSession"
+    "project/:project_id/measure/plan/count_session/:count_session_id/edit"   : "measurePlanEditCountSession"
+
+    "project/:project_id/measure/count"                                       : "measureCount"
+    "project/:project_id/measure/count/count_session/new"                     : "measureCountNewCountSession"
+    "project/:project_id/measure/count/count_session/:count_session_id/enter" : "measureCountEnterCountSession"
+    "project/:project_id/measure/count/count_session/:count_session_id"       : "measureCountSelectedCountSession"
+
+    "project/:project_id/measure/view"                                        : "measureView"
+    "project/:project_id/measure/view/segment/:segment_id"                    : "measureViewSelectedSegment"
     
     "project/:project_id/opportunity"             : "opportunity"
     # "project/:project_id/opportunity/:segment_id" : "opportunitySelectedSegment"
@@ -110,13 +126,24 @@ class App.Routers.Master extends Backbone.Router
     masterRouter.navigate 'project/open', true
 
   projectOpen: ->
+    # clear tab bar
     if @projectTab
       @projectTab.remove()
+    $('#top-bar').hide() # will be shown again in project()
+
+    # clear data from previously used project
     masterRouter.projects.reset()
-    masterRouter.projects.fetch()
     masterRouter.geo_points.reset()
     masterRouter.geo_point_on_segments.reset()
     masterRouter.segments.reset()
+    # projects will be injected by dashboard.slim
+    injectProjects()
+
+    # reset global session variables
+    @hideDeleteGeoPointConfirmation = false
+    @hideDeleteSegmentConfirmation = false
+    @mostRecentMeasureSubTab = null
+
     @routeNameKeeper 'projectOpen'
     @reset()
     projectsModal = new App.Views.ProjectsModal
@@ -127,335 +154,401 @@ class App.Routers.Master extends Backbone.Router
     @map.resetMap false, false
     @map.centerMap()
 
-  projectAdmin: ->
-    @reset()
-    @routeNameKeeper 'projectAdmin'
-    projectModal = new App.Views.ProjectsModal
-      mode: "admin"
-      projects: masterRouter.projects
-    masterRouter.modals.push projectsModal
-
   project: (projectId) ->
-    @reset(projectId)
-    @routeNameKeeper 'project'
-    @fetchProjectData()
-    # topBar
-    @projectTab = new App.Views.ProjectTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-    masterRouter.topBarTabs.push @projectTab
-    @geo_points.selectNone()
-    @segments.selectNone()
-    @map.setOsmLayer "color"
-    @map.resetMap false, true
-    @map.centerMap()
+    if @reset(projectId)
+      @routeNameKeeper 'project'
+      $('#top-bar').show() # was hidden in projectOpen()
+
+      # fetch project data
+      if masterRouter.geo_points.length == 0 or 
+         masterRouter.geo_point_on_segments.length == 0 or
+         masterRouter.segments.length == 0
+        masterRouter.geo_points.fetch
+          success: ->
+            masterRouter.geo_point_on_segments.fetch
+              success: -> 
+                masterRouter.segments.fetch()
+        masterRouter.model_jobs.fetch()
+
+      # topBar
+      @projectTab = new App.Views.ProjectTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+      masterRouter.topBarTabs.push @projectTab
+
+      @geo_points.selectNone()
+      @segments.selectNone()
+
+      @map.setOsmLayer "color"
+      @map.resetMap false, true
+      @map.centerMap()
   
   projectSettings: (projectId) ->
-    @reset(projectId)  
-    @routeNameKeeper 'projectSettings'
-    @projectTab = new App.Views.ProjectTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-    projectModal = new App.Views.ProjectModal
-      mode: "settings"
-      project: masterRouter.projects.getCurrentProject()
-    masterRouter.modals.push projectModal
+    if @reset(projectId)  
+      @routeNameKeeper 'projectSettings'
+      @projectTab = new App.Views.ProjectTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+      projectModal = new App.Views.ProjectModal
+        mode: "settings"
+        project: masterRouter.projects.getCurrentProject()
+      masterRouter.modals.push projectModal
 
   projectExport: (projectId) ->
-    @reset(projectId)  
-    @routeNameKeeper 'projectExport'
-    @projectTab = new App.Views.ProjectTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-    projectModal = new App.Views.ProjectModal
-      mode: "export"
-      project: masterRouter.projects.getCurrentProject()
-    masterRouter.modals.push projectModal
+    if @reset(projectId)  
+      @routeNameKeeper 'projectExport'
+      @projectTab = new App.Views.ProjectTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+      projectModal = new App.Views.ProjectModal
+        mode: "export"
+        project: masterRouter.projects.getCurrentProject()
+      masterRouter.modals.push projectModal
   
   map: (projectId) ->
-    @reset(projectId)
-    @routeNameKeeper 'map'
-    # @fetchProjectData()
-    new App.Views.MapTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      map_edits: masterRouter.map_edits
-    @geo_points.selectNone()
-    @segments.selectNone()
-    @map.setOsmLayer "color"
-    @map.resetMap true, true
-    @map.mapMode()
+    if @reset(projectId)
+      @routeNameKeeper 'map'
+      new App.Views.MapTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        map_edits: masterRouter.map_edits
+      @geo_points.selectNone()
+      @segments.selectNone()
+      @map.setOsmLayer "color"
+      @map.resetMap true, true
+      @map.mapMode()
     
   mapSelectedGeoPoint: (projectId, geoPointId) ->
-    @reset(projectId)
-    @routeNameKeeper 'mapSelectedGeoPoint'
-    # @fetchProjectData()
-    new App.Views.MapTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      geoPointId: geoPointId
-      mapMode: 'geoPointSelected'
-      map_edits: masterRouter.map_edits
-    @map.setOsmLayer "color"
-    @map.resetMap true, true
-    @map.mapMode()
+    if @reset(projectId)
+      @routeNameKeeper 'mapSelectedGeoPoint'
+      new App.Views.MapTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        geoPointId: geoPointId
+        mapMode: 'geoPointSelected'
+        map_edits: masterRouter.map_edits
+      @map.setOsmLayer "color"
+      @map.resetMap true, true
+      @map.mapMode()
     
   mapMoveGeoPoint: (projectId, geoPointId) ->
-    @reset(projectId)
-    @routeNameKeeper 'mapMoveGeoPoint'
-    # @fetchProjectData()
-    new App.Views.MapTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      geoPointId: geoPointId
-      mapMode: 'geoPointMove'
-      map_edits: masterRouter.map_edits
-    @map.setOsmLayer "color"
-    @map.resetMap true, true
-    @map.moveGeoPointMode()
+    if @reset(projectId)
+      @routeNameKeeper 'mapMoveGeoPoint'
+      new App.Views.MapTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        geoPointId: geoPointId
+        mapMode: 'geoPointMove'
+        map_edits: masterRouter.map_edits
+      @map.setOsmLayer "color"
+      @map.resetMap true, true
+      @map.moveGeoPointMode()
     
   mapConnectGeoPoint: (projectId, geoPointId) ->
-    @reset(projectId)
-    @routeNameKeeper 'mapConnectGeoPoint'
-    # @fetchProjectData()
-    new App.Views.MapTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      geoPointId: geoPointId
-      mapMode: 'geoPointConnect'
-      map_edits: masterRouter.map_edits
-    @map.setOsmLayer "color"
-    @map.resetMap true, true
-    @map.connectGeoPointMode()
+    if @reset(projectId)
+      @routeNameKeeper 'mapConnectGeoPoint'
+      new App.Views.MapTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        geoPointId: geoPointId
+        mapMode: 'geoPointConnect'
+        map_edits: masterRouter.map_edits
+      @map.setOsmLayer "color"
+      @map.resetMap true, true
+      @map.connectGeoPointMode()
     
   mapDeleteGeoPoint: (projectId, geoPointId) ->
-    @reset(projectId)
-    @routeNameKeeper 'mapDeleteGeoPoint'
-    # @fetchProjectData()
-    new App.Views.MapTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      geoPointId: geoPointId
-      mapMode: 'geoPointDelete'
-      map_edits: masterRouter.map_edits
-    deleteGeoPointModal = new App.Views.DeleteGeoPointModal
+    if @reset(projectId)
+      @routeNameKeeper 'mapDeleteGeoPoint'
+      new App.Views.MapTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
         geoPointId: geoPointId
-    masterRouter.modals.push deleteGeoPointModal
-    @map.setOsmLayer "color"
-    @map.resetMap true, true
+        mapMode: 'geoPointDelete'
+        map_edits: masterRouter.map_edits
+      deleteGeoPointModal = new App.Views.DeleteGeoPointModal
+          geoPointId: geoPointId
+      masterRouter.modals.push deleteGeoPointModal
+      @map.setOsmLayer "color"
+      @map.resetMap true, true
     
   mapSelectedSegment: (projectId, segmentId) ->
-    @reset(projectId)
-    @routeNameKeeper 'mapSelectedSegment'
-    # @fetchProjectData()
-    new App.Views.MapTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      segmentId: segmentId
-      mapMode: 'segmentSelected'
-      map_edits: masterRouter.map_edits
-    @map.setOsmLayer "color"
-    @map.resetMap true, true
+    if @reset(projectId)
+      @routeNameKeeper 'mapSelectedSegment'
+      new App.Views.MapTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        segmentId: segmentId
+        mapMode: 'segmentSelected'
+        map_edits: masterRouter.map_edits
+      @map.setOsmLayer "color"
+      @map.resetMap true, true
     
   mapDeleteSegment: (projectId, segmentId) ->
-    @reset(projectId)
-    @routeNameKeeper 'mapDeleteSegment'
-    # @fetchProjectData()
-    new App.Views.MapTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      segmentId: segmentId
-      mapMode: 'segmentDelete'
-      map_edits: masterRouter.map_edits
-    deleteSegmentModal = new App.Views.DeleteSegmentModal
+    if @reset(projectId)
+      @routeNameKeeper 'mapDeleteSegment'
+      new App.Views.MapTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
         segmentId: segmentId
-    masterRouter.modals.push deleteSegmentModal
-    @map.setOsmLayer "color"
-    @map.resetMap true, true
+        mapMode: 'segmentDelete'
+        map_edits: masterRouter.map_edits
+      deleteSegmentModal = new App.Views.DeleteSegmentModal
+          segmentId: segmentId
+      masterRouter.modals.push deleteSegmentModal
+      @map.setOsmLayer "color"
+      @map.resetMap true, true
       
   mapUploadEdits: (projectId) ->
-    @reset(projectId)
-    @routeNameKeeper 'mapUploadEdits'
-    # @fetchProjectData()
-    new App.Views.MapTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects      
-      map_edits: masterRouter.map_edits
-    uploadMapEditsModal = new App.Views.UploadMapEditsModal
-      projectId: projectId
-      projects: masterRouter.projects
-    masterRouter.modals.push uploadMapEditsModal
-    @map.setOsmLayer "color"
-    @map.resetMap true, true
+    if @reset(projectId)
+      @routeNameKeeper 'mapUploadEdits'
+      new App.Views.MapTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects      
+        map_edits: masterRouter.map_edits
+      uploadMapEditsModal = new App.Views.UploadMapEditsModal
+        projectId: projectId
+        projects: masterRouter.projects
+      masterRouter.modals.push uploadMapEditsModal
+      @map.setOsmLayer "color"
+      @map.resetMap true, true
 
   model: (projectId) ->
-    @reset(projectId)
-    @routeNameKeeper 'model'
-    # @fetchProjectData()
-    @modelTab = new App.Views.ModelTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      mode: "model"
-    @map.setOsmLayer "gray"
-    @map.resetMap false, true
-    masterRouter.segments.selectNone()
+    if @reset(projectId)
+      @routeNameKeeper 'model'
+      @modelTab = new App.Views.ModelTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        mode: "model"
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
+      masterRouter.segments.selectNone()
     
   modelPermeability: (projectId, modelJobId) ->
-    @reset(projectId)
-    @routeNameKeeper 'modelPermeability'
-    # @fetchProjectData()
-    @modelTab = new App.Views.ModelTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      modelJobId: modelJobId
-      mode: "modelPermeability"
-    @map.setOsmLayer "gray"
-    @map.resetMap false, true
-    masterRouter.segments.selectNone()
+    if @reset(projectId)
+      @routeNameKeeper 'modelPermeability'
+      @modelTab = new App.Views.ModelTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        modelJobId: modelJobId
+        mode: "modelPermeability"
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
+      masterRouter.segments.selectNone()
 
   measure: (projectId) ->
-    @reset(projectId, 250)
-    @routeNameKeeper 'measure'
-    # @fetchProjectData()
-    @measureTab = new App.Views.MeasureTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      mode: "measure"
-    @map.setOsmLayer "gray"
-    @map.resetMap false, true
-    @geo_points.selectNone()
-    @segments.selectNone()
-    if !@countSessionTable
-      @countSessionTable = new App.Views.CountSessionTable
-        count_sessions: masterRouter.count_sessions
-    else
-      @countSessionTable.render()
-  
-  measurePredictions: (projectId) ->
-    @reset(projectId, 580)
-    @routeNameKeeper 'measurePredictions'
-    # @fetchProjectData()
-    @measureTab = new App.Views.MeasureTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      mode: "predictions"
-    @map.setOsmLayer "gray"
-    @map.resetMap false, true  
-    @geo_points.selectNone()
-    @segments.selectNone()
-  
-  measureSelectedSegment: (projectId, segmentId) ->
-    @reset(projectId, 250)
-    @routeNameKeeper 'measureSelectedSegment'
-    # @fetchProjectData()
-    @measureTab = new App.Views.MeasureTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      segmentId: segmentId
-      mode: "selectedSegment"
-    if !@countSessionTable
-      @countSessionTable = new App.Views.CountSessionTable
-        count_sessions: masterRouter.count_sessions
-    else
-      @countSessionTable.render()
-      
-  measureNewCountSession: (projectId, segmentId) ->
-    @reset(projectId, 250)
-    @routeNameKeeper 'measureNewCountSession'
-    # @fetchProjectData()
-    @measureTab = new App.Views.MeasureTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      segmentId: segmentId
-    newCountSessionModal = new App.Views.NewCountSessionModal
-      projectId: projectId
-      segmentId: segmentId
-    masterRouter.modals.push newCountSessionModal
-    if !@countSessionTable
-      @countSessionTable = new App.Views.CountSessionTable
-        count_sessions: masterRouter.count_sessions
-    else
-      @countSessionTable.render()
-      
-  measureSelectedCountSession: (projectId, countSessionId) ->
-    @reset(projectId, 250)
-    @routeNameKeeper 'measureSelectedCountSession'
-    # @fetchProjectData()
-    @measureTab = new App.Views.MeasureTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      countSessionId: countSessionId
-      mode: "selectedCountSession"
-    if !@countSessionTable
-      @countSessionTable = new App.Views.CountSessionTable
-        count_sessions: masterRouter.count_sessions
-    else
-      @countSessionTable.render()
+    if @reset(projectId)
+      # load count sessions
+      if masterRouter.count_sessions.length == 0
+        masterRouter.count_sessions.fetch()
 
-  measureEnterCountSession: (projectId, countSessionId) ->
-    @reset(projectId, 160)
-    @routeNameKeeper 'measureEnterCountSession'
-    # @fetchProjectData()
-    if @countSessionTable
-      @countSessionTable.remove()
-    @measureTab = new App.Views.MeasureTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      countSessionId: countSessionId
-      mode: "enterCountSession"
+      # redirect to the most recently used sub tab,
+      # or just redirect to view sub tab, as that one
+      # is available to all users
+      if @mostRecentMeasureSubTab == "plan"
+        masterRouter.navigate "#project/#{@projects.getCurrentProjectId()}/measure/plan", true
+      else if @mostRecentMeasureSubTab == "count"
+        masterRouter.navigate "#project/#{@projects.getCurrentProjectId()}/measure/count", true
+      else
+        masterRouter.navigate "#project/#{@projects.getCurrentProjectId()}/measure/view", true
 
-  measureDeleteCountSession: (projectId, countSessionId) ->
-    @reset(projectId, 250)
-    @routeNameKeeper 'measureDeleteCountSession'
-    # @fetchProjectData()
-    @measureTab = new App.Views.MeasureTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-      countSessionId: countSessionId
-    deleteCountSessionModal = new App.Views.DeleteCountSessionModal
-        countSessionId: countSessionId
-    masterRouter.modals.push deleteCountSessionModal
-    if !@countSessionTable
-      @countSessionTable = new App.Views.CountSessionTable
-        count_sessions: masterRouter.count_sessions
-    else
-      @countSessionTable.render()
+  measurePlan: (projectId) ->
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measurePlan'
+      @mostRecentMeasureSubTab = "plan"
+      @measureTab = new App.Views.MeasureTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        mode: "measurePlan"
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
+      @geo_points.selectNone()
+      @segments.selectNone()
+
+  measurePlanAssistantParameters: (projectId) ->
+    if @reset(projectId, false, 250)
+      @routeNameKeeper 'measurePlanAssistantParameters'
+      # TODO: render modal
+
+  measurePlanAssistantSegments: (projectId) ->
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measurePlanAssistantSegments'
+      @measureTab = new App.Views.MeasureTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        mode: "measurePlanAssistantSegments"
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
+      @geo_points.selectNone()
+      @segments.selectNone()
+
+  measurePlanSelectedSegment: (projectId, segmentId) ->
+    # TODO
+
+  measurePlanSelectedCountSession: (projectId, countSessionId) ->
+    # TODO
+
+  measurePlanEditCountSession: (projectId, countSessionId) ->
+    # TODO
+
+  measureCount: (projectId) ->
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measureCount'
+      @mostRecentMeasureSubTab = "count"
+      @measureTab = new App.Views.MeasureTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        mode: "measureCount"
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
+      @geo_points.selectNone()
+      @segments.selectNone()
+
+  measureCountNewCountSession: (projectId) ->
+    # TODO
+
+  measureCountEnterCountSession: (projectId) ->
+    # TODO
+
+  measureCountSelectedCountSession: (projectId, countSessionId) ->
+    # TODO
+
+  measureView: (projectId) ->
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measureView'
+      @mostRecentMeasureSubTab = "view"
+      @measureTab = new App.Views.MeasureTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        mode: "measureView"
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
+      @geo_points.selectNone()
+      @segments.selectNone()
+
+  measureViewSelectedSegment: (projectId) ->
+    # TODO
+  
+  # measurePredictions: (projectId) ->
+  #   @reset(projectId, 580)
+  #   @routeNameKeeper 'measurePredictions'
+  #   @measureTab = new App.Views.MeasureTab
+  #     topBar: masterRouter.topBar
+  #     projectId: projectId
+  #     projects: masterRouter.projects
+  #     mode: "predictions"
+  #   @map.setOsmLayer "gray"
+  #   @map.resetMap false, true  
+  #   @geo_points.selectNone()
+  #   @segments.selectNone()
+  
+  # measureSelectedSegment: (projectId, segmentId) ->
+  #   @reset(projectId, 250)
+  #   @routeNameKeeper 'measureSelectedSegment'
+  #   @measureTab = new App.Views.MeasureTab
+  #     topBar: masterRouter.topBar
+  #     projectId: projectId
+  #     projects: masterRouter.projects
+  #     segmentId: segmentId
+  #     mode: "selectedSegment"
+  #   if !@countSessionTable
+  #     @countSessionTable = new App.Views.CountSessionTable
+  #       count_sessions: masterRouter.count_sessions
+  #   else
+  #     @countSessionTable.render()
+      
+  # measureNewCountSession: (projectId, segmentId) ->
+  #   @reset(projectId, 250)
+  #   @routeNameKeeper 'measureNewCountSession'
+  #   @measureTab = new App.Views.MeasureTab
+  #     topBar: masterRouter.topBar
+  #     projectId: projectId
+  #     projects: masterRouter.projects
+  #     segmentId: segmentId
+  #   newCountSessionModal = new App.Views.NewCountSessionModal
+  #     projectId: projectId
+  #     segmentId: segmentId
+  #   masterRouter.modals.push newCountSessionModal
+  #   if !@countSessionTable
+  #     @countSessionTable = new App.Views.CountSessionTable
+  #       count_sessions: masterRouter.count_sessions
+  #   else
+  #     @countSessionTable.render()
+      
+  # measureSelectedCountSession: (projectId, countSessionId) ->
+  #   @reset(projectId, false, 250)
+  #   @routeNameKeeper 'measureSelectedCountSession'
+  #   @measureTab = new App.Views.MeasureTab
+  #     topBar: masterRouter.topBar
+  #     projectId: projectId
+  #     projects: masterRouter.projects
+  #     countSessionId: countSessionId
+  #     mode: "selectedCountSession"
+  #   if !@countSessionTable
+  #     @countSessionTable = new App.Views.CountSessionTable
+  #       count_sessions: masterRouter.count_sessions
+  #   else
+  #     @countSessionTable.render()
+
+  # measureEnterCountSession: (projectId, countSessionId) ->
+  #   @reset(projectId, true, 160)
+  #   @routeNameKeeper 'measureEnterCountSession'
+  #   if @countSessionTable
+  #     @countSessionTable.remove()
+  #   @measureTab = new App.Views.MeasureTab
+  #     topBar: masterRouter.topBar
+  #     projectId: projectId
+  #     projects: masterRouter.projects
+  #     countSessionId: countSessionId
+  #     mode: "enterCountSession"
+
+  # measureDeleteCountSession: (projectId, countSessionId) ->
+  #   @reset(projectId, true, 250)
+  #   @routeNameKeeper 'measureDeleteCountSession'
+  #   @measureTab = new App.Views.MeasureTab
+  #     topBar: masterRouter.topBar
+  #     projectId: projectId
+  #     projects: masterRouter.projects
+  #     countSessionId: countSessionId
+  #   deleteCountSessionModal = new App.Views.DeleteCountSessionModal
+  #       countSessionId: countSessionId
+  #   masterRouter.modals.push deleteCountSessionModal
+  #   if !@countSessionTable
+  #     @countSessionTable = new App.Views.CountSessionTable
+  #       count_sessions: masterRouter.count_sessions
+  #   else
+  #     @countSessionTable.render()
 
   opportunity: (projectId) ->
-    @reset(projectId, 580)
-    @routeNameKeeper 'opportunity'
-    # @fetchProjectData
-    @opportunityTab = new App.Views.OpportunityTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-    @map.setOsmLayer "gray"
-    @map.resetMap false, true
+    if @reset(projectId, true, 580)
+      @routeNameKeeper 'opportunity'
+      @opportunityTab = new App.Views.OpportunityTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
     
   # opportunitySelectedSegment: (projectId, segmentId) ->
   #   @reset(projectId)
   #   @routeNameKeeper 'opportunity'
-  #   # @fetchProjectData
   #   @opportunityTab = new App.Views.OpportunityTab
   #     topBar: masterRouter.topBar
   #     projectId: projectId
@@ -465,23 +558,22 @@ class App.Routers.Master extends Backbone.Router
   #   @map.resetMap false, true
 
   design: (projectId) ->
-    @reset(projectId)
-    @routeNameKeeper 'design'
-    # @fetchProjectData
-    @designTab = new App.Views.DesignTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
-    @map.setOsmLayer "color"
-    @map.resetMap false, true 
+    if @reset(projectId)
+      @routeNameKeeper 'design'
+      @designTab = new App.Views.DesignTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+      @map.setOsmLayer "color"
+      @map.resetMap false, true 
     
   help: (projectId) ->
-    @reset(projectId)
-    @routeNameKeeper 'help'
-    new App.Views.HelpTab
-      topBar: masterRouter.topBar
-      projectId: projectId
-      projects: masterRouter.projects
+    if @reset(projectId)
+      @routeNameKeeper 'help'
+      new App.Views.HelpTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
   
   routeNameKeeper: (routeName) ->
     @currentRouteName = routeName
@@ -491,40 +583,30 @@ class App.Routers.Master extends Backbone.Router
        location.hash.split('/').pop().match(/\d+/)
       @currentRouteName += ":" + location.hash.split('/').pop()
     
-  reset: (projectId, topBarHeight = 80) ->
+  reset: (projectId = null, clearScreen = true, topBarHeight = 80) ->
     ###
     TODO: if there are any map edits that have not yet been uploaded,
           kick the user back to map mode
     ###
 
+    @clearTimers()
+
     # if projects have not yet been loaded, kick the user back to the start
-    if @projects.length < 1 and @currentRouteName != "projectOpen"
+    if @projects.length < 1
       masterRouter.navigate '#', true
-    else
-      @clearTimers()
-      
+      return false # do not continue with any more page setup
+    else      
       if projectId
         masterRouter.projects.setCurrentProjectId projectId
-      $('.modal').modal('hide').remove()
-      $('.modal-backdrop').remove()
-      masterRouter.topBarTabs = []
-      masterRouter.modals = []
+      if clearScreen
+        $('.modal').modal('hide').remove()
+        $('.modal-backdrop').remove()
+        masterRouter.topBarTabs = []
+        masterRouter.modals = []
       $('#top-bar').animate {height:"#{topBarHeight}px"}, 400 unless $('#top-bar').height == topBarHeight 
+      return true # continue with the rest of the page setup
     
   clearTimers: ->
     _.each @timers, (t) ->
       clearTimeout t
     @timers = []
-      
-  fetchProjectData: ->
-    if masterRouter.geo_points.length == 0 or 
-       masterRouter.geo_point_on_segments.length == 0 or
-       masterRouter.segments.length == 0
-      masterRouter.geo_points.fetch
-        success: ->
-          masterRouter.geo_point_on_segments.fetch
-            success: -> 
-              masterRouter.segments.fetch()
-      masterRouter.model_jobs.fetch()
-    if masterRouter.count_sessions.length == 0
-      masterRouter.count_sessions.fetch()

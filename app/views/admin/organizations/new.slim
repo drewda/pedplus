@@ -3,7 +3,7 @@
     h1 Create Organization
 
     - if f.error_messages
-      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+      = f.error_messages :class => "alert alert-error", :header_tag => :strong
     fieldset
       .clearfix
         = f.label :name
@@ -33,9 +33,10 @@
         = f.label :country
         .input
           = f.country_select(:country, ["United States"])
-    
-      h2 Subscription
-      = f.collection_select(:subscription_id, Subscription.all, :id, :name)
+      .clearfix
+        = f.label :time_zone
+        .input
+          = f.time_zone_select(:time_zone, ActiveSupport::TimeZone.us_zones, :default => "Pacific Time (US & Canada)")
               
       .row(align="right")
         = f.submit "Create Organization", {:class => "btn btn-primary"}

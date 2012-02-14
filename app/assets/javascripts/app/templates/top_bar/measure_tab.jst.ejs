@@ -1,53 +1,11 @@
 <div id="measure-tab">
-  <div id="count-bar">
-    <% if (mode == "measure" || mode == "selectedSegment" || mode == "selectedCountSession") { %>
-    <div class="btn-group" style="float: left;">
-      <h6>
-        <a class="btn btn-primary">Measured Counts</a> 
-        <a href="#project/<%= projectId %>/measure/predictions" class="btn">Predicted Counts</a> 
-      </h6>
-    </div>
-    <div id="count-buttons">
-      <% if (segmentId) { %>
-        <h6><a href="#project/<%= projectId %>/measure/segment/<%= segmentId %>/count_session/new" class="btn btn-primary">Count At Selected Segment</a></h6>
-      <% } else { %>
-        <h6><em>To start or schedule a count session, select a segment on the map.</em></h6>
-      <% } %>
-    </div>    
-  </div>
-  <div id="count-session-table-wrapper">
-    <!-- table will be populated by App.Views.CountSessionTable using the jQuery DataTables plugin -->
-	  <table id="count-session-table" class="table-condensed table-striped"></table>
-	</div>
-  <% } else if (mode == "enterCountSession") { %>
-    <h3>Entering Counts</h3>
-    <div id="count-buttons" style="float: left; margin-left: 6px">
-      <h6><a id="stop-count-session-cancel-button" class="btn btn-danger">Cancel Counting</a></h6>
-    </div>
-    <div id="count-session-entry">
-      <button id="count-minus-one-button" class="btn btn-danger large">&ndash; 1</button>
-      <div id="timer">
-        <h6 id="minutes"></h6>
-        <h6 id="seconds"></h6>
-      </div>
-      <div id="counter">0 <h6>people</h6></div>
-      <button id="count-plus-one-button" class="btn btn-primary large">+ 1</button>
-      <button id="count-plus-five-button" class="btn btn-primary large">+ 5</button>
-    </div>
-  <% } else if (mode == "predictions") { %>
-    <div class="btn-group" style="float: left;">
-      <h6>
-        <a href="#project/<%= projectId %>/measure" class="btn">Measured Counts</a> 
-        <a class="btn btn-primary">Predicted Counts</a> 
-      </h6>
-    </div>
-    <div style="float: right;">
-        <h6><em>Click a point on the plot to see the corresponding segment on the map.</em></h6>
-    </div>
-    <% if (projectId == 4) { %>
-      <div align="center"><img src="/media/redlands-synthesized-measures.png"/></div>
-    <% } else { %>
-      <h6 align="center">Not computed for this project.</h6>
+  <ul id="measure-sub-tabs" class="nav nav-tabs">
+    <!-- permissions -->
+    <% if (project.get('permissions_for_current_user').plan == true) { %>
+    <li id="plan-sub-tab"><a href="#project/<%= project.id %>/measure/plan">Plan</a></li>
+    <% } if (project.get('permissions_for_current_user').count == true) { %>
+    <li id="count-sub-tab"><a href="#project/<%= project.id %>/measure/count">Count</a></li>
     <% } %>
-  <% } %>
+    <li id="view-sub-tab"><a href="#project/<%= project.id %>/measure/view">View</a></li>
+  </ul>
 </div>

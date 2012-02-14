@@ -3,7 +3,7 @@
     h1 Create User
         
     - if f.error_messages
-      = f.error_messages :class => "alert-message block-message error", :header_tag => :strong
+      = f.error_messages :class => "alert alert-error", :header_tag => :strong
     fieldset
       .clearfix
         = f.label :first_name
@@ -30,13 +30,9 @@
         .input
           = f.telephone_field :phone_number
       .clearfix
-        = f.label :orgup_admin, "Is an OrgUP administrator?"
+        = f.label :s3sol_admin, "Is an S3sol administrator?"
         .input
-          = f.check_box :orgup_admin
-      .clearfix
-        = f.label :orgup_api, "Has access to OrgUP API?"
-        .input
-          = f.check_box :orgup_api
+          = f.check_box :s3sol_admin
 
     .row
       .span4.columns

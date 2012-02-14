@@ -16,6 +16,8 @@ class Api::CountSessionsController < Api::ApiController
   end
   
   def create
+    params[:count_session].delete 'cid'
+
     @count_session = CountSession.new params[:count_session]
     
     respond_to do |format|

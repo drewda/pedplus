@@ -24,7 +24,7 @@ class App.Views.CountSessionTable extends Backbone.View
     # render the table
     @table = $('#count-session-table').dataTable
       "sDom": "Tt<'#table-footer'<'#info'i><'#pagination'p>>"
-      "bDestroy": true
+      # "bDestroy": true
       "bLengthChange": false
       "bFilter": true
       "sPaginationType": "bootstrap"

@@ -1,0 +1,66 @@
+- content_for :body do
+  = form_for([:manage, @organization]) do |f|
+    h1 = @organization.name
+    ul.nav.nav-tabs
+      li 
+        = link_to "View", manage_root_path
+      li.active
+        a Edit
+
+    - if f.error_messages
+      = f.error_messages :class => "alert alert-error", :header_tag => :strong
+    fieldset
+      .clearfix
+        = f.label :name
+        .input
+          = f.text_field :name, :class => 'large'
+      .clearfix
+        = f.label :url
+        .input
+          = f.url_field :url, :class => 'large'
+      .clearfix
+        = f.label :address
+        .input
+          = f.text_field :address, :class => 'large'
+      .clearfix
+        = f.label :city
+        .input
+          = f.text_field :city, :class => 'large'
+      .clearfix
+        = f.label :state
+        .input
+          = f.text_field :state, :class => 'large'
+      .clearfix
+        = f.label :postal_code
+        .input
+          = f.text_field :postal_code, :class => 'large'
+      .clearfix
+        = f.label :country
+        .input
+          = f.country_select(:country, ["United States", "United Kingdom", "Portugal", "Canada"])
+      .clearfix
+        = f.label :time_zone
+        .input
+          = f.time_zone_select(:time_zone, ActiveSupport::TimeZone.us_zones, :default => "Pacific Time (US & Canada)", :class => 'span4')
+
+    h2 Users
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th E-mail Address
+          th Billing?
+          th Manager?
+      tbody
+        - @organization.users.each do |u|
+          = f.fields_for :users, u do |u_fields|
+            tr
+              td 
+                strong = link_to u.full_name, manage_user_path(u.id)
+              td = u.email
+              td = u_fields.check_box :organization_billing
+              td = u_fields.check_box :organization_manager
+    .form-actions align="right"
+      = f.submit "Save Changes", {:class => "btn btn-primary"}
+
+= render :template => '/manage/layout'

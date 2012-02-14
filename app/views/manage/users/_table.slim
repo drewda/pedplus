@@ -1,0 +1,20 @@
+.row.manage-table-header
+  .span10
+    h1 Users
+    h4 = "#{pluralize @organization.users.length, 'users'} out of #{@organization.max_number_of_users} credits"
+  .span2 align="right"
+    = link_to "Create User", new_manage_user_path, :class => "btn"
+table.table.table-striped
+  thead
+    tr
+      th Name
+      th E-mail Address
+      th Billing?
+      th Manager?
+  tbody
+    - @users.each do |u|
+      tr
+        td = link_to u.full_name, manage_user_path(u.id)
+        td = u.email
+        td == u.organization_billing ? "<i class='icon-ok'/>" : ""
+        td == u.organization_manager ? "<i class='icon-ok'/>" : ""

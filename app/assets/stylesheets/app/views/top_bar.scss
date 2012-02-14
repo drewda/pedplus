@@ -5,7 +5,7 @@
   left: 0px;
   right: 75px;
 /*  width: 70%;*/
-  height: 90px; // also used in App.Routers.Master.reset()
+  height: 80px; // also used in App.Routers.Master.reset()
   background-color: #fff; //#fefbf3;
   border: 1px solid rgba(0,0,0,.2);
   padding: 4px;
@@ -44,90 +44,95 @@
   }
   
   #measure-tab {
-    #count-bar {
-      h3 {
-        float: left;
-        text-align: left;
-        padding-top: 0;
-      }
-      #count-buttons {
-        float: right;
-        text-align: right;
+    #measure-sub-tabs {
+      li {
+        font-size: 16px;
       }
     }
-    #count-session-table-wrapper {
-      table {
-        width: 100%;
-        margin: 0;
-        clear: both;
-        th {
-          text-align: left;
-        }
-		    tr.selected td {
-          background-color: #55ee33;
-        }
-      }
-      #table-footer {
-        clear: both;
-        margin: 0;
-        #info {
-          float: left;
-          padding-top: 8px;
-          width: 250px;
-          .dataTables_info {
-            /* should look like h6 */
-            font-size: 13px;
-            font-weight: bold;
-            color: #bfbfbf;
-            text-transform: uppercase;
-          }
-        }
-        #pagination {
-          float: right;
-          margin: 0;
-          .pagination {
-            margin: 0;
-          }
-        }
-      }
-    }
-    #count-session-entry {
-      clear: both;
-      #timer {
-        float: left;
-        padding: 20px;
-        margin-left: 20px;
-        width: 100px;
-        text-align: left;
+    // #count-bar {
+    //   h3 {
+    //     float: left;
+    //     text-align: left;
+    //     padding-top: 0;
+    //   }
+    //   #count-buttons {
+    //     float: right;
+    //     text-align: right;
+    //   }
+    // }
+    // #count-session-table-wrapper {
+    //   table {
+    //     width: 100%;
+    //     margin: 0;
+    //     clear: both;
+    //     th {
+    //       text-align: left;
+    //     }
+		  //   tr.selected td {
+    //       background-color: #55ee33;
+    //     }
+    //   }
+    //   #table-footer {
+    //     clear: both;
+    //     margin: 0;
+    //     #info {
+    //       float: left;
+    //       padding-top: 8px;
+    //       width: 250px;
+    //       .dataTables_info {
+    //         /* should look like h6 */
+    //         font-size: 13px;
+    //         font-weight: bold;
+    //         color: #bfbfbf;
+    //         text-transform: uppercase;
+    //       }
+    //     }
+    //     #pagination {
+    //       float: right;
+    //       margin: 0;
+    //       .pagination {
+    //         margin: 0;
+    //       }
+    //     }
+    //   }
+    // }
+    // #count-session-entry {
+    //   clear: both;
+    //   #timer {
+    //     float: left;
+    //     padding: 20px;
+    //     margin-left: 20px;
+    //     width: 100px;
+    //     text-align: left;
 
-      }
-      #counter {
-       float: left; 
-       font-size: 52pt;
-       padding: 33px;
-       text-align: center;
-       h6 {
-         display: block;
-         width: 100%;
-         padding-top: 20px;
-       }
-      }
-      .btn {
-        height: 120px;
-        width: 130px;
-        font-size: 52pt;
-      }
-      #count-minus-one-button {
-        float: left;
-      }
-      #count-plus-one-button {
-        float: right;
-        margin-left: 4px;
-      }
-      #count-plus-five-button {
-        float: right;
-      }
-    }
+    //   }
+    //   #counter {
+    //    float: left; 
+    //    font-size: 52pt;
+    //    padding: 33px;
+    //    text-align: center;
+    //    h6 {
+    //      display: block;
+    //      width: 100%;
+    //      padding-top: 20px;
+    //    }
+    //   }
+    //   .btn {
+    //     height: 120px;
+    //     width: 130px;
+    //     font-size: 52pt;
+    //   }
+    //   #count-minus-one-button {
+    //     float: left;
+    //   }
+    //   #count-plus-one-button {
+    //     float: right;
+    //     margin-left: 4px;
+    //   }
+    //   #count-plus-five-button {
+    //     float: right;
+    //   }
+    // }
   }
   #design-tab {
     table {

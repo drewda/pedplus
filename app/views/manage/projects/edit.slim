@@ -1,0 +1,50 @@
+- content_for :body do
+  = form_for([:manage, @project]) do |f|
+    h1 = @project.name
+    ul.nav.nav-tabs
+      li 
+        = link_to "View", manage_project_path(@project.id)
+      li.active
+        a Edit
+        
+    - if f.error_messages
+      = f.error_messages :class => "alert alert-error", :header_tag => :strong
+    fieldset
+      .clearfix
+        = f.label :name
+        .input
+          = f.text_field :name
+      .clearfix
+        = f.label :kind
+        .input
+          / because we only want to show pedcount for now
+          = f.select :kind, Project.kind_choices.delete_if { |k| k[1] == 'pedplus' }
+          
+    h2 Users
+    table.table.table-striped
+      thead
+        tr
+          th Name
+          th E-mail Address
+          th View?
+          th Count?
+          th Plan?
+          th Map?
+          th Manage?
+      tbody
+        - @project.organization.users.each do |u|
+          = f.fields_for :project_members, ProjectMember.find_or_create_by_user_id_and_project_id(u.id, @project.id) do |pm_fields|
+            tr.project-member-row
+              td = u.full_name
+              td = u.email
+              td = pm_fields.check_box :view, { :class => 'view-checkbox'}
+              td = pm_fields.check_box :count, { :class => 'count-checkbox'}
+              td = pm_fields.check_box :plan, { :class => 'plan-checkbox'}
+              td = pm_fields.check_box :map, { :class => 'map-checkbox'}
+              td = pm_fields.check_box :manage, { :class => 'manage-checkbox'}
+    .row(align="right")
+      = f.submit "Save Changes", {:class => "btn btn-primary"}
+  .well(align="left")
+     = button_to "Delete Project", manage_project_path(@project.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@project.name}?"
+     
+= render :template => '/manage/layout'

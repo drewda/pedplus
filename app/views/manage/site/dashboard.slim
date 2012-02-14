@@ -1,0 +1,40 @@
+- content_for :body do
+  .row
+    .span10
+      h1 = @organization.name
+    .span2(align="right")
+      = link_to "Edit Organization", edit_manage_organization_path(@organization.id), :class => "btn"
+  p
+    = link_to @organization.url, @organization.url
+  p
+    = @organization.address
+    br
+    = @organization.city 
+    | , 
+    = @organization.state
+    | , 
+    = @organization.postal_code
+    br
+    = @organization.country
+  p
+    ' Time zone:
+    = @organization.time_zone
+  h3 Subscription
+  p
+    ' Owns PedCount?
+    == @organization.owns_pedcount ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+    br
+    ' Owns PedPlus?
+    == @organization.owns_pedplus ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+    br
+    ' Max number of map segments per project:
+    strong = @organization.max_number_of_segments_per_project
+    br
+    ' Count session credits available: 
+    strong = @organization.count_session_credits_available
+
+
+  = render "/manage/users/table"
+  = render "/manage/projects/table"
+
+= render :template => '/manage/layout'

@@ -1,6 +1,6 @@
 - content_for :body do
   h1 = @organization.name
-  ul.nav.tabs
+  ul.nav.nav-tabs
     li.active 
       a View
     li = link_to "Edit", edit_admin_organization_path(@organization.id)
@@ -12,26 +12,27 @@
     = "#{@organization.city}, #{@organization.state} #{@organization.postal_code}"
     br
     = @organization.country
+  p
+    ' Time zone:
+    = @organization.time_zone
 
-  h2 Subscription
-  table.common-table
-    thead
-      tr
-        th Name
-        th Uses Ped
-        th Uses Sign
-        th Max Users
-        th Max Projects
-    tbody
-      tr
-        td = link_to @organization.subscription.name, admin_subscription_path(@organization.subscription.id)
-        td = @organization.subscription.uses_ped ? 'yes' : 'no'
-        td = @organization.subscription.uses_sign ? 'yes' : 'no'
-        td = @organization.subscription.max_users
-        td = @organization.subscription.max_projects
+  h3 Subscription
+  p
+    ' Owns PedCount?
+    == @organization.owns_pedcount ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+    br
+    ' Owns PedPlus?
+    == @organization.owns_pedplus ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+    br
+    ' Max number of map segments per project:
+    strong = @organization.max_number_of_segments_per_project
+    br
+    ' Count session credits available: 
+    strong = @organization.count_session_credits_available
+
 
   h2 Users
-  table.common-table
+  table.table.table-striped
     thead
       tr
         th Name
@@ -43,11 +44,11 @@
         tr
           td = link_to u.full_name, admin_user_path(u.id)
           td = u.email
-          td = u.organization_billing ? 'yes' : 'no'
-          td = u.organization_manager ? 'yes' : 'no'
+          td == u.organization_billing ? '<i class="icon-ok"></i>' : ''
+          td == u.organization_manager ? '<i class="icon-ok"></i>' : ''
        
   h2 Projects
-  table.common-table
+  table.table.table-striped
     thead
       tr
         th Name
@@ -57,7 +58,7 @@
       - @organization.projects.each do |p|
         tr
           td = link_to p.name, admin_project_path(p.id)
-          td = p.kind
+          td = p.kind_display
           td = p.created_at
 
 = render :template => '/admin/layout'
