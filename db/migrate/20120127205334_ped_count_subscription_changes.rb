@@ -8,7 +8,6 @@ class PedCountSubscriptionChanges < ActiveRecord::Migration
       t.integer :max_number_of_segments_per_project, :default => 1000
       t.remove :subscription_id
     end
-    remove_index :organizations, :subscription_id
 
     drop_table :subscriptions
 
