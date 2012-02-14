@@ -4,7 +4,6 @@ gem 'rails', '3.2.1'
 
 gem 'mysql2'
 
-gem 'newrelic_rpm'
 gem 'capistrano'
 
 gem 'resque', :require => "resque/server"
