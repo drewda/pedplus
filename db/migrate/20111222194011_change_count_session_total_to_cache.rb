@@ -6,9 +6,6 @@ class ChangeCountSessionTotalToCache < ActiveRecord::Migration
     add_column :count_sessions, :counts_count, :integer, :default => 0
     
     CountSession.reset_column_information
-    CountSession.all.each do |cs|
-      cs.update_attribute :counts_count, cs.counts.length
-    end
     
     remove_column :count_sessions, :total_count
   end
