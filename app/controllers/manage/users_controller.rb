@@ -66,11 +66,16 @@ class Manage::UsersController < Manage::ManageController
     # do not allowing deleting users outside of current user's organization
     if @user.organization != current_user.organization
       redirect_to manage_root_url
+    # do not allow deleting of your own account
+    elsif @user == current_user
+      flash[:error] = "You cannot delete your own user account."
+    else
+      if @user.destroy
+        flash[:success] = "User account deleted for <strong>#{@user.full_name}</strong>."
+      end
     end
-    @user.destroy
 
     respond_to do |format|
-      flash[:success] = "User account deleted for <strong>#{@user.full_name}</strong>."
       format.html { redirect_to(manage_users_url) }
     end
   end

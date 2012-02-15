@@ -43,10 +43,15 @@ class Admin::UsersController < Admin::AdminController
   
   def destroy
     @user = User.find(params[:id])
-    @user.destroy
+    if @user == current_user
+      flash[:error] = "You cannot delete your own user account."
+    else
+      if @user.destroy
+        flash[:success] = "User account deleted for <strong>#{@user.full_name}</strong>."
+      end
+    end
 
     respond_to do |format|
-      flash[:success] = "User account deleted for <strong>#{@user.full_name}</strong>."
       format.html { redirect_to(admin_users_url) }
     end
   end

@@ -35,10 +35,6 @@ class User < ActiveRecord::Base
       errors.add :s3sol_admin, "You cannot remove your own S3Sol admin permission. Use the Rails console to do so."
     end
   end
-  before_destroy :at_least_one_user_per_organization
-  def at_least_one_user_per_organization
-    errors.add :base, "You must have at least one user per organization." unless self.organization.length > 1
-  end
   
   def full_name
     "#{first_name} #{last_name}"
