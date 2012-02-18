@@ -1,5 +1,5 @@
 - content_for :body do
-  = form_for([:manage, @organization]) do |f|
+  = simple_form_for([:manage, @organization], :html => { :class => 'form-horizontal' }) do |f|
     h1 = @organization.name
     ul.nav.nav-tabs
       li 
@@ -9,39 +9,17 @@
 
     - if f.error_messages
       = f.error_messages :class => "alert alert-error", :header_tag => :strong
-    fieldset
-      .clearfix
-        = f.label :name
-        .input
-          = f.text_field :name, :class => 'large'
-      .clearfix
-        = f.label :url
-        .input
-          = f.url_field :url, :class => 'large'
-      .clearfix
-        = f.label :address
-        .input
-          = f.text_field :address, :class => 'large'
-      .clearfix
-        = f.label :city
-        .input
-          = f.text_field :city, :class => 'large'
-      .clearfix
-        = f.label :state
-        .input
-          = f.text_field :state, :class => 'large'
-      .clearfix
-        = f.label :postal_code
-        .input
-          = f.text_field :postal_code, :class => 'large'
-      .clearfix
-        = f.label :country
-        .input
-          = f.country_select(:country, ["United States", "United Kingdom", "Portugal", "Canada"])
-      .clearfix
-        = f.label :time_zone
-        .input
-          = f.time_zone_select(:time_zone, ActiveSupport::TimeZone.us_zones, :default => "Pacific Time (US & Canada)", :class => 'span4')
+    = f.input :name
+    = f.input :url, :label => "Web site"
+    = f.input :address
+    = f.input :city
+    = f.input :state
+    = f.input :postal_code
+    = f.input :country
+    = f.input :time_zone
+
+    h2 Subscription
+    p Please contact S3Sol to change your subscription.
 
     h2 Users
     table.table.table-striped
@@ -60,7 +38,8 @@
               td = u.email
               td = u_fields.check_box :organization_billing
               td = u_fields.check_box :organization_manager
-    .form-actions align="right"
-      = f.submit "Save Changes", {:class => "btn btn-primary"}
+
+    .form-actions
+      = f.button :submit, "Save Changes", {:class => "btn btn-primary"}
 
 = render :template => '/manage/layout'

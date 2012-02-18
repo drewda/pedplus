@@ -7,16 +7,16 @@ table.table.table-striped
   thead
     tr
       th Name
+      th Kind
       th City, State, Country
       th Software Package
-      th Max number of map segments per project
-      th Count session credits available
+      th Subscription Active Until
   tbody
     - @organizations.each do |o|
       tr
         td 
           strong = link_to o.name, admin_organization_path(o.id)
+        td = o.kind_display
         td = "#{o.city}, #{o.state}, #{o.country}"
         td = o.software_package
-        td = o.max_number_of_segments_per_project
-        td = o.count_session_credits_available
+        td = o.subscription_active_until.strftime "%d %B %Y"

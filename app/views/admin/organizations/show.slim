@@ -5,7 +5,9 @@
       a View
     li = link_to "Edit", edit_admin_organization_path(@organization.id)
 
-  p = link_to @organization.url, @organization.url
+  p 
+    ' Web site: 
+    = link_to @organization.url, @organization.url
   p
     = @organization.address
     br
@@ -16,19 +18,31 @@
     ' Time zone:
     = @organization.time_zone
 
-  h3 Subscription
+  h2 Subscription
   p
+    ' Kind: 
+    strong = @organization.kind_display
+    br
     ' Owns PedCount?
     == @organization.owns_pedcount ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
     br
     ' Owns PedPlus?
     == @organization.owns_pedplus ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
     br
-    ' Max number of map segments per project:
-    strong = @organization.max_number_of_segments_per_project
+    ' Max number of users: 
+    strong = @organization.max_number_of_users
     br
-    ' Count session credits available: 
-    strong = @organization.count_session_credits_available
+    ' Max number of projects: 
+    strong = @organization.max_number_of_projects
+    br
+    ' Default max number of counting locations per project: 
+    strong = @organization.default_max_number_of_counting_locations_per_project
+    br
+    ' Default number of counting day credits per user: 
+    strong = @organization.default_number_of_counting_day_credits_per_user
+    br
+    ' Subscription active until: 
+    strong = @organization.subscription_active_until.strftime "%d %B %Y"
 
 
   h2 Users

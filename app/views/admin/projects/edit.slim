@@ -1,5 +1,5 @@
 - content_for :body do
-  = form_for([:admin, @project]) do |f|
+  = simple_form_for([:admin, @project], :html => { :class => 'form-horizontal' }) do |f|
     h1 = @project.name
     ul.nav.nav-tabs
       li 
@@ -9,16 +9,10 @@
         
     - if f.error_messages
       = f.error_messages :class => "alert alert-error", :header_tag => :strong
-    fieldset
-      .clearfix
-        = f.label :name
-        .input
-          = f.text_field :name
-      .clearfix
-        = f.label :kind
-        .input
-          = f.select :kind, Project.kind_choices
-          
+    = f.association :organization, :as => :select
+    = f.input :name
+    = f.input :kind, :as => :select, :collection => Project.kind_choices
+
     h2 Users
     table.table.table-striped
       thead
@@ -41,9 +35,14 @@
               td = pm_fields.check_box :plan, { :class => 'plan-checkbox'}
               td = pm_fields.check_box :map, { :class => 'map-checkbox'}
               td = pm_fields.check_box :manage, { :class => 'manage-checkbox'}
-    .row(align="right")
+
+          
+    .form-actions
       = f.submit "Save Changes", {:class => "btn btn-primary"}
-  .well(align="left")
-     = button_to "Delete Project", admin_project_path(@project.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@project.name}?"
-     
-= render :template => '/manage/layout'
+  h2 Delete Project
+  p Deleting this project will also remove all of its associated data, including segments and count sessions.
+  .form-horizontal
+    .form-actions
+       = button_to "Delete Project", admin_project_path(@project.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@project.name}?"
+      
+= render :template => '/admin/layout'

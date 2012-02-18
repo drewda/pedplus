@@ -3,7 +3,7 @@ class User < ActiveRecord::Base
   has_many :project_members, :dependent => :destroy
   has_many :projects, :through => :project_members
   
-  has_many :count_sessions
+  has_many :count_sessions, :dependent => :destroy
   
   devise :database_authenticatable, 
          :invitable,
@@ -14,6 +14,7 @@ class User < ActiveRecord::Base
 
   accepts_nested_attributes_for :project_members, :allow_destroy => true
 
+  validates :organization, :presence => true
   validates :first_name, :presence => true
   validates :last_name, :presence => true
   validates :email, :presence => true

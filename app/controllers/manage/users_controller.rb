@@ -9,7 +9,7 @@ class Manage::UsersController < Manage::ManageController
     if current_user.organization.users.length < current_user.organization.max_number_of_users
       @user = User.new
     else
-      flash[:success] = "Your organization has no remaining user credits. Please contact S3Sol to upgrade your account."
+      flash[:warning] = "Your organization has no remaining user credits. Please contact S3Sol to upgrade your account."
       redirect_to manage_root_url
     end
   end
@@ -33,6 +33,7 @@ class Manage::UsersController < Manage::ManageController
   def create
     @user = User.new(params[:user])
     @user.organization = current_user.organization
+    @user.counting_day_credits = current_user.organization.default_number_of_counting_day_credits_per_user
 
     respond_to do |format|
       if @user.save

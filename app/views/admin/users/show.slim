@@ -5,29 +5,31 @@
       a View
     li = link_to "Edit", edit_admin_user_path(@user.id)
   p
+    ' Organization: 
+    strong = link_to @user.organization.name, admin_organization_path(@user.organization.id)
+  p
     ' E-mail address:
     strong  = @user.email
   p
     ' Phone number:
     strong = @user.phone_number unless @user.phone_number.nil?
+
+  h2 Permissions
   p
     ' Is an S3Sol administrator?
     strong == @user.s3sol_admin ? '<span class="label label-important">yes</span>' : '<span class="label">no</span>'
-
-  .row
-    .span4.columns
-      h2 = link_to @user.organization.name, admin_organization_path(@user.organization.id)
-    .span3.offset5.columns(align="right")
-      h6 Permissions
-    .span2.columns(align="center")
-      h5 
-        ' Billing?
-        = @user.organization_billing ? 'yes' : 'no'
-    .span2.columns(align="center")
-      h5 
-        ' Manager?
-        = @user.organization_manager ? 'yes' : 'no'
+  p
+    ' Has billing permission for organization?
+    == @user.organization_billing ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+  p
+    ' Has manager permission for organization?
+    == @user.organization_manager ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
       
+  h2 Resources
+  p
+    ' Counting day credits: 
+    strong = @user.counting_day_credits
+
   table.table.table-striped
     thead
       tr
@@ -41,8 +43,8 @@
     tbody
       - @user.organization.projects.each do |p|
         tr
-          td = p.name
-          td = p.kind
+          td = link_to p.name, admin_project_url(p.id)
+          td = p.kind_display
           td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).view ? "<i class='icon-ok'/>" : ""
           td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).count ? "<i class='icon-ok'/>" : ""
           td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).plan ? "<i class='icon-ok'/>" : ""

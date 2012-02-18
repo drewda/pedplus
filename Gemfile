@@ -16,6 +16,7 @@ gem 'devise_invitable'
 gem "geocoder"
 
 gem 'slim'
+gem 'simple_form', git: 'git://github.com/plataformatec/simple_form.git'
 gem 'dynamic_form'
 gem 'attribute_choices'
 gem 'country_select'
@@ -28,13 +29,6 @@ group :assets do
   gem "less"
   gem 'coffee-rails'
   gem 'uglifier'
-end
-
-group :test, :development do
-  gem 'rspec-rails', '>= 2.6.1'
-  gem 'factory_girl_rails', '>= 1.1.0'
-  gem 'cucumber-rails', '>= 1.0.2'
-  gem 'capybara', '>= 1.0.0'
 end
 
 group :development do

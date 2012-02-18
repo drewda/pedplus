@@ -20,6 +20,7 @@ class Admin::UsersController < Admin::AdminController
 
     respond_to do |format|
       if @user.save
+        @user.update_attribute :counting_day_credits, @user.organization.default_number_of_counting_day_credits_per_user
         flash[:success] = "User account created for <strong>#{@user.full_name}</strong>."
         format.html { redirect_to(admin_user_url(@user)) }
       else

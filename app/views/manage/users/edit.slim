@@ -1,7 +1,6 @@
 - content_for :body do
-  = form_for([:manage, @user]) do |f|
+  = simple_form_for([:manage, @user], :html => { :class => 'form-horizontal' }) do |f|
     h1 = @user.full_name
-
     ul.nav.nav-tabs
       li
         = link_to "View", manage_user_path(@user.id)
@@ -10,35 +9,30 @@
         
     - if f.error_messages
       = f.error_messages :class => "alert alert-error", :header_tag => :strong
-    fieldset
-      .clearfix
-        = f.label :email
-        .input
-          = f.text_field :email, :class => "large"
-      .clearfix
-        = f.label :phone_number
-        .input
-          = f.telephone_field :phone_number, :class => "large"
+    = f.input :first_name
+    = f.input :last_name
+    = f.input :email
+    = f.input :phone_number
+    legend Permissions
+    = f.input :organization_billing, :label => "Has billing permission for organization?"
+    = f.input :organization_manager, :label => "Has manager permission for organization?"
+    legend Resources
+    p To add counting day credits for this user, please contact S3Sol.
+          
+    .form-actions
+      = f.submit "Save Changes", {:class => "btn btn-primary"}
 
-      .clearfix
-        h5 
-          ' Billing?
-          = f.check_box :organization_billing
-      .clearfix
-        h5 
-          ' Manager?
-          = f.check_box :organization_manager
+  h2 Change Password
+  = simple_form_for([:manage, @user], :html => {:class => 'form-horizontal'}) do |f|
+    = f.input :password
+    = f.input :password_confirmation
+    .form-actions
+      = f.submit "Change Password", {:class => "btn btn-primary"}
 
-      .row(align="right")
-        = f.submit "Save Changes", {:class => "btn btn-primary"}
-            
-  = form_for [:manage, @user], :html => {:class => 'form-inline'} do |f|
-    = f.label :password
-    = f.password_field :password, :class => "input-medium"
-    = f.label :password_confirmation, "Confirmation"
-    = f.password_field :password_confirmation, :class => "input-medium"
-    = f.submit "Change Password", {:class => "btn btn-primary"}
-                  
-  .well(align="left")
-    = button_to "Delete User", manage_user_path(@user.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@user.full_name}?"
+  h2 Delete User
+  p Deleting this user will permanently remove all associated records, including count sessions.
+  .form-horizontal
+    .form-actions
+      = button_to "Delete User", manage_user_path(@user.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@user.full_name}?"
+      
 = render :template => '/manage/layout'

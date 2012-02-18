@@ -20,6 +20,7 @@ class Admin::ProjectsController < Admin::AdminController
 
     respond_to do |format|
       if @project.save
+        @project.update_attribute :max_number_of_counting_locations, @project.organization.default_max_number_of_counting_locations_per_project
         flash[:success] = "<strong>#{@project.name}</strong> project created."
         format.html { redirect_to(edit_admin_project_url(@project)) }
       else

@@ -16,6 +16,9 @@ class Project < ActiveRecord::Base
   attribute_choices :kind, 
                     [['pedcount', 'PedCount'], ['pedplus', 'PedPlus']],
                     :validate => true
+
+  validates :name, :presence => true
+  validates :organization, :presence => true
   
   def cache_bounding_box
     southwestLatitude = -Float::INFINITY

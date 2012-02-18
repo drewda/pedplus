@@ -11,14 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120214064642) do
-
-  create_table "count_session_credits", :force => true do |t|
-    t.integer "organization_id"
-    t.string  "payment_method"
-    t.integer "count_session_credits_purchased"
-    t.integer "count_session_credits_used",      :default => 0
-  end
+ActiveRecord::Schema.define(:version => 20120215233243) do
 
   create_table "count_sessions", :force => true do |t|
     t.integer  "segment_id"
@@ -114,12 +107,15 @@ ActiveRecord::Schema.define(:version => 20120214064642) do
     t.string   "postal_code"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "owns_pedcount",                      :default => true
-    t.boolean  "owns_pedplus",                       :default => false
-    t.integer  "max_number_of_users",                :default => 1
-    t.integer  "max_number_of_projects",             :default => 1
-    t.integer  "max_number_of_segments_per_project", :default => 1000
-    t.string   "time_zone",                          :default => "Pacific Time (US & Canada)"
+    t.boolean  "owns_pedcount",                                        :default => true
+    t.boolean  "owns_pedplus",                                         :default => false
+    t.integer  "max_number_of_users",                                  :default => 1
+    t.integer  "max_number_of_projects",                               :default => 1
+    t.string   "time_zone",                                            :default => "Pacific Time (US & Canada)"
+    t.string   "kind"
+    t.integer  "default_max_number_of_counting_locations_per_project"
+    t.integer  "default_number_of_counting_day_credits_per_user"
+    t.date     "subscription_active_until"
   end
 
   create_table "project_members", :force => true do |t|
@@ -143,11 +139,12 @@ ActiveRecord::Schema.define(:version => 20120214064642) do
     t.string   "kind"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "southwest_latitude",  :precision => 15, :scale => 10
-    t.decimal  "southwest_longitude", :precision => 15, :scale => 10
-    t.decimal  "northeast_latitude",  :precision => 15, :scale => 10
-    t.decimal  "northeast_longitude", :precision => 15, :scale => 10
+    t.decimal  "southwest_latitude",               :precision => 15, :scale => 10
+    t.decimal  "southwest_longitude",              :precision => 15, :scale => 10
+    t.decimal  "northeast_latitude",               :precision => 15, :scale => 10
+    t.decimal  "northeast_longitude",              :precision => 15, :scale => 10
     t.integer  "version"
+    t.integer  "max_number_of_counting_locations"
   end
 
   add_index "projects", ["organization_id"], :name => "index_projects_on_organization_id"
@@ -210,6 +207,7 @@ ActiveRecord::Schema.define(:version => 20120214064642) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "s3sol_admin"
+    t.integer  "counting_day_credits"
   end
 
   add_index "users", ["invitation_token"], :name => "index_users_on_invitation_token"

@@ -32,7 +32,7 @@
     tbody
       - @user.organization.projects.each do |p|
         tr
-          td = p.name
+          td = link_to p.name, manage_project_url(p.id)
           td = p.kind_display
           td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).view ? "<i class='icon-ok'></i>" : ""
           td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).count ? "<i class='icon-ok'></i>" : ""

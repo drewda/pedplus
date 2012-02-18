@@ -1,5 +1,5 @@
 - content_for :body do
-  = form_for([:admin, @organization]) do |f|
+  = simple_form_for([:admin, @organization], :html => { :class => 'form-horizontal' }) do |f|
     h1 = @organization.name
     ul.nav.nav-tabs
       li 
@@ -9,53 +9,24 @@
 
     - if f.error_messages
       = f.error_messages :class => "alert alert-error", :header_tag => :strong
-    fieldset
-      .clearfix
-        = f.label :name
-        .input
-          = f.text_field :name, :class => 'large'
-      .clearfix
-        = f.label :url
-        .input
-          = f.url_field :url, :class => 'large'
-      .clearfix
-        = f.label :address
-        .input
-          = f.text_field :address, :class => 'large'
-      .clearfix
-        = f.label :city
-        .input
-          = f.text_field :city, :class => 'large'
-      .clearfix
-        = f.label :state
-        .input
-          = f.text_field :state, :class => 'large'
-      .clearfix
-        = f.label :postal_code
-        .input
-          = f.text_field :postal_code, :class => 'large'
-      .clearfix
-        = f.label :country
-        .input
-          = f.country_select(:country, ["United States"])
-      .clearfix
-        = f.label :time_zone
-        .input
-          = f.time_zone_select(:time_zone, ActiveSupport::TimeZone.us_zones, :default => "Pacific Time (US & Canada)")
+    = f.input :name
+    = f.input :url, :label => "Web site"
+    = f.input :address
+    = f.input :city
+    = f.input :state
+    = f.input :postal_code
+    = f.input :country
+    = f.input :time_zone
 
     h2 Subscription
-    p
-      ' Owns PedCount?
-      = f.check_box :owns_pedcount
-      br
-      ' Owns PedPlus?
-      = f.check_box :owns_pedplus
-      br
-      ' Max number of map segments per project:
-      = f.text_field :max_number_of_segments_per_project
-      br
-      ' Count session credits available: 
-      strong TODO: code interface for managing credits
+    = f.input :kind, :as => :select, :collection => Organization.kind_choices
+    = f.input :owns_pedcount, :label => "Owns PedCount"
+    = f.input :owns_pedplus, :label => "Owns PedPlus"
+    = f.input :max_number_of_users
+    = f.input :max_number_of_projects
+    = f.input :default_max_number_of_counting_locations_per_project
+    = f.input :default_number_of_counting_day_credits_per_user
+    = f.input :subscription_active_until
 
     h2 Users
     table.table.table-striped
@@ -75,10 +46,12 @@
               td = u_fields.check_box :organization_billing
               td = u_fields.check_box :organization_manager
 
-    .row(align="right")
-      = f.submit "Save Changes", {:class => "btn btn-primary"}
-    
-  .well(align="left")
-     = button_to "Delete Organization", admin_organization_path(@organization.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@organization.name}?"
+    .form-actions
+      = f.button :submit, "Save Changes", {:class => "btn btn-primary"}
+  h2 Delete Organization
+  p Deleting an organization will remove all of its users, projects, and the contents of those projects.
+  .form-horizontal
+    .form-actions
+      = button_to "Delete Organization", admin_organization_path(@organization.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@organization.name}?"
 
 = render :template => '/admin/layout'

@@ -1,44 +1,29 @@
 - content_for :body do
-  = form_for([:admin, @organization]) do |f|
+  = simple_form_for([:admin, @organization], :html => { :class => 'form-horizontal organization-new' }) do |f|
     h1 Create Organization
 
     - if f.error_messages
       = f.error_messages :class => "alert alert-error", :header_tag => :strong
-    fieldset
-      .clearfix
-        = f.label :name
-        .input
-          = f.text_field :name
-      .clearfix
-        = f.label :url
-        .input
-          = f.url_field :url
-      .clearfix
-        = f.label :address
-        .input
-          = f.text_field :address
-      .clearfix
-        = f.label :city
-        .input
-          = f.text_field :city
-      .clearfix
-        = f.label :state
-        .input
-          = f.text_field :state
-      .clearfix
-        = f.label :postal_code
-        .input
-          = f.text_field :postal_code
-      .clearfix
-        = f.label :country
-        .input
-          = f.country_select(:country, ["United States"])
-      .clearfix
-        = f.label :time_zone
-        .input
-          = f.time_zone_select(:time_zone, ActiveSupport::TimeZone.us_zones, :default => "Pacific Time (US & Canada)")
-              
-      .row(align="right")
-        = f.submit "Create Organization", {:class => "btn btn-primary"}
+    = f.input :name
+    = f.input :url, :label => "Web site"
+    = f.input :address
+    = f.input :city
+    = f.input :state
+    = f.input :postal_code
+    = f.input :country
+    = f.input :time_zone
+
+    h2 Subscription
+    = f.input :kind, :as => :select, :collection => Organization.kind_choices
+    = f.input :owns_pedcount, :label => "Owns PedCount"
+    = f.input :owns_pedplus, :label => "Owns PedPlus"
+    = f.input :max_number_of_users
+    = f.input :max_number_of_projects
+    = f.input :default_max_number_of_counting_locations_per_project
+    = f.input :default_number_of_counting_day_credits_per_user
+    = f.input :subscription_active_until
+
+    .form-actions
+      = f.button :submit, "Create Organization", {:class => "btn-primary"}
 
 = render :template => '/admin/layout'

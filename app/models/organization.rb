@@ -1,14 +1,26 @@
 class Organization < ActiveRecord::Base
   has_many :users, :dependent => :destroy
   has_many :projects, :dependent => :destroy
-  has_many :count_session_credits, :dependent => :destroy
   
   accepts_nested_attributes_for :users
-  
+
+  attribute_choices :kind, 
+                    [
+                      ['free-trial', 'Free Trial'], 
+                      ['professional', 'Professional'],
+                      ['academic-institution', 'Academic Institution'],
+                      ['student-pro', 'Student Pro']
+                    ],
+                    :validate => true
+
   validates :name, :presence => true, :uniqueness => true
-  validates :city, :presence => true
-  validates :state, :presence => true
   validates :country, :presence => true
+  validates :time_zone, :presence => true
+  validates :max_number_of_users, :presence => true
+  validates :max_number_of_projects, :presence => true
+  validates :default_max_number_of_counting_locations_per_project, :presence => true
+  validates :default_number_of_counting_day_credits_per_user, :presence => true
+  validates :subscription_active_until, :presence => true
 
   def software_package
   	if self.owns_pedplus
@@ -24,16 +36,6 @@ class Organization < ActiveRecord::Base
 
   def project_credits_available
     return self.max_number_of_projects - self.projects.length
-  end
-
-  def count_session_credits_available
-    total_count_session_credits_purchased = self.count_session_credits.sum(:count_session_credits_purchased)
-    total_count_session_credits_used = self.count_session_credits.sum(:count_session_credits_used)
-    return total_count_session_credits_purchased - total_count_session_credits_used
-  end
-
-  def use_a_count_session_credit
-    # TODO
   end
 
   def manager_users

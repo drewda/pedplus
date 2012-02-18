@@ -9,7 +9,7 @@ class Manage::ProjectsController < Manage::ManageController
     if current_user.organization.projects.length < current_user.organization.max_number_of_projects 
       @project = Project.new
     else
-      flash[:success] = "Your organization has no remaining project credits. Please contact S3Sol to upgrade your account."
+      flash[:warning] = "Your organization has no remaining project credits. Please contact S3Sol to upgrade your account."
       redirect_to manage_root_url
     end
   end
@@ -33,6 +33,8 @@ class Manage::ProjectsController < Manage::ManageController
   
   def create
     @project = Project.new(params[:project])
+    @project.organization = current_user.organization
+    @project.max_number_of_counting_locations = current_user.organization.default_max_number_of_counting_locations_per_project
 
     respond_to do |format|
       if @project.save
