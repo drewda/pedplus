@@ -26,8 +26,8 @@
           th E-mail Address
           th View?
           th Count?
-          th Plan?
           th Map?
+          th Plan?
           th Manage?
       tbody
         - @project.project_members.each do |pm|
@@ -36,8 +36,8 @@
             td = pm.user.email
             td == pm.view ? "<i class='icon-ok'/>" : ""
             td == pm.count ? "<i class='icon-ok'/>" : ""
-            td == pm.plan ? "<i class='icon-ok'/>" : ""
             td == pm.map ? "<i class='icon-ok'/>" : ""
+            td == pm.plan ? "<i class='icon-ok'/>" : ""
             td == pm.manage ? "<i class='icon-ok'/>" : ""
             
 = render :template => '/manage/layout'

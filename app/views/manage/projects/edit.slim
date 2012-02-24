@@ -22,8 +22,8 @@
           th E-mail Address
           th View?
           th Count?
-          th Plan?
           th Map?
+          th Plan?
           th Manage?
       tbody
         - @project.organization.users.each do |u|
@@ -33,8 +33,8 @@
               td = u.email
               td = pm_fields.check_box :view, { :class => 'view-checkbox'}
               td = pm_fields.check_box :count, { :class => 'count-checkbox'}
-              td = pm_fields.check_box :plan, { :class => 'plan-checkbox'}
               td = pm_fields.check_box :map, { :class => 'map-checkbox'}
+              td = pm_fields.check_box :plan, { :class => 'plan-checkbox'}
               td = pm_fields.check_box :manage, { :class => 'manage-checkbox'}
 
           

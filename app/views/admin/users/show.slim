@@ -37,8 +37,8 @@
         th Kind
         th View?
         th Count?
-        th Plan?
         th Map?
+        th Plan?
         th Manage?
     tbody
       - @user.organization.projects.each do |p|
@@ -47,8 +47,8 @@
           td = p.kind_display
           td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).view ? "<i class='icon-ok'/>" : ""
           td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).count ? "<i class='icon-ok'/>" : ""
-          td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).plan ? "<i class='icon-ok'/>" : ""
           td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).map ? "<i class='icon-ok'/>" : ""
+          td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).plan ? "<i class='icon-ok'/>" : ""
           td == ProjectMember.find_or_create_by_user_id_and_project_id(@user.id, p.id).manage ? "<i class='icon-ok'/>" : ""
 
 = render :template => '/admin/layout'
