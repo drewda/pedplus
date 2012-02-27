@@ -1,0 +1,44 @@
+- content_for :head do
+  script
+    | function injectProjects() {
+    == "projects.reset(#{@projects.to_json(:methods => [:permissions_for_current_user])});"
+    | }
+
+- content_for :body do
+  ///
+  / OPEN PROJECT
+  ///
+  #open-project(data-role="page")
+  	div(data-role="header")
+  		h1 Open a Project
+
+  	div(data-role="content")
+  		ul(data-role="listview")
+  		  - current_user.projects.each do |p|
+  		    li
+  		      a(href="#project?projectId=#{p.id}") #{p.name}
+  		      
+  	.ui-bar(data-role="footer" data-id="footer" data-position="fixed")
+  	  h1(style="float: left;") = current_user.full_name
+  	  a(href="/users/sign_out" data-role="button" data-ajax="false" style="float: right; margin-right:27px;") Sign Out 
+  
+  ///
+  / PROJECT
+  ///
+  #project(data-role="page")
+  	div(data-role="header")
+  		h1(data-bind="text name") Project
+
+  	#project-content(data-role="content")
+  		#map-area
+  		#count-session-listview(data-role="listview")
+
+  	.ui-bar(data-role="footer" data-id="footer" data-position="fixed")
+  	  a(href="#open-project" data-role="button" data-icon="grid") Switch Project
+  
+  ///
+  / COUNT SESSION
+  ///
+  #count-session(data-role="page")
+
+= render :template => '/smartphone/layout'

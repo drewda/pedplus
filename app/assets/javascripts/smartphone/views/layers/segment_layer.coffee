@@ -1,0 +1,1 @@
+class Smartphone.Views.SegmentLayer extends Backbone.View
