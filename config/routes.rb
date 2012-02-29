@@ -18,7 +18,8 @@ Pedplus::Application.routes.draw do
                 :geo_point_on_segments,
                 :scenarios,
                 :segment_in_scenarios,
-                :model_jobs
+                :model_jobs,
+                :count_plans
       resources :count_sessions do
         resources :counts
       end

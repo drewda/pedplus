@@ -23,6 +23,7 @@ class App.Routers.Master extends Backbone.Router
     @geo_points = new App.Collections.GeoPoints
     @geo_point_on_segments = new App.Collections.GeoPointOnSegments
     # will be fetch'ed in measure()
+    @count_plans = new App.Collections.CountPlans
     @count_sessions = new App.Collections.CountSessions
     
     # will be populated by the client-side
@@ -98,8 +99,7 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/measure"                                             : "measure"
 
     "project/:project_id/measure/plan"                                        : "measurePlan"
-    "project/:project_id/measure/plan/assistant/parameters"                   : "measurePlanAssistantParameters"
-    "project/:project_id/measure/plan/assistant/segments"                     : "measurePlanAssistantSegments"
+    "project/:project_id/measure/plan/assistant"                              : "measurePlanAssistant"
     "project/:project_id/measure/plan/segment_id/:segment_id"                 : "measurePlanSelectedSegment"
     "project/:project_id/measure/plan/count_session/:count_session_id"        : "measurePlanSelectedCountSession"
     "project/:project_id/measure/plan/count_session/:count_session_id/edit"   : "measurePlanEditCountSession"
@@ -379,19 +379,15 @@ class App.Routers.Master extends Backbone.Router
       @geo_points.selectNone()
       @segments.selectNone()
 
-  measurePlanAssistantParameters: (projectId) ->
-    if @reset(projectId, false, 250)
-      @routeNameKeeper 'measurePlanAssistantParameters'
-      # TODO: render modal
-
-  measurePlanAssistantSegments: (projectId) ->
-    if @reset(projectId, true, 250)
-      @routeNameKeeper 'measurePlanAssistantSegments'
+  measurePlanAssistant: (projectId) ->
+    if @reset(projectId, false, 285)
+      @routeNameKeeper 'measurePlanAssistant'
       @measureTab = new App.Views.MeasureTab
         topBar: masterRouter.topBar
+        users: masterRouter.users
         projectId: projectId
         projects: masterRouter.projects
-        mode: "measurePlanAssistantSegments"
+        mode: "measurePlanAssistant"
       @map.setOsmLayer "gray"
       @map.resetMap false, true
       @geo_points.selectNone()

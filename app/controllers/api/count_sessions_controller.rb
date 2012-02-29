@@ -31,8 +31,6 @@ class Api::CountSessionsController < Api::ApiController
   
   def update
     @count_session = CountSession.find(params[:id])
-    
-    params[:count_session].delete 'total_count'
 
     if counts = params[:counts]
       counts.each do |c|

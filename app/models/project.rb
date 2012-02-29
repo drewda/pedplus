@@ -1,15 +1,16 @@
 class Project < ActiveRecord::Base
   belongs_to :organization
-  has_many :project_members
+  has_many :project_members, :dependent => :destroy
   has_many :users, :through => :project_members
   
-  has_many :segments
-  has_many :geo_points
+  has_many :segments, :dependent => :destroy
+  has_many :geo_points, :dependent => :destroy
   has_many :geo_point_on_segments
-  has_many :count_sessions
-  has_many :scenarios
+  has_many :count_plans, :dependent => :destroy
+  has_many :count_sessions, :dependent => :destroy
+  has_many :scenarios, :dependent => :destroy
   
-  has_many :model_jobs
+  has_many :model_jobs, :dependent => :destroy
   
   accepts_nested_attributes_for :project_members, :allow_destroy => true
 

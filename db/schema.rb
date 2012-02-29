@@ -11,7 +11,45 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120215233243) do
+ActiveRecord::Schema.define(:version => 20120227201732) do
+
+  create_table "count_plan_segments", :force => true do |t|
+    t.integer "count_plan_id"
+    t.integer "segment_id"
+  end
+
+  add_index "count_plan_segments", ["count_plan_id"], :name => "index_count_plan_segments_on_count_plan_id"
+  add_index "count_plan_segments", ["segment_id"], :name => "index_count_plan_segments_on_segment_id"
+
+  create_table "count_plan_users", :force => true do |t|
+    t.integer "count_plan_id"
+    t.integer "user_id"
+  end
+
+  add_index "count_plan_users", ["count_plan_id"], :name => "index_count_plan_users_on_count_plan_id"
+  add_index "count_plan_users", ["user_id"], :name => "index_count_plan_users_on_user_id"
+
+  create_table "count_plans", :force => true do |t|
+    t.string   "name"
+    t.integer  "project_id"
+    t.date     "start_date"
+    t.integer  "weeks"
+    t.integer  "number_of_intervening_weeks"
+    t.string   "days"
+    t.string   "hours"
+    t.datetime "created_at",                  :null => false
+    t.datetime "updated_at",                  :null => false
+  end
+
+  add_index "count_plans", ["project_id"], :name => "index_count_plans_on_project_id"
+
+  create_table "count_plans_segments", :id => false, :force => true do |t|
+    t.integer "count_plan_id"
+    t.integer "segment_id"
+  end
+
+  add_index "count_plans_segments", ["count_plan_id"], :name => "index_count_plans_segments_on_count_plan_id"
+  add_index "count_plans_segments", ["segment_id"], :name => "index_count_plans_segments_on_segment_id"
 
   create_table "count_sessions", :force => true do |t|
     t.integer  "segment_id"
@@ -22,10 +60,11 @@ ActiveRecord::Schema.define(:version => 20120215233243) do
     t.datetime "updated_at"
     t.integer  "project_id"
     t.integer  "user_id"
-    t.integer  "count_total"
-    t.integer  "counts_count", :default => 0
+    t.integer  "counts_count",  :default => 0
+    t.integer  "count_plan_id"
   end
 
+  add_index "count_sessions", ["count_plan_id"], :name => "index_count_sessions_on_count_plan_id"
   add_index "count_sessions", ["project_id"], :name => "index_count_sessions_on_project_id"
   add_index "count_sessions", ["segment_id"], :name => "index_count_sessions_on_segment_id"
   add_index "count_sessions", ["user_id"], :name => "index_count_sessions_on_user_id"
@@ -121,10 +160,10 @@ ActiveRecord::Schema.define(:version => 20120215233243) do
   create_table "project_members", :force => true do |t|
     t.integer  "user_id"
     t.integer  "project_id"
+    t.boolean  "view"
     t.boolean  "manage"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "view"
     t.boolean  "count",      :default => false
     t.boolean  "map"
     t.boolean  "plan"

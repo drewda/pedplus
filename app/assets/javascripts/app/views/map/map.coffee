@@ -236,6 +236,7 @@ class App.Views.Map extends Backbone.View
     @segmentWorkingAnimation = setInterval "masterRouter.map.doSegmentWorkingAnimation()", 500
   disableSegmentWorkingAnimation: ->
     @segmentWorkingAnimation = clearInterval @segmentWorkingAnimation
+    $('.segment-line').svg().removeAttr 'style'
   doSegmentWorkingAnimation: ->
     $('.segment-line').svg().css 'stroke', (index, value) =>
       "rgb(#{Math.floor(Math.random() * 256)}, 0, 0)"

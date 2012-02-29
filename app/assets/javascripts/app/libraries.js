@@ -2,6 +2,7 @@
 //= require jquery_ujs
 //= require json2
 //= require underscore
+//= require underscore-addons
 //= require backbone
 //= require backbone-rails
 //= require polymaps
@@ -12,6 +13,7 @@
 //= require bootstrap-dropdown
 //= require bootstrap-modal
 //= require bootstrap-button
+//= require bootstrap-transition
 //= require bootbox
 //= require xdate
 //= require jquery-datatables

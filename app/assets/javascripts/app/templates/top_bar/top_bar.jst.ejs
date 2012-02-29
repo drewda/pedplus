@@ -1,4 +1,4 @@
-<ul class="nav nav-pills">
+<ul id="top-bar-tabs" class="nav nav-pills">
     <li id="project-pill"><a href="#project/<%= currentProject.id %>">Project</a></li>
     <% if (currentProject.get('permissions_for_current_user').map == true) { %>
     <li id="map-pill"><a href="#project/<%= currentProject.id %>/map">Map</a></li>

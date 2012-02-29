@@ -38,13 +38,19 @@ class App.Models.Segment extends Backbone.Model
     else if masterRouter.currentRouteName.startsWith "measure"
       if masterRouter.currentRouteName.startsWith "measureEnterCountSession"
         return # we do not want to allow selected when at the "measureEnterCountSession" route
+      if masterRouter.currentRouteName.startsWith "measurePlanAssistant"
+        if @collection.selected().length < masterRouter.measureTab.numberOfCountLocations
+          @doSelect(true)
+        else
+          return
       else
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure/segment/#{@cid}", true)
         @doSelect()
-  doSelect: ->
-    # only want one GeoPoint or Segment selected at a time
-    @collection.selectNone()
-    masterRouter.geo_points.selectNone()
+  doSelect: (allowMultiple) ->
+    unless allowMultiple
+      # only want one GeoPoint or Segment selected at a time
+      @collection.selectNone()
+      masterRouter.geo_points.selectNone()
     @set
        selected: true
     $("#segment-line-#{@cid}").svg()
@@ -57,12 +63,15 @@ class App.Models.Segment extends Backbone.Model
       else
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
         @doDeselect()
-    else if masterRouter.currentRouteName == "measure" or
-            masterRouter.currentRouteName.startsWith "measureSelectedSegment" or
-            masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
-      # note that we do not want to allow selected when at the "measureEnterCountSession" route
-      masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure", true)
-      @doDeselect()
+    else if masterRouter.currentRouteName.startsWith "measure"
+      if masterRouter.currentRouteName == "measure" or
+         masterRouter.currentRouteName.startsWith "measureSelectedSegment" or
+         masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
+        # note that we do not want to allow selected when at the "measureEnterCountSession" route
+        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure", true)
+        @doDeselect()
+      else if masterRouter.currentRouteName.startsWith "measurePlanAssistant"
+        @doDeselect()
   doDeselect: ->
     # if this Segment is not already selected, then we want its 
     # @set() command to be silent and not fire a changed event

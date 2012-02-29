@@ -3,6 +3,8 @@ class User < ActiveRecord::Base
   has_many :project_members, :dependent => :destroy
   has_many :projects, :through => :project_members
   
+  has_many :count_plan_users
+  has_many :count_plans, :through => :count_plan_users
   has_many :count_sessions, :dependent => :destroy
   
   devise :database_authenticatable, 

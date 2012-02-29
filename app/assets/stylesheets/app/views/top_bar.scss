@@ -45,10 +45,38 @@
   
   #measure-tab {
     #measure-sub-tabs {
+      margin-bottom: 8px;
       li {
         font-size: 16px;
       }
     }
+    #measure-plan-buttons {
+      #measure-plan-pagination {
+        margin: 0;
+        float: left;
+        padding-bottom: 8px;
+      }
+      #count-planning-assistant-button {
+        float: right;
+        padding-bottom: 8px;
+      }
+    }
+    #measure-plan-assistant {
+      label.control-label {
+        font-size: 15px;
+        font-weight: bold;
+      }
+      .control-label {
+        width: 60px;
+      }
+      .controls {
+        margin-left: 80px;
+      }
+      .control-group {
+        margin-bottom: 9px;
+      }
+    }
+
     // #count-bar {
     //   h3 {
     //     float: left;
