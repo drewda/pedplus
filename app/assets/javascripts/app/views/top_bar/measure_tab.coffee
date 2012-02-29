@@ -155,7 +155,7 @@ class App.Views.MeasureTab extends Backbone.View
       success: (modelJob) ->
         masterRouter.map.disableSegmentWorkingAnimation()
         masterRouter.measureTab.modelJobRunningModal.modal 'hide'
-        @continueToCountPlanningAssistant(modelJob)
+        masterRouter.measureTab.continueToCountPlanningAssistant(modelJob)
       , this
       error: ->
         alert 'Error fetching the results of the permeability analysis from the server.'
