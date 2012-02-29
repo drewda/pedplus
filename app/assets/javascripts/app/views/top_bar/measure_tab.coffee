@@ -67,6 +67,9 @@ class App.Views.MeasureTab extends Backbone.View
     # MEASURE PLAN
     if @mode == "measurePlan"
       $('#count-planning-assistant-button').bind "click", (event) ->
+        masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/plan/assistant", true
+        # NOTE: turn this off for now because it's slow
+        ###
         # check to see if permeability model already exists or if it needs to be run
         if masterRouter.model_jobs.getModelsForCurrentVersion("permeability").length > 0
           # continue on to count planning assistant
@@ -86,6 +89,7 @@ class App.Views.MeasureTab extends Backbone.View
             , this
             error: ->
               alert 'Error starting permeability analysis.'
+        ###
     
     # MEASURE PLAN ASSISTANT
     else if @mode == "measurePlanAssistant"
@@ -216,11 +220,13 @@ class App.Views.MeasureTab extends Backbone.View
 
     # set the number of counting locations to the number of users
     # TODO: allow for more counting locations if there are a sufficient number of hours selected for counting
-    numberOfUsers = $('.user-checkbox:checked').length
-    numberOfCountLocations = numberOfUsers * 5
-    masterRouter.measureTab.numberOfCountLocations = numberOfUsers * 5
-    $('#counting-locations-input').val numberOfCountLocations
+    # numberOfUsers = $('.user-checkbox:checked').length
+    # numberOfCountLocations = numberOfUsers * 5
+    masterRouter.measureTab.numberOfCountLocations = numberOfCountLocations
+    # $('#counting-locations-input').val numberOfCountLocations
 
+    # NOTE: disable this for now because it's slow
+    ###
     # select segments on map
     # unselect all
     masterRouter.segments.selectNone()
@@ -231,6 +237,7 @@ class App.Views.MeasureTab extends Backbone.View
     for num in [0...numberOfNexuses]
       nexusSegment = segmentsMostToLeastPermeable[num]
       masterRouter.measureTab.selectNexus nexusSegment
+    ###
 
   selectNexus: (currentSegment) ->
     if masterRouter.segments.selected().length < @numberOfCountLocations
