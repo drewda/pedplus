@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.1'
+gem 'rails', '3.2.2'
 
 gem 'mysql2'
 
@@ -16,7 +16,7 @@ gem 'devise_invitable'
 gem "geocoder"
 
 gem 'slim'
-gem 'simple_form', git: 'git://github.com/plataformatec/simple_form.git'
+gem 'simple_form'
 gem 'dynamic_form'
 gem 'attribute_choices'
 gem 'country_select'
