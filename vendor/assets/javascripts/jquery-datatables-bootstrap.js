@@ -1,9 +1,7 @@
-// http://datatables.net/media/blog/bootstrap/
+// http://datatables.net/blog/Twitter_Bootstrap_2
 /* Default class modification */
 $.extend( $.fn.dataTableExt.oStdClasses, {
-	"sSortAsc": "header headerSortDown",
-	"sSortDesc": "header headerSortUp",
-	"sSortable": "header"
+	"sWrapper": "dataTables_wrapper form-inline"
 } );
 
 /* API method to get paging information */
@@ -72,7 +70,7 @@ $.extend( $.fn.dataTableExt.oPagination, {
 				for ( j=iStart ; j<=iEnd ; j++ ) {
 					sClass = (j==oPaging.iPage+1) ? 'class="active"' : '';
 					$('<li '+sClass+'><a href="#">'+j+'</a></li>')
-						.insertBefore('li:last', an[j])
+						.insertBefore( $('li:last', an[i])[0] )
 						.bind('click', function (e) {
 							e.preventDefault();
 							oSettings._iDisplayStart = (parseInt($('a', this).text(),10)-1) * oPaging.iLength;
@@ -87,7 +85,7 @@ $.extend( $.fn.dataTableExt.oPagination, {
 					$('li:first', an[i]).removeClass('disabled');
 				}
 
-				if ( oPaging.iPage === oPaging.iTotalPages-1 ) {
+				if ( oPaging.iPage === oPaging.iTotalPages-1 || oPaging.iTotalPages === 0 ) {
 					$('li:last', an[i]).addClass('disabled');
 				} else {
 					$('li:last', an[i]).removeClass('disabled');
@@ -95,4 +93,15 @@ $.extend( $.fn.dataTableExt.oPagination, {
 			}
 		}
 	}
+} );
+
+/* Table initialisation */
+$(document).ready(function() {
+	$('#example').dataTable( {
+		"sDom": "<'row'<'span6'l><'span6'f>r>t<'row'<'span6'i><'span6'p>>",
+		"sPaginationType": "bootstrap",
+		"oLanguage": {
+			"sLengthMenu": "_MENU_ records per page"
+		}
+	} );
 } );
