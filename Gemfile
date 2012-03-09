@@ -35,3 +35,13 @@ group :development do
   gem 'drewda-railroad', '~> 0.5.3'
   gem 'pry'
 end
+
+group :development, :test do
+	gem 'rspec-rails', '~> 2.6'
+	gem 'capybara'
+	gem 'autotest'
+	gem 'autotest-rails-pure'
+	# for use while developing on Mac OS X
+	gem 'autotest-fsevent'
+	gem 'autotest-growl'
+end
