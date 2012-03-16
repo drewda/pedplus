@@ -47,4 +47,4 @@ class App.Views.UploadMapEditsModal extends Backbone.View
                   success: ->
                     masterRouter.count_sessions.fetch()
       error: (model, error) ->
-        alert "Error uploading edits to the server: #{error}"
+        alert "Please press 'reload' in your Web browser. Error uploading edits to the server: #{error}."
