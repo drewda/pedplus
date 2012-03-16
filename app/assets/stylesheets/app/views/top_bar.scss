@@ -20,6 +20,12 @@
       font-size: 16px;
     }
   }
+
+  .disabled-pill {
+    a {
+      color: #ccc;
+    }
+  }
   
   #help-pill {
     float: right;

@@ -6,6 +6,11 @@ class App.Views.TopBar extends Backbone.View
       currentUser: masterRouter.users.getCurrentUser()
     $("##{mode}-pill").addClass('active')
 
+    # activate tooltips (which are used to mark unactivated PedPlus 
+    # tabs and the map tab pill, when user doesn't have map permission)
+    $("[rel=tooltip]").tooltip
+      placement: 'right'
+
     $('#dashboard-link').click (event) =>
     	bootbox.confirm "Do you want to exit and return to the dashboard?", (confirmed) =>
 	    	window.location.href = "/" if confirmed
