@@ -39,7 +39,10 @@ class Api::MapEditsController < Api::ApiController
         if sLocal['markedForDelete']
           # the segment may be deleted when a geopoint is destroyed, but just
           # in case we will check to see if it still needs to be deleted
-          s.destroy if s = Segment.find_by_id(sLocal['id'])
+          s = Segment.find_by_id(sLocal['id'])
+          if s
+            s.destroy
+          end
         else
           cid = sLocal.delete 'cid'
           Segment.find(sLocal['id']).update_attributes sLocal # TODO: check
