@@ -21,6 +21,14 @@ class Project < ActiveRecord::Base
   validates :name, :presence => true
   validates :organization, :presence => true
   
+  def remove_broken_segments
+    self.segments.each do |s|
+      if s.geo_points.length != 2
+        s.destroy()
+      end
+    end
+  end
+
   def cache_bounding_box
     southwestLatitude = -Float::INFINITY
     southwestLongitude = Float::INFINITY

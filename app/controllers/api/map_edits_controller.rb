@@ -72,6 +72,9 @@ class Api::MapEditsController < Api::ApiController
     end
     
     project = Project.find(projectId)
+
+    # remove any disconnected segments from project
+    project.remove_broken_segments()
     
     # update project's bounding box
     # we'll assume that data is only being uplaoded for one project
@@ -80,6 +83,7 @@ class Api::MapEditsController < Api::ApiController
     # increment the project's version
     project.increment!(:version)
     
+    # json to return
     json = {
       projectId: projectId,
       projectVersion: project.version,
