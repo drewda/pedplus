@@ -1,20 +1,26 @@
 class App.Views.MeasureTab extends Backbone.View
   initialize: ->
     @topBar = @options.topBar
-    @projects = @options.projects
     @mode = @options.mode
+
+    @countPlan = masterRouter.count_plans.getCurrentCountPlan()
 
     @modelJob = null
     @modelJobRunningModal = null
     @numberOfCountingLocations = null
     
+
     @renderData =
       project: @options.projects.getCurrentProject()
       users: @options.users
+      countPlan: @countPlan
       segmentId: @options.segmentId
       mode: @mode
 
     @topBar.render 'measure'
+
+    # reload the segment layer in order to render the count colors
+    masterRouter.segment_layer.layer.reload()
     
 #     if @mode == "enterCountSession"
 #       @countSession = masterRouter.count_sessions.get @options.countSessionId
@@ -28,27 +34,6 @@ class App.Views.MeasureTab extends Backbone.View
 #       @millisecondsTotal = @minutes * 60 * 1000
 #       @millisecondsRemaining = @millisecondsTotal
 #       @endTime = null
-#     else
-#       # TODO: cache this computation by version number
-#       masterRouter.segments.each (s) =>
-#         s.set
-#           measuredClass: 0 # reset the coloring
-#       countTotals = masterRouter.count_sessions.pluck('counts_count')
-#       min = _.min countTotals
-#       max = _.max countTotals
-#       fullRange = max - min
-#       classRange = fullRange / 5
-#       breaks = [min, min + classRange, min + classRange * 2, min + classRange * 3, min + classRange * 2, max]
-#       masterRouter.count_sessions.each (cs) =>
-#         value = cs.get('counts_count')
-#         for i in [1..breaks.length]
-#           if value <= breaks[i]
-#             b = i
-#             break
-#         masterRouter.segments.get(cs.get('segment_id')).set
-#           measuredClass: b    
-#       # reloading SegmentLayer will draw the coloring
-#       masterRouter.segment_layer.layer.reload()
     
     @render()
   template: JST["app/templates/top_bar/measure_tab"]
@@ -275,7 +260,7 @@ class App.Views.MeasureTab extends Backbone.View
       project_id: masterRouter.projects.getCurrentProjectId()
       start_date: startDate
       weeks: numberOfWeeks
-      number_of_intervening_weeks: 0
+      intervening_weeks: 0
       days: days.join ','
       hours: hours.join ','
       users: users.join ','

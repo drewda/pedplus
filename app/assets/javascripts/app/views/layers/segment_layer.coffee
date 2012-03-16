@@ -71,8 +71,7 @@ class App.Views.SegmentLayer extends Backbone.View
       if masterRouter.currentRouteName.startsWith "modelPermeability"
         colorClass = masterRouter.segments.getByCid(f.data.cid).get('permeabilityClass')
         c.setAttribute "class", "red#{colorClass}"
-      else if masterRouter.currentRouteName.startsWith "measureSelectedCountSession" or 
-              masterRouter.currentRouteName.startsWith "measureSelectedSegment"
+      else if masterRouter.currentRouteName.startsWith "measure"
         if masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
           selectedCountSessionId = masterRouter.currentRouteName.split(':').pop()
           selectedSegmentId = masterRouter.count_sessions.get(selectedCountSessionId).get('segment_id')
@@ -87,7 +86,6 @@ class App.Views.SegmentLayer extends Backbone.View
           c.setAttribute "class", "segment-line blue#{colorClass}"
         else
           c.setAttribute "class", "segment-line black"
-    # else if masterRouter.currentRouteName.startsWith "measurePredictions"
       else if masterRouter.segments.getByCid(f.data.cid).get("selected")
         c.setAttribute "class", "segment-line selected black"
       else if connectedSegmentCids.length > 0

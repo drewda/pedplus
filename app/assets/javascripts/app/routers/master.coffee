@@ -111,6 +111,7 @@ class App.Routers.Master extends Backbone.Router
 
     "project/:project_id/measure/view"                                        : "measureView"
     "project/:project_id/measure/view/segment/:segment_id"                    : "measureViewSelectedSegment"
+    "project/:project_id/measure/view/count_session/:count_session_id"        : "measureViewSelectedCountSession"
     
     "project/:project_id/opportunity"             : "opportunity"
     # "project/:project_id/opportunity/:segment_id" : "opportunitySelectedSegment"
@@ -162,12 +163,17 @@ class App.Routers.Master extends Backbone.Router
       # fetch project data
       if masterRouter.geo_points.length == 0 or 
          masterRouter.geo_point_on_segments.length == 0 or
-         masterRouter.segments.length == 0
+         masterRouter.segments.length == 0 or
+         masterRouter.count_sessions.length == 0 or
+         masterRouter.count_plans.length == 0
         masterRouter.geo_points.fetch
           success: ->
             masterRouter.geo_point_on_segments.fetch
               success: -> 
-                masterRouter.segments.fetch()
+                masterRouter.segments.fetch
+                  success: ->
+                    masterRouter.count_sessions.fetch()
+                    masterRouter.count_plans.fetch()
         masterRouter.model_jobs.fetch()
 
       # topBar
@@ -350,20 +356,15 @@ class App.Routers.Master extends Backbone.Router
       masterRouter.segments.selectNone()
 
   measure: (projectId) ->
-    if @reset(projectId)
-      # load count sessions
-      if masterRouter.count_sessions.length == 0
-        masterRouter.count_sessions.fetch()
-
-      # redirect to the most recently used sub tab,
-      # or just redirect to view sub tab, as that one
-      # is available to all users
-      if @mostRecentMeasureSubTab == "plan"
-        masterRouter.navigate "#project/#{@projects.getCurrentProjectId()}/measure/plan", true
-      else if @mostRecentMeasureSubTab == "count"
-        masterRouter.navigate "#project/#{@projects.getCurrentProjectId()}/measure/count", true
-      else
-        masterRouter.navigate "#project/#{@projects.getCurrentProjectId()}/measure/view", true
+    # redirect to the most recently used sub tab,
+    # or just redirect to view sub tab, as that one
+    # is available to all users
+    if @mostRecentMeasureSubTab == "plan"
+      masterRouter.navigate "#project/#{@projects.getCurrentProjectId()}/measure/plan", true
+    else if @mostRecentMeasureSubTab == "count"
+      masterRouter.navigate "#project/#{@projects.getCurrentProjectId()}/measure/count", true
+    else
+      masterRouter.navigate "#project/#{@projects.getCurrentProjectId()}/measure/view", true
 
   measurePlan: (projectId) ->
     if @reset(projectId, true, 250)
@@ -438,9 +439,19 @@ class App.Routers.Master extends Backbone.Router
       @map.resetMap false, true
       @geo_points.selectNone()
       @segments.selectNone()
+      if !@countSessionTable
+        @countSessionTable = new App.Views.CountSessionTable
+          count_sessions: masterRouter.count_sessions
+      else
+        @countSessionTable.render()
 
   measureViewSelectedSegment: (projectId) ->
-    # TODO
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measureViewSelectedSegment'
+
+  measureViewSelectedCountSession: (projectId) ->
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measureViewSelectedCountSession'
   
   # measurePredictions: (projectId) ->
   #   @reset(projectId, 580)
@@ -454,21 +465,6 @@ class App.Routers.Master extends Backbone.Router
   #   @map.resetMap false, true  
   #   @geo_points.selectNone()
   #   @segments.selectNone()
-  
-  # measureSelectedSegment: (projectId, segmentId) ->
-  #   @reset(projectId, 250)
-  #   @routeNameKeeper 'measureSelectedSegment'
-  #   @measureTab = new App.Views.MeasureTab
-  #     topBar: masterRouter.topBar
-  #     projectId: projectId
-  #     projects: masterRouter.projects
-  #     segmentId: segmentId
-  #     mode: "selectedSegment"
-  #   if !@countSessionTable
-  #     @countSessionTable = new App.Views.CountSessionTable
-  #       count_sessions: masterRouter.count_sessions
-  #   else
-  #     @countSessionTable.render()
       
   # measureNewCountSession: (projectId, segmentId) ->
   #   @reset(projectId, 250)
@@ -488,20 +484,6 @@ class App.Routers.Master extends Backbone.Router
   #   else
   #     @countSessionTable.render()
       
-  # measureSelectedCountSession: (projectId, countSessionId) ->
-  #   @reset(projectId, false, 250)
-  #   @routeNameKeeper 'measureSelectedCountSession'
-  #   @measureTab = new App.Views.MeasureTab
-  #     topBar: masterRouter.topBar
-  #     projectId: projectId
-  #     projects: masterRouter.projects
-  #     countSessionId: countSessionId
-  #     mode: "selectedCountSession"
-  #   if !@countSessionTable
-  #     @countSessionTable = new App.Views.CountSessionTable
-  #       count_sessions: masterRouter.count_sessions
-  #   else
-  #     @countSessionTable.render()
 
   # measureEnterCountSession: (projectId, countSessionId) ->
   #   @reset(projectId, true, 160)
@@ -514,23 +496,6 @@ class App.Routers.Master extends Backbone.Router
   #     projects: masterRouter.projects
   #     countSessionId: countSessionId
   #     mode: "enterCountSession"
-
-  # measureDeleteCountSession: (projectId, countSessionId) ->
-  #   @reset(projectId, true, 250)
-  #   @routeNameKeeper 'measureDeleteCountSession'
-  #   @measureTab = new App.Views.MeasureTab
-  #     topBar: masterRouter.topBar
-  #     projectId: projectId
-  #     projects: masterRouter.projects
-  #     countSessionId: countSessionId
-  #   deleteCountSessionModal = new App.Views.DeleteCountSessionModal
-  #       countSessionId: countSessionId
-  #   masterRouter.modals.push deleteCountSessionModal
-  #   if !@countSessionTable
-  #     @countSessionTable = new App.Views.CountSessionTable
-  #       count_sessions: masterRouter.count_sessions
-  #   else
-  #     @countSessionTable.render()
 
   opportunity: (projectId) ->
     if @reset(projectId, true, 580)

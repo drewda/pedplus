@@ -64,7 +64,7 @@ class App.Views.CountSessionTable extends Backbone.View
           # masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count_session/#{id}", true
         "fnRowDeselected": (node) =>
           masterRouter.count_sessions.selectNone()
-          masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure", true
+          masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view", true
           
   remove: ->
     $('#count-session-table-wrapper').remove()

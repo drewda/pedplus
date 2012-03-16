@@ -88,42 +88,42 @@
     //     text-align: right;
     //   }
     // }
-    // #count-session-table-wrapper {
-    //   table {
-    //     width: 100%;
-    //     margin: 0;
-    //     clear: both;
-    //     th {
-    //       text-align: left;
-    //     }
-		  //   tr.selected td {
-    //       background-color: #55ee33;
-    //     }
-    //   }
-    //   #table-footer {
-    //     clear: both;
-    //     margin: 0;
-    //     #info {
-    //       float: left;
-    //       padding-top: 8px;
-    //       width: 250px;
-    //       .dataTables_info {
-    //         /* should look like h6 */
-    //         font-size: 13px;
-    //         font-weight: bold;
-    //         color: #bfbfbf;
-    //         text-transform: uppercase;
-    //       }
-    //     }
-    //     #pagination {
-    //       float: right;
-    //       margin: 0;
-    //       .pagination {
-    //         margin: 0;
-    //       }
-    //     }
-    //   }
-    // }
+    #count-session-table-wrapper {
+      table {
+        width: 100%;
+        margin: 0;
+        clear: both;
+        th {
+          text-align: left;
+        }
+		    tr.selected td {
+          background-color: #55ee33;
+        }
+      }
+      #table-footer {
+        clear: both;
+        margin: 0;
+        #info {
+          float: left;
+          padding-top: 8px;
+          width: 250px;
+          .dataTables_info {
+            /* should look like h6 */
+            font-size: 13px;
+            font-weight: bold;
+            color: #bfbfbf;
+            text-transform: uppercase;
+          }
+        }
+        #pagination {
+          float: right;
+          margin: 0;
+          .pagination {
+            margin: 0;
+          }
+        }
+      }
+    }
     // #count-session-entry {
     //   clear: both;
     //   #timer {

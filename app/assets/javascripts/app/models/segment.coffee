@@ -44,7 +44,7 @@ class App.Models.Segment extends Backbone.Model
         else
           return
       else
-        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure/segment/#{@cid}", true)
+        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view/segment/#{@cid}", true)
         @doSelect()
   doSelect: (allowMultiple) ->
     unless allowMultiple
@@ -64,9 +64,8 @@ class App.Models.Segment extends Backbone.Model
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map", true)
         @doDeselect()
     else if masterRouter.currentRouteName.startsWith "measure"
-      if masterRouter.currentRouteName == "measure" or
-         masterRouter.currentRouteName.startsWith "measureSelectedSegment" or
-         masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
+      if masterRouter.currentRouteName.startsWith "measureViewSelectedSegment" or
+         masterRouter.currentRouteName.startsWith "measureViewSelectedCountSession"
         # note that we do not want to allow selected when at the "measureEnterCountSession" route
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure", true)
         @doDeselect()
@@ -82,6 +81,10 @@ class App.Models.Segment extends Backbone.Model
       silent: !alreadySelected
     if alreadySelected
       $("#segment-line-#{@cid}").svg().removeClass('selected').attr "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
+
+    if masterRouter.currentRouteName.startsWith "measureViewSelectedSegment" or
+       masterRouter.currentRouteName.startsWith "measureViewSelectedCountSession"
+      $("#segment-line-#{@cid}").svg().addClass "blue" + @get('measuredClass')
   toggle: ->
     if @get 'selected'
       @deselect()
