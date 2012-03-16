@@ -11,7 +11,7 @@
       = f.error_messages :class => "alert alert-error", :header_tag => :strong
     = f.association :organization, :as => :select
     = f.input :name
-    = f.input :kind, :as => :select, :collection => Project.kind_choices
+    = f.input :kind, :as => :select, :collection => @project.organization.software_packages
 
     h2 Users
     table.table.table-striped

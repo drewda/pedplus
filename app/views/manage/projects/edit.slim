@@ -12,7 +12,7 @@
     = f.association :organization, :as => :select
     = f.input :name
     / we only want to show pedcount for now
-    = f.input :kind, :as => :select, :collection => Project.kind_choices.delete_if { |k| k[1] == 'pedplus' }
+    = f.input :kind, :as => :select, :collection => @project.organization.software_packages
 
     h2 Users
     table.table.table-striped

@@ -6,7 +6,7 @@
       = f.error_messages :class => "alert alert-error", :header_tag => :strong
     = f.input :name
     / we only want to show pedcount for now
-    = f.input :kind, :as => :select, :collection => Project.kind_choices.delete_if { |k| k[1] == 'pedplus' }
+    = f.input :kind, :as => :select, :collection => current_user.organization.software_packages
           
     .form-actions
       = f.submit "Create Project", {:class => "btn btn-primary"}

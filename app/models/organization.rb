@@ -30,6 +30,14 @@ class Organization < ActiveRecord::Base
   	end
   end
 
+  def software_packages
+    if self.owns_pedplus
+      return Project.kind_choices
+    else
+      return Project.kind_choices.delete_if { |k| k[1] == 'pedplus' }
+    end
+  end
+
   def user_credits_available
     return self.max_number_of_users - self.users.length
   end
