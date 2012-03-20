@@ -1,0 +1,19 @@
+<div id="measure-tab">
+
+  <ul id="measure-sub-tabs" class="nav nav-tabs">
+    <% if (project.get('permissions_for_current_user').plan == true) { %>
+    <li id="plan-sub-tab">
+    	<a href="#project/<%= project.id %>/measure/plan">Plan</a>
+    </li>
+    <% } if (project.get('permissions_for_current_user').count == true) { %>
+    <li id="count-sub-tab" class="active">
+    	<a href="#project/<%= project.id %>/measure/count">Count</a>
+    </li>
+    <% } %>
+    <li id="view-sub-tab">
+    	<a href="#project/<%= project.id %>/measure/view">View</a>
+    </li>
+  </ul>
+
+  <h1>Count</h1>
+</div>

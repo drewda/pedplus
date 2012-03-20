@@ -24,11 +24,6 @@
   p
     ' Has manager permission for organization?
     == @user.organization_manager ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
-      
-  h2 Resources
-  p
-    ' Counting day credits: 
-    strong = @user.counting_day_credits
 
   table.table.table-striped
     thead

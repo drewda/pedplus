@@ -15,6 +15,7 @@
 //= require bootstrap-button
 //= require bootstrap-transition
 //= require bootstrap-tooltip
+//= require bootstrap-popover
 //= require bootbox
 //= require xdate
 //= require jquery-datatables

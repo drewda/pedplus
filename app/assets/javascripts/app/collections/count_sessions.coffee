@@ -11,18 +11,17 @@ class App.Collections.CountSessions extends Backbone.Collection
   selectNone: ->
     @each (cs) -> cs.deselect()
   arrayForDataTables: ->
-    # columns: start, duration (minutes), total count
     array = []
     @each (cs) =>
-      # only include the CountSession's that are finished
+      # only include the CountSession's that are completed
       # otherwise this will refresh after NewCountSessionModal completes 
       # and creates a new CountSession that is in progress and incomplete
-      if cs.get('stop')
+      if cs.get('status') == 'completed'
         array.push [
           cs.id
           cs.get('segment_id')
           cs.get('start')
-          cs.get('duration')
+          cs.get('duration_seconds')
           cs.get('user_id')
           cs.get('counts_count')
           if !cs.get('selected') then false else cs.get('selected')

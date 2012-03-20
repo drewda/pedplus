@@ -11,40 +11,21 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120306211536) do
-
-  create_table "count_plan_segments", :force => true do |t|
-    t.integer "count_plan_id"
-    t.integer "segment_id"
-  end
-
-  add_index "count_plan_segments", ["count_plan_id"], :name => "index_count_plan_segments_on_count_plan_id"
-  add_index "count_plan_segments", ["segment_id"], :name => "index_count_plan_segments_on_segment_id"
-
-  create_table "count_plan_users", :force => true do |t|
-    t.integer "count_plan_id"
-    t.integer "user_id"
-  end
-
-  add_index "count_plan_users", ["count_plan_id"], :name => "index_count_plan_users_on_count_plan_id"
-  add_index "count_plan_users", ["user_id"], :name => "index_count_plan_users_on_user_id"
+ActiveRecord::Schema.define(:version => 20120320211539) do
 
   create_table "count_plans", :force => true do |t|
     t.integer  "project_id"
     t.date     "start_date"
-    t.integer  "weeks"
-    t.integer  "intervening_weeks"
-    t.string   "days"
-    t.string   "hours"
-    t.datetime "created_at",          :null => false
-    t.datetime "updated_at",          :null => false
+    t.datetime "created_at",                     :null => false
+    t.datetime "updated_at",                     :null => false
     t.boolean  "is_the_current_plan"
+    t.integer  "count_session_duration_seconds"
+    t.integer  "total_weeks"
   end
 
   add_index "count_plans", ["project_id"], :name => "index_count_plans_on_project_id"
 
   create_table "count_sessions", :force => true do |t|
-    t.integer  "segment_id"
     t.datetime "start"
     t.datetime "stop"
     t.string   "status"
@@ -54,11 +35,11 @@ ActiveRecord::Schema.define(:version => 20120306211536) do
     t.integer  "user_id"
     t.integer  "counts_count",  :default => 0
     t.integer  "count_plan_id"
+    t.integer  "gate_id"
   end
 
   add_index "count_sessions", ["count_plan_id"], :name => "index_count_sessions_on_count_plan_id"
   add_index "count_sessions", ["project_id"], :name => "index_count_sessions_on_project_id"
-  add_index "count_sessions", ["segment_id"], :name => "index_count_sessions_on_segment_id"
   add_index "count_sessions", ["user_id"], :name => "index_count_sessions_on_user_id"
 
   create_table "counts", :force => true do |t|
@@ -70,12 +51,35 @@ ActiveRecord::Schema.define(:version => 20120306211536) do
 
   add_index "counts", ["count_session_id"], :name => "index_counts_on_count_session_id"
 
-  create_table "data_sources", :force => true do |t|
-    t.string   "name"
-    t.string   "kind"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+  create_table "gate_groups", :force => true do |t|
+    t.integer  "count_plan_id"
+    t.integer  "user_id"
+    t.string   "label"
+    t.datetime "created_at",    :null => false
+    t.datetime "updated_at",    :null => false
+    t.string   "color"
+    t.integer  "weeks"
+    t.string   "days"
+    t.string   "hours"
+    t.string   "status"
   end
+
+  add_index "gate_groups", ["count_plan_id"], :name => "index_gate_groups_on_counting_plan_id"
+  add_index "gate_groups", ["user_id"], :name => "index_gate_groups_on_user_id"
+
+  create_table "gates", :force => true do |t|
+    t.integer  "segment_id"
+    t.integer  "gate_group_id"
+    t.integer  "count_plan_id"
+    t.integer  "counting_days_remaining"
+    t.string   "label"
+    t.datetime "created_at",              :null => false
+    t.datetime "updated_at",              :null => false
+  end
+
+  add_index "gates", ["count_plan_id"], :name => "index_gates_on_counting_plan_id"
+  add_index "gates", ["gate_group_id"], :name => "index_gates_on_gate_group_id"
+  add_index "gates", ["segment_id"], :name => "index_gates_on_segment_id"
 
   create_table "geo_point_in_scenarios", :force => true do |t|
     t.integer  "scenario_id"
@@ -99,16 +103,14 @@ ActiveRecord::Schema.define(:version => 20120306211536) do
   add_index "geo_point_on_segments", ["segment_id"], :name => "index_geo_point_on_segments_on_segment_id"
 
   create_table "geo_points", :force => true do |t|
-    t.decimal  "latitude",       :precision => 15, :scale => 10
-    t.decimal  "longitude",      :precision => 15, :scale => 10
-    t.decimal  "accuracy",       :precision => 5,  :scale => 2
-    t.integer  "data_source_id"
+    t.decimal  "latitude",   :precision => 15, :scale => 10
+    t.decimal  "longitude",  :precision => 15, :scale => 10
+    t.decimal  "accuracy",   :precision => 5,  :scale => 2
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "project_id"
   end
 
-  add_index "geo_points", ["data_source_id"], :name => "index_geo_points_on_data_source_id"
   add_index "geo_points", ["project_id"], :name => "index_geo_points_on_project_id"
 
   create_table "model_jobs", :force => true do |t|
@@ -138,15 +140,16 @@ ActiveRecord::Schema.define(:version => 20120306211536) do
     t.string   "postal_code"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "owns_pedcount",                                        :default => true
-    t.boolean  "owns_pedplus",                                         :default => false
-    t.integer  "max_number_of_users",                                  :default => 1
-    t.integer  "max_number_of_projects",                               :default => 1
-    t.string   "time_zone",                                            :default => "Pacific Time (US & Canada)"
+    t.boolean  "owns_pedcount",                           :default => true
+    t.boolean  "owns_pedplus",                            :default => false
+    t.integer  "max_number_of_users",                     :default => 1
+    t.integer  "max_number_of_projects",                  :default => 1
+    t.string   "time_zone",                               :default => "Pacific Time (US & Canada)"
     t.string   "kind"
-    t.integer  "default_max_number_of_counting_locations_per_project"
-    t.integer  "default_number_of_counting_day_credits_per_user"
+    t.integer  "default_max_number_of_gates_per_project"
     t.date     "subscription_active_until"
+    t.integer  "default_counting_days_per_gate"
+    t.integer  "extra_counting_day_credits_available",    :default => 0
   end
 
   create_table "project_members", :force => true do |t|
@@ -170,12 +173,12 @@ ActiveRecord::Schema.define(:version => 20120306211536) do
     t.string   "kind"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "southwest_latitude",               :precision => 15, :scale => 10
-    t.decimal  "southwest_longitude",              :precision => 15, :scale => 10
-    t.decimal  "northeast_latitude",               :precision => 15, :scale => 10
-    t.decimal  "northeast_longitude",              :precision => 15, :scale => 10
+    t.decimal  "southwest_latitude",  :precision => 15, :scale => 10
+    t.decimal  "southwest_longitude", :precision => 15, :scale => 10
+    t.decimal  "northeast_latitude",  :precision => 15, :scale => 10
+    t.decimal  "northeast_longitude", :precision => 15, :scale => 10
     t.integer  "version"
-    t.integer  "max_number_of_counting_locations"
+    t.integer  "max_number_of_gates"
   end
 
   add_index "projects", ["organization_id"], :name => "index_projects_on_organization_id"
@@ -238,7 +241,6 @@ ActiveRecord::Schema.define(:version => 20120306211536) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "s3sol_admin"
-    t.integer  "counting_day_credits"
   end
 
   add_index "users", ["invitation_token"], :name => "index_users_on_invitation_token"

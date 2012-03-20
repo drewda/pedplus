@@ -22,11 +22,12 @@
     = f.input :kind, :as => :select, :collection => Organization.kind_choices
     = f.input :owns_pedcount, :label => "Owns PedCount"
     = f.input :owns_pedplus, :label => "Owns PedPlus"
+    = f.input :subscription_active_until
     = f.input :max_number_of_users
     = f.input :max_number_of_projects
-    = f.input :default_max_number_of_counting_locations_per_project
-    = f.input :default_number_of_counting_day_credits_per_user
-    = f.input :subscription_active_until
+    = f.input :default_max_number_of_gates_per_project
+    = f.input :default_counting_days_per_gate
+    = f.input :extra_counting_day_credits_available
 
     h2 Users
     table.table.table-striped

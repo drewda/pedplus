@@ -3,7 +3,7 @@ class Api::CountSessionsController < Api::ApiController
     @count_sessions = CountSession.where(:project_id => params[:project_id])
     
     respond_to do |format|
-      format.json { render :json => @count_sessions.to_json(:methods => [:duration]) }
+      format.json { render :json => @count_sessions }
     end
   end
   
@@ -11,7 +11,7 @@ class Api::CountSessionsController < Api::ApiController
     @count_session = CountSession.where(:id => params[:id], :project_id => params[:project_id])
     
     respond_to do |format|
-      format.json { render :json => @count_session.to_json(:methods => [:duration]) }
+      format.json { render :json => @count_session }
     end
   end
   

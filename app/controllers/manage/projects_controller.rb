@@ -34,7 +34,7 @@ class Manage::ProjectsController < Manage::ManageController
   def create
     @project = Project.new(params[:project])
     @project.organization = current_user.organization
-    @project.max_number_of_counting_locations = current_user.organization.default_max_number_of_counting_locations_per_project
+    @project.max_number_of_gates = current_user.organization.default_max_number_of_gates_per_project
 
     respond_to do |format|
       if @project.save

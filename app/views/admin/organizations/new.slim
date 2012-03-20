@@ -19,9 +19,10 @@
     = f.input :owns_pedplus, :label => "Owns PedPlus"
     = f.input :max_number_of_users
     = f.input :max_number_of_projects
-    = f.input :default_max_number_of_counting_locations_per_project
-    = f.input :default_number_of_counting_day_credits_per_user
+    = f.input :default_max_number_of_gates_per_project
+    = f.input :default_counting_days_per_gate
     = f.input :subscription_active_until
+    = f.input :extra_counting_day_credits_available
 
     .form-actions
       = f.button :submit, "Create Organization", {:class => "btn-primary"}

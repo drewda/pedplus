@@ -1,0 +1,59 @@
+<div id="measure-tab">
+  <ul id="measure-sub-tabs" class="nav nav-tabs">
+    <% if (project.get('permissions_for_current_user').plan == true) { %>
+    <li id="plan-sub-tab" class="active">
+      <a href="#project/<%= project.id %>/measure/plan">Plan</a>
+    </li>
+    <% } if (project.get('permissions_for_current_user').count == true) { %>
+    <li id="count-sub-tab">
+      <a href="#project/<%= project.id %>/measure/count">Count</a>
+    </li>
+    <% } %>
+    <li id="view-sub-tab">
+      <a href="#project/<%= project.id %>/measure/view">View</a>
+    </li>
+  </ul>
+
+  <div id="measure-plan-buttons">
+    <div id="measure-plan-pagination" class="pagination">
+      <% if (countPlan) { %>
+      <ul>
+        <% for (i = 1; i <= countPlan.get('total_weeks'); i++) { %>
+        <li><a>Week <%= i %></a></li>
+        <% } %>
+      </ul>
+      <% } %>
+    </div>
+    <% if (countPlan) { %>
+    <h6><a id="manage-count-plans-button" class="btn btn-primary"><i class="icon-calendar icon-white"></i> Manage Count Plans</a></h6>
+    <% } else { %>
+    <h6><a id="count-planning-assistant-button" class="btn btn-primary"><i class="icon-calendar icon-white"></i> Create a New Count Plan</a></h6>
+    <% } %>
+  </div>
+
+  <table id="measure-plan-table" class="table table-bordered table-condensed">
+    <thead>
+      <th id="measure-plan-monday-header">
+        <h4>Monday</h4>
+      </div>
+      <th id="measure-plan-tuesday-header">
+        <h4>Tuesday</h4>
+      </div>
+      <th id="measure-plan-wednesday-header">
+        <h4>Wednesday</h4>
+      </div>
+      <th id="measure-plan-thursday-header">
+        <h4>Thursday</h4>
+      </div>
+      <th id="measure-plan-friday-header">
+        <h4>Friday</h4>
+      </div>
+      <th id="measure-plan-saturday-header">
+        <h4>Saturday</h4>
+      </div>
+      <th id="measure-plan-sunday-header">
+        <h4>Sunday</h4>
+      </div>
+    </thead>
+  </table>
+</div>

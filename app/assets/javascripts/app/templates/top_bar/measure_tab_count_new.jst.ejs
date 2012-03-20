@@ -1,0 +1,23 @@
+<div id="measure-tab">
+  
+  <div class="row">
+    <table class="table table-striped">
+      <tr>
+        <td>Start Time</td>
+        <td><strong><%= new XDate %></strong></td>
+      </tr>
+      <tr>
+        <td>User</td>
+        <td><strong><%= masterRouter.users.getCurrentUser().get('first_name') + " " + masterRouter.users.getCurrentUser().get('last_name')%></strong></td>
+      </tr>
+      <tr>
+        <td>Duration</td>
+        <td><strong>5 minutes</strong></td>
+      </tr>
+    </table>
+  </div>
+  <div class="row">
+    <h6><a id="start-count-session-now-button" class="btn btn-primary">Start Now</a></h6>
+    <h6><a href="#project/<%= projectId %>/measure/segment/<%= segmentId %>" class="btn secondary">Cancel</a></h6>
+  </div>
+</div>

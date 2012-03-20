@@ -33,7 +33,6 @@ class Manage::UsersController < Manage::ManageController
   def create
     @user = User.new(params[:user])
     @user.organization = current_user.organization
-    @user.counting_day_credits = current_user.organization.default_number_of_counting_day_credits_per_user
 
     respond_to do |format|
       if @user.save

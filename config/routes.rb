@@ -18,8 +18,12 @@ Pedplus::Application.routes.draw do
                 :geo_point_on_segments,
                 :scenarios,
                 :segment_in_scenarios,
-                :model_jobs,
-                :count_plans
+                :model_jobs
+      resources :count_plans do
+        resources :gate_groups
+        resources :gates
+        resources :gate_group_schedules, :only => [:index]
+      end
       resources :count_sessions do
         resources :counts
       end

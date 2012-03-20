@@ -22,9 +22,11 @@ class App.Routers.Master extends Backbone.Router
     @segments = new App.Collections.Segments
     @geo_points = new App.Collections.GeoPoints
     @geo_point_on_segments = new App.Collections.GeoPointOnSegments
-    # will be fetch'ed in measure()
-    @count_plans = new App.Collections.CountPlans
     @count_sessions = new App.Collections.CountSessions
+    @count_plans = new App.Collections.CountPlans
+    # will be fetch'ed for only one CountPlan
+    @gate_groups = new App.Collections.GateGroups
+    @gates = new App.Collections.Gates
     
     # will be populated by the client-side
     @map_edits = new App.Collections.MapEdits
@@ -174,6 +176,8 @@ class App.Routers.Master extends Backbone.Router
                   success: ->
                     masterRouter.count_sessions.fetch()
                     masterRouter.count_plans.fetch()
+                    # if there is a current CountPlan, that will trigger
+                    # the fetching of gates and gate_counts
         masterRouter.model_jobs.fetch()
 
       # topBar
@@ -370,25 +374,23 @@ class App.Routers.Master extends Backbone.Router
     if @reset(projectId, true, 250)
       @routeNameKeeper 'measurePlan'
       @mostRecentMeasureSubTab = "plan"
-      @measureTab = new App.Views.MeasureTab
+      @measureTab = new App.Views.MeasureTabPlan
         topBar: masterRouter.topBar
         projectId: projectId
         projects: masterRouter.projects
-        mode: "measurePlan"
       @map.setOsmLayer "gray"
       @map.resetMap false, true
       @geo_points.selectNone()
       @segments.selectNone()
 
   measurePlanAssistant: (projectId) ->
-    if @reset(projectId, false, 285)
+    if @reset(projectId, true, 285)
       @routeNameKeeper 'measurePlanAssistant'
-      @measureTab = new App.Views.MeasureTab
+      @measureTab = new App.Views.MeasureTabPlanAssistant
         topBar: masterRouter.topBar
         users: masterRouter.users
         projectId: projectId
         projects: masterRouter.projects
-        mode: "measurePlanAssistant"
       @map.setOsmLayer "gray"
       @map.resetMap false, true
       @geo_points.selectNone()
@@ -407,21 +409,32 @@ class App.Routers.Master extends Backbone.Router
     if @reset(projectId, true, 250)
       @routeNameKeeper 'measureCount'
       @mostRecentMeasureSubTab = "count"
-      @measureTab = new App.Views.MeasureTab
+      @measureTab = new App.Views.MeasureTabCount
         topBar: masterRouter.topBar
         projectId: projectId
         projects: masterRouter.projects
-        mode: "measureCount"
       @map.setOsmLayer "gray"
       @map.resetMap false, true
       @geo_points.selectNone()
       @segments.selectNone()
 
-  measureCountNewCountSession: (projectId) ->
-    # TODO
+  # TODO: REMOVE
+  # measureCountNewCountSession: (projectId) ->
+  #   if @reset(projectId, true, 250)
+  #     @routeNameKeeper 'measureNewCountSession'
+  #     @measureTab = new App.Views.MeasureTabCountNew
+  #       topBar: masterRouter.topBar
+  #       projectId: projectId
+  #       projects: masterRouter.projects
 
-  measureCountEnterCountSession: (projectId) ->
-    # TODO
+  measureCountEnterCountSession: (projectId, countSessionId) ->
+    if @reset(projectId, true, 160)
+      @routeNameKeeper 'measureEnterCountSession'
+      @measureTab = new App.Views.MeasureTab
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        countSessionId: countSessionId
 
   measureCountSelectedCountSession: (projectId, countSessionId) ->
     # TODO
@@ -430,11 +443,10 @@ class App.Routers.Master extends Backbone.Router
     if @reset(projectId, true, 250)
       @routeNameKeeper 'measureView'
       @mostRecentMeasureSubTab = "view"
-      @measureTab = new App.Views.MeasureTab
+      @measureTab = new App.Views.MeasureTabView
         topBar: masterRouter.topBar
         projectId: projectId
         projects: masterRouter.projects
-        mode: "measureView"
       @map.setOsmLayer "gray"
       @map.resetMap false, true
       @geo_points.selectNone()
@@ -448,54 +460,12 @@ class App.Routers.Master extends Backbone.Router
   measureViewSelectedSegment: (projectId) ->
     if @reset(projectId, true, 250)
       @routeNameKeeper 'measureViewSelectedSegment'
+      # TODO
 
   measureViewSelectedCountSession: (projectId) ->
     if @reset(projectId, true, 250)
       @routeNameKeeper 'measureViewSelectedCountSession'
-  
-  # measurePredictions: (projectId) ->
-  #   @reset(projectId, 580)
-  #   @routeNameKeeper 'measurePredictions'
-  #   @measureTab = new App.Views.MeasureTab
-  #     topBar: masterRouter.topBar
-  #     projectId: projectId
-  #     projects: masterRouter.projects
-  #     mode: "predictions"
-  #   @map.setOsmLayer "gray"
-  #   @map.resetMap false, true  
-  #   @geo_points.selectNone()
-  #   @segments.selectNone()
-      
-  # measureNewCountSession: (projectId, segmentId) ->
-  #   @reset(projectId, 250)
-  #   @routeNameKeeper 'measureNewCountSession'
-  #   @measureTab = new App.Views.MeasureTab
-  #     topBar: masterRouter.topBar
-  #     projectId: projectId
-  #     projects: masterRouter.projects
-  #     segmentId: segmentId
-  #   newCountSessionModal = new App.Views.NewCountSessionModal
-  #     projectId: projectId
-  #     segmentId: segmentId
-  #   masterRouter.modals.push newCountSessionModal
-  #   if !@countSessionTable
-  #     @countSessionTable = new App.Views.CountSessionTable
-  #       count_sessions: masterRouter.count_sessions
-  #   else
-  #     @countSessionTable.render()
-      
-
-  # measureEnterCountSession: (projectId, countSessionId) ->
-  #   @reset(projectId, true, 160)
-  #   @routeNameKeeper 'measureEnterCountSession'
-  #   if @countSessionTable
-  #     @countSessionTable.remove()
-  #   @measureTab = new App.Views.MeasureTab
-  #     topBar: masterRouter.topBar
-  #     projectId: projectId
-  #     projects: masterRouter.projects
-  #     countSessionId: countSessionId
-  #     mode: "enterCountSession"
+      # TODO
 
   opportunity: (projectId) ->
     if @reset(projectId, true, 580)

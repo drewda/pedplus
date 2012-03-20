@@ -29,20 +29,23 @@
     ' Owns PedPlus?
     == @organization.owns_pedplus ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
     br
+    ' Subscription active until: 
+    strong = @organization.subscription_active_until.strftime "%d %B %Y"
+    br
     ' Max number of users: 
     strong = @organization.max_number_of_users
     br
     ' Max number of projects: 
     strong = @organization.max_number_of_projects
     br
-    ' Default max number of counting locations per project: 
-    strong = @organization.default_max_number_of_counting_locations_per_project
+    ' Default max number of gates per project: 
+    strong = @organization.default_max_number_of_gates_per_project
     br
-    ' Default number of counting day credits per user: 
-    strong = @organization.default_number_of_counting_day_credits_per_user
+    ' Default number of counting days per gate:
+    strong = @organization.default_counting_days_per_gate
     br
-    ' Subscription active until: 
-    strong = @organization.subscription_active_until.strftime "%d %B %Y"
+    ' Extra counting day credits available:
+    strong = @organization.extra_counting_day_credits_available
 
 
   h2 Users

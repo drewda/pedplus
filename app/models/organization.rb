@@ -18,8 +18,8 @@ class Organization < ActiveRecord::Base
   validates :time_zone, :presence => true
   validates :max_number_of_users, :presence => true
   validates :max_number_of_projects, :presence => true
-  validates :default_max_number_of_counting_locations_per_project, :presence => true
-  validates :default_number_of_counting_day_credits_per_user, :presence => true
+  validates :default_counting_days_per_gate, :presence => true
+  validates :default_max_number_of_gates_per_project, :presence => true
   validates :subscription_active_until, :presence => true
 
   def software_package

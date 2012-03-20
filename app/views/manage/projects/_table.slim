@@ -10,11 +10,9 @@ table.table.table-striped
       th Name
       th Kind
       th Members(s)
-      th Max number of counting locations
   tbody
     - @projects.each do |p|
       tr
         td = link_to p.name, manage_project_path(p.id)
         td = p.kind_display
         td = p.project_members.where(:view => true).collect{|m| m.user.full_name}.to_sentence
-        td = p.max_number_of_counting_locations

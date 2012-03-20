@@ -1,54 +1,4 @@
 <div id="measure-tab">
-  <ul id="measure-sub-tabs" class="nav nav-tabs">
-    <% if (project.get('permissions_for_current_user').plan == true) { %>
-    <li id="plan-sub-tab"><a href="#project/<%= project.id %>/measure/plan">Plan</a></li>
-    <% } if (project.get('permissions_for_current_user').count == true) { %>
-    <li id="count-sub-tab"><a href="#project/<%= project.id %>/measure/count">Count</a></li>
-    <% } %>
-    <li id="view-sub-tab"><a href="#project/<%= project.id %>/measure/view">View</a></li>
-  </ul>
-
-  <% if (mode == "measurePlan") { %>
-  <div id="measure-plan-buttons">
-    <div id="measure-plan-pagination" class="pagination">
-      <% if (countPlan) { %>
-      <ul>
-        <% for (i = 1; i <= countPlan.get('weeks'); i++) { %>
-        <li><a href="#">Week <%= i %></a></li>
-        <% } %>
-      </ul>
-      <% } %>
-    </div>
-    <h6><a id="count-planning-assistant-button" class="btn btn-primary"><i class="icon-calendar icon-white"></i> Count Planning Assistant</a></h6>
-  </div>
-
-  <table id="measure-plan-table" class="table table-bordered table-condensed">
-    <thead>
-      <th id="measure-plan-monday-header">
-        <h4>Monday</h4>
-      </div>
-      <th id="measure-plan-tuesday-header">
-        <h4>Tuesday</h4>
-      </div>
-      <th id="measure-plan-wednesday-header">
-        <h4>Wednesday</h4>
-      </div>
-      <th id="measure-plan-thursday-header">
-        <h4>Thursday</h4>
-      </div>
-      <th id="measure-plan-friday-header">
-        <h4>Friday</h4>
-      </div>
-      <th id="measure-plan-saturday-header">
-        <h4>Saturday</h4>
-      </div>
-      <th id="measure-plan-sunday-header">
-        <h4>Sunday</h4>
-      </div>
-    </thead>
-  </table>
-
-  <% } else if (mode == "measurePlanAssistant") { %>
   <div id="measure-plan-assistant">
     <div id="measure-plan-assistant-top-row" class="row-fluid">
       <div class="span3"><h3>Count Planning Assistant</h3></div>
@@ -73,6 +23,7 @@
       </div>
       <div class="span10 form-horizontal">
         <div class="row-fluid">
+          <!--
           <div class="span3 control-group">
             <label class="control-label">Locations</label>
             <div class="controls">
@@ -80,20 +31,28 @@
               <div class="help-block">At how many segments do you want to count?</div>
             </div>
           </div>
-          <div class="span6 control-group">
+          -->
+          <div class="span5 control-group">
             <label class="control-label">Start</label>
             <div class="controls">
               <select id="start-date-year-input" class="span1"></select>
               <select id="start-date-month-input" class="span2"></select>
               <select id="start-date-day-input" class="span1"></select>
-              <div class="help-block">Select the Monday that begins the first week of counting.</div>
+              <div class="help-block">Select the Monday starting the first counting week.</div>
             </div>
           </div>
           <div class="span3 control-group">
             <label class="control-label">Weeks</label>
             <div class="controls">
               <input id="weeks-input" class="span1" type="number" min="1" max="52" pattern="[0-9]*" />
-              <div class="help-block">For how many weeks will counts be taken?</div>
+              <div class="help-block">During how many weeks will counts be taken?</div>
+            </div>
+          </div>
+          <div class="span4 control-group">
+            <label class="control-label">Break Weeks</label>
+            <div class="controls">
+              <input id="intervening-weeks-input" class="span1" type="number" min="0" max="8" pattern="[0-9]*" />
+              <div class="help-block">How many break weeks will separate counting weeks?</div>
             </div>
           </div>
         </div>
@@ -144,13 +103,4 @@
       </div>
     </div>
   </div>
-
-  <% } else if (mode == "measureCount") { %>
-  <h1>Count</h1>
-  <% } else if (mode == "measureView") { %>
-    <div id="count-session-table-wrapper">
-    <!-- table will be populated by App.Views.CountSessionTable using the jQuery DataTables plugin -->
-      <table id="count-session-table" class="table table-striped table-condensed"></table>
-    </div>
-  <% } %>
 </div>

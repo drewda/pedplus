@@ -3,5 +3,6 @@ class App.Collections.CountPlans extends Backbone.Collection
   url: ->
     "/api/projects/#{masterRouter.projects.getCurrentProjectId()}/count_plans"
   getCurrentCountPlan: ->
-  	# TODO: select based on the is_the_current_plan boolean
-  	@last()
+    @detect (cp) => cp.get('is_the_current_plan')
+  getArchivedCountPlans: ->
+    @filter (cp) => !cp.get('is_the_current_plan')

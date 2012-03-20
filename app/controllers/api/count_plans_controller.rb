@@ -3,7 +3,7 @@ class Api::CountPlansController < Api::ApiController
     @count_plans = CountPlan.where(:project_id => params[:project_id])
     
     respond_to do |format|
-      format.json { render :json => @count_plans }
+      format.json { render :json => @count_plans.to_json(:methods => [:percent_completed]) }
     end
   end
   
@@ -33,6 +33,8 @@ class Api::CountPlansController < Api::ApiController
       if @count_plan.save
         countPlanUserIds.each { |userId| CountPlanUser.create :count_plan_id => @count_plan.id, :user_id => userId }
         segmentIds.each { |segmentId| CountPlanSegment.create :count_plan_id => @count_plan.id, :segment_id => segmentId }
+
+        # TODO: create the CountSessions
 
         format.json  { render :json => @count_plan, :status => :created, :location => api_project_count_plan_url(@count_plan.project, @count_plan) }
       else

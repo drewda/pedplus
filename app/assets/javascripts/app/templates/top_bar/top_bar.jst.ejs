@@ -1,3 +1,4 @@
+<% if (showTabPills) { %>
 <ul id="top-bar-tabs" class="nav nav-pills">
     <li id="project-pill"><a href="#project/<%= currentProject.id %>">Project</a></li>
     <% if (currentProject.get('permissions_for_current_user').map == true) { %>
@@ -33,4 +34,5 @@
     </li>
     <li id="help-pill"><a href="#project/<%= currentProject.id %>/help">Help</a></li>
 </ul>
+<% } %>
 <div id="tab-area"></div>
