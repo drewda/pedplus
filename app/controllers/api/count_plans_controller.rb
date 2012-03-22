@@ -3,7 +3,7 @@ class Api::CountPlansController < Api::ApiController
     @count_plans = CountPlan.where(:project_id => params[:project_id])
     
     respond_to do |format|
-      format.json { render :json => @count_plans.to_json(:methods => [:percent_completed]) }
+      format.json { render :json => @count_plans.to_json(:methods => [:percent_completed, :end_date]) }
     end
   end
   
@@ -11,7 +11,7 @@ class Api::CountPlansController < Api::ApiController
     @count_plan = CountPlan.where(:id => params[:id], :project_id => params[:project_id])
     
     respond_to do |format|
-      format.json { render :json => @count_plan }
+      format.json { render :json => @count_plan.to_json(:methods => [:percent_completed, :end_date]) }
     end
   end
   

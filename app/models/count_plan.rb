@@ -17,4 +17,8 @@ class CountPlan < ActiveRecord::Base
     numberCounted = self.count_sessions.where(:status => 'completed').count
     return numberCounted / totalNumber
   end
+
+  def end_date
+    return start_date + total_weeks.weeks + 6.days
+  end
 end

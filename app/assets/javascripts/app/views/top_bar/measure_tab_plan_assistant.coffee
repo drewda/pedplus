@@ -48,23 +48,7 @@ class App.Views.MeasureTabPlanAssistant extends Backbone.View
     $('#tab-area').empty().html @template @renderData
     
     ### START###
-    # set up start date input fields
-    # set the current year
-    year = XDate().getFullYear()
-    $('#start-date-year-input').append $("<option></option>").attr("value", year).text(year)
-    for monthNumber in [1..12]
-      fullMonthName = XDate.locales[''].monthNames[monthNumber - 1]
-      option = $("<option></option>").attr("value", monthNumber).text(fullMonthName)
-      option.prop("selected", true) if monthNumber == XDate().getMonth() + 1 # select the current month
-      $('#start-date-month-input').append option
-    @computeMondayDays()
-    # set the next Monday
-    mondays = $('#start-date-day-input').children().map ->
-      $(this).val()
-    for day in mondays.get()
-      if day >= XDate().getDate()
-        $('#start-date-day-input').val(day)
-        break
+
 
     # set default number of counting locations
     numberOfUsers = $('.user-checkbox:checked').length
@@ -123,30 +107,7 @@ class App.Views.MeasureTabPlanAssistant extends Backbone.View
     # continue on to count planning assistant
     masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/plan/assistant", true
 
-  computeMondayDays: ->
-    # clear the current day options
-    $('#start-date-day-input').empty()
 
-    # take the first day of the selected month, in the selected year
-    year = $('#start-date-year-input').val()
-    month = $('#start-date-month-input').val()
-    firstDayOfMonth = new XDate "#{year} #{month} 1"
-
-    # find first Monday
-    firstMonday = firstDayOfMonth.clone()
-    until firstMonday.getDay() == 1
-      firstMonday.addDays(1)
-
-    # find rest of Mondays
-    mondays = []
-    nextMonday = firstMonday.clone()
-    while nextMonday.getMonth() == firstMonday.getMonth()
-      mondays.push nextMonday.getDate()
-      nextMonday = nextMonday.addWeeks(1)
-
-    # render the options
-    _.each mondays, (day) ->
-      $('#start-date-day-input').append $("<option></option>").attr("value", day).text(day)
 
   recomputeCountPlan: ->
     numberOfCountLocations = $('#counting-locations-input').val()

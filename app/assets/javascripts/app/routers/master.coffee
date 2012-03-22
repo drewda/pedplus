@@ -98,22 +98,19 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/model"                         : "model"
     "project/:project_id/model/permeability/:model_job" : "modelPermeability"
 
-    "project/:project_id/measure"                                             : "measure"
+    "project/:project_id/measure"                                                     : "measure"
 
-    "project/:project_id/measure/plan"                                        : "measurePlan"
-    "project/:project_id/measure/plan/assistant"                              : "measurePlanAssistant"
-    "project/:project_id/measure/plan/segment_id/:segment_id"                 : "measurePlanSelectedSegment"
-    "project/:project_id/measure/plan/count_session/:count_session_id"        : "measurePlanSelectedCountSession"
-    "project/:project_id/measure/plan/count_session/:count_session_id/edit"   : "measurePlanEditCountSession"
+    "project/:project_id/measure/plan"                                                 : "measurePlan"
+    "project/:project_id/measure/plan/:count_plan_cid/edit"                             : "measurePlanEdit"
+    "project/:project_id/measure/plan/:count_plan_cid/edit/gate_group/:gate_group_cid"  : "measurePlanEditGateGroup"
+    "project/:project_id/measure/plan/:count_plan_cid/gate_group/:gate_group_cid"       : "measurePlanSelectedGateGroup"
 
-    "project/:project_id/measure/count"                                       : "measureCount"
-    "project/:project_id/measure/count/count_session/new"                     : "measureCountNewCountSession"
-    "project/:project_id/measure/count/count_session/:count_session_id/enter" : "measureCountEnterCountSession"
-    "project/:project_id/measure/count/count_session/:count_session_id"       : "measureCountSelectedCountSession"
+    "project/:project_id/measure/count"                                               : "measureCount"
+    "project/:project_id/measure/count/count_session/:count_session_cid/enter"        : "measureCountEnterCountSession"
 
-    "project/:project_id/measure/view"                                        : "measureView"
-    "project/:project_id/measure/view/segment/:segment_id"                    : "measureViewSelectedSegment"
-    "project/:project_id/measure/view/count_session/:count_session_id"        : "measureViewSelectedCountSession"
+    "project/:project_id/measure/view"                                                : "measureView"
+    "project/:project_id/measure/view/segment/:segment_id"                            : "measureViewSelectedSegment"
+    "project/:project_id/measure/view/count_session/:count_session_id"                : "measureViewSelectedCountSession"
     
     "project/:project_id/opportunity"             : "opportunity"
     # "project/:project_id/opportunity/:segment_id" : "opportunitySelectedSegment"
@@ -383,27 +380,46 @@ class App.Routers.Master extends Backbone.Router
       @geo_points.selectNone()
       @segments.selectNone()
 
-  measurePlanAssistant: (projectId) ->
-    if @reset(projectId, true, 285)
-      @routeNameKeeper 'measurePlanAssistant'
-      @measureTab = new App.Views.MeasureTabPlanAssistant
+  measurePlanEdit: (projectId, countPlanId) ->
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measurePlanEdit'
+      @measureTab = new App.Views.MeasureTabPlanEdit
         topBar: masterRouter.topBar
-        users: masterRouter.users
         projectId: projectId
+        countPlanId: countPlanId
         projects: masterRouter.projects
       @map.setOsmLayer "gray"
       @map.resetMap false, true
       @geo_points.selectNone()
       @segments.selectNone()
 
-  measurePlanSelectedSegment: (projectId, segmentId) ->
-    # TODO
+  measurePlanEditGateGroup: (projectId, countPlanCid, gateGroupCid) ->
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measurePlanEditGateGroup'
+      @measureTab = new App.Views.MeasureTabPlanEditGateGroup
+        topBar: masterRouter.topBar
+        projectId: projectId
+        countPlanCid: countPlanCid
+        gateGroupCid: gateGroupCid
+        projects: masterRouter.projects
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
+      @geo_points.selectNone()
+      @segments.selectNone()
 
-  measurePlanSelectedCountSession: (projectId, countSessionId) ->
-    # TODO
-
-  measurePlanEditCountSession: (projectId, countSessionId) ->
-    # TODO
+  measurePlanSelectedGateGroup: (projectId, countPlanCid, gateGroupCid) ->
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measurePlanSelectedGateGroup'
+      @measureTab = new App.Views.MeasureTabPlanSelectedGateGroup
+        topBar: masterRouter.topBar
+        projectId: projectId
+        countPlanCid: countPlanCid
+        gateGroupCid: gateGroupCid
+        projects: masterRouter.projects
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
+      @geo_points.selectNone()
+      @segments.selectNone()
 
   measureCount: (projectId) ->
     if @reset(projectId, true, 250)
@@ -418,15 +434,6 @@ class App.Routers.Master extends Backbone.Router
       @geo_points.selectNone()
       @segments.selectNone()
 
-  # TODO: REMOVE
-  # measureCountNewCountSession: (projectId) ->
-  #   if @reset(projectId, true, 250)
-  #     @routeNameKeeper 'measureNewCountSession'
-  #     @measureTab = new App.Views.MeasureTabCountNew
-  #       topBar: masterRouter.topBar
-  #       projectId: projectId
-  #       projects: masterRouter.projects
-
   measureCountEnterCountSession: (projectId, countSessionId) ->
     if @reset(projectId, true, 160)
       @routeNameKeeper 'measureEnterCountSession'
@@ -435,9 +442,6 @@ class App.Routers.Master extends Backbone.Router
         projectId: projectId
         projects: masterRouter.projects
         countSessionId: countSessionId
-
-  measureCountSelectedCountSession: (projectId, countSessionId) ->
-    # TODO
 
   measureView: (projectId) ->
     if @reset(projectId, true, 250)

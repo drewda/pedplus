@@ -56,44 +56,34 @@
         font-size: 16px;
       }
     }
-    #measure-plan-buttons {
-      #measure-plan-pagination {
-        margin: 0;
-        float: left;
-        padding-bottom: 8px;
+
+    #count-plan-table {
+      margin-bottom: 4px;
+      tbody {
+        height: 90px;
+        overflow-y: auto;
       }
-      #count-planning-assistant-button, #manage-count-plans-button {
-        float: right;
-        padding-bottom: 8px;
+      tr.count-plan-table-row.new {
+        background-color: #f5f5f5;
       }
-    }
-    #measure-plan-assistant {
-      label.control-label {
-        font-size: 15px;
+      th, td {
+        padding: 2px;
+        .checkbox.inline {
+          margin-left: 1px;
+        }
+        select {
+          width: auto;
+        }
+      }
+      .gate-group-label {
+        padding: 7px;
+        text-align: center;
+        font-size: 18pt;
         font-weight: bold;
-      }
-      .control-label {
-        width: 60px;
-      }
-      .controls {
-        margin-left: 80px;
-      }
-      .control-group {
-        margin-bottom: 9px;
+        /* background-color will be set in count_plan_table_row.jst.ejs */
       }
     }
 
-    // #count-bar {
-    //   h3 {
-    //     float: left;
-    //     text-align: left;
-    //     padding-top: 0;
-    //   }
-    //   #count-buttons {
-    //     float: right;
-    //     text-align: right;
-    //   }
-    // }
     #count-session-table-wrapper {
       table {
         width: 100%;

@@ -1,0 +1,77 @@
+<% if (mode == "show") { %>
+  <tr class="count-plan-table-row show">
+    <td><%= gateGroup.get('label') %></td>
+    <td><%= users.get(gateGroup.get('user_id')).full_name() %></td>
+    <td><%= gateGroup.get('status') %></td>
+    <td>
+      <%= gateGroup.printDays() %>
+      <%= gateGroup.printHours() %>
+    </td>
+    <td><h6><a id="edit-gate-group-button-<%= gateGroup.cid %>" class="edit-gate-group-button" class="btn">Edit</a></h6></td>
+  </tr>
+<% } else if (mode == "edit") { %>
+  <tr class="count-plan-table-row edit">
+
+  </tr>
+<% } else if (mode == "new") { %>
+  <tr id="count-plan-table-row-<%= gateGroup.cid %>" class="count-plan-table-row new">
+    <td>
+      <div class="gate-group-label" style="background-color: <%= gateGroup.getColor() %>;">
+          <%= gateGroup.get('label') %>
+      </div>
+    </td>
+    <td>
+      <select class="gate-group-counter-select">
+        <% users.each(function(u) { %>
+          <option value="<%= u.id %>"><%= u.full_name() %></option>
+        <% }); %>
+      </select>
+      <!-- we know the status is proposed, so no need to print that -->
+    </td>
+    <td>
+      <label class="checkbox inline"><input id="mo-checkbox" class="day-checkbox" type="checkbox" value="mo">Monday</label>
+      <label class="checkbox inline"><input id="tu-checkbox" class="day-checkbox" type="checkbox" value="tu">Tuesday</label>
+      <label class="checkbox inline"><input id="we-checkbox" class="day-checkbox" type="checkbox" value="we">Wednesday</label>
+      <label class="checkbox inline"><input id="th-checkbox" class="day-checkbox" type="checkbox" value="th">Thursday</label>
+      <label class="checkbox inline"><input id="fr-checkbox" class="day-checkbox" type="checkbox" value="fr">Friday</label>
+      <label class="checkbox inline"><input id="sa-checkbox" class="day-checkbox" type="checkbox" value="sa">Saturday</label>
+      <label class="checkbox inline"><input id="su-checkbox" class="day-checkbox" type="checkbox" value="su">Sunday</label>
+      <br/>
+      <label class="checkbox inline"><input id="000-checkbox" class="hour-checkbox" type="checkbox" value="000">0:00</label>
+      <label class="checkbox inline"><input id="100-checkbox" class="hour-checkbox" type="checkbox" value="100">1:00</label>
+      <label class="checkbox inline"><input id="200-checkbox" class="hour-checkbox" type="checkbox" value="200">2:00</label>
+      <label class="checkbox inline"><input id="300-checkbox" class="hour-checkbox" type="checkbox" value="300">3:00</label>
+      <label class="checkbox inline"><input id="400-checkbox" class="hour-checkbox" type="checkbox" value="400">4:00</label>
+      <label class="checkbox inline"><input id="500-checkbox" class="hour-checkbox" type="checkbox" value="500">5:00</label>
+      <label class="checkbox inline"><input id="600-checkbox" class="hour-checkbox" type="checkbox" value="600">6:00</label>
+      <label class="checkbox inline"><input id="700-checkbox" class="hour-checkbox" type="checkbox" value="700">7:00</label>
+      <label class="checkbox inline"><input id="800-checkbox" class="hour-checkbox" type="checkbox" value="800">8:00</label>
+      <label class="checkbox inline"><input id="900-checkbox" class="hour-checkbox" type="checkbox" value="900">9:00</label>
+      <label class="checkbox inline"><input id="1000-checkbox" class="hour-checkbox" type="checkbox" value="1000">10:00</label>
+      <label class="checkbox inline"><input id="1100-checkbox" class="hour-checkbox" type="checkbox" value="1100">11:00</label>
+      <br/>
+      <label class="checkbox inline"><input id="1200-checkbox" class="hour-checkbox" type="checkbox" value="1200">12:00</label>
+      <label class="checkbox inline"><input id="1300-checkbox" class="hour-checkbox" type="checkbox" value="1300">13:00</label>
+      <label class="checkbox inline"><input id="1400-checkbox" class="hour-checkbox" type="checkbox" value="1400">14:00</label>
+      <label class="checkbox inline"><input id="1500-checkbox" class="hour-checkbox" type="checkbox" value="1500">15:00</label>
+      <label class="checkbox inline"><input id="1600-checkbox" class="hour-checkbox" type="checkbox" value="1600">16:00</label>
+      <label class="checkbox inline"><input id="1700-checkbox" class="hour-checkbox" type="checkbox" value="1700">17:00</label>
+      <label class="checkbox inline"><input id="1800-checkbox" class="hour-checkbox" type="checkbox" value="1800">18:00</label>
+      <label class="checkbox inline"><input id="1900-checkbox" class="hour-checkbox" type="checkbox" value="1900">19:00</label>
+      <label class="checkbox inline"><input id="2000-checkbox" class="hour-checkbox" type="checkbox" value="2000">20:00</label>
+      <label class="checkbox inline"><input id="2100-checkbox" class="hour-checkbox" type="checkbox" value="2100">21:00</label>
+      <label class="checkbox inline"><input id="2200-checkbox" class="hour-checkbox" type="checkbox" value="2200">22:00</label>
+      <label class="checkbox inline"><input id="2300-checkbox" class="hour-checkbox" type="checkbox" value="2300">23:00</label>
+    </td>
+    <td style="text-align: right;">
+      <h6>
+        <a id="remove-gate-group-button-<%= gateGroup.cid %>" class="remove-gate-group-button btn btn-danger">
+          <i class="icon-remove icon-white"></i>
+        </a> 
+        <a id="save-gate-group-button-<%= gateGroup.cid %>" class="save-gate-group-button btn btn-primary">
+          <i class="icon-ok icon-white"></i>
+          </a>
+      </h6>
+    </td>
+  </tr>
+<% } %>

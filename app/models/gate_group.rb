@@ -16,8 +16,6 @@ class GateGroup < ActiveRecord::Base
   # there should only be one GateGroup with 
   # each letter label in a count plan
   validates_uniqueness_of :label, :scope => :count_plan_id
-  # and only one of each color
-  validates_uniqueness_of :color, :scope => :count_plan_id
 
   before_save :auto_label
   def auto_label
