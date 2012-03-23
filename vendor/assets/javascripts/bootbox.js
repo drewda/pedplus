@@ -251,7 +251,7 @@ var bootbox = window.bootbox || (function() {
                 _class = handlers[i]['class'];
             } else if (i == handlers.length -1 && handlers.length <= 2) {
                 // always add a primary to the main option in a two-button dialog
-                _class = 'primary';
+                _class = 'btn-primary';
             }
 
             if (handlers[i]['label']) {
@@ -260,7 +260,7 @@ var bootbox = window.bootbox || (function() {
                 label = "Option "+(i+1);
             }
 
-            buttons += "<a data-handler='"+i+"' class='btn "+_class+"' href='#'>"+label+"</a>";
+            buttons += "<h6><a data-handler='"+i+"' class='btn "+_class+"' href='#'>"+label+"</a></h6>";
 
             callbacks[i] = callback;
         }
