@@ -18,12 +18,20 @@ class Api::GatesController < Api::ApiController
   end
   
   def create
+    params[:gate].delete 'cid'
+
     @gate = Gate.new params[:gate]
-    @gate.count_plan = CountPlan.find!(params[:count_plan_id])
+    @gate.gate_group = GateGroup.find(params[:gate_group_id])
+    @gate.count_plan = CountPlan.find(params[:count_plan_id])
     
     respond_to do |format|
       if @gate.save
-        format.json  { render :json => @gate, :status => :created, :location => api_gate_url(@gate) }
+        format.json  { render :json => @gate, 
+                              :status => :created, 
+                              :location => api_project_count_plan_gate_url(@gate.count_plan.project, 
+                                                                           @gate.count_plan, 
+                                                                           @gate)
+                     }
       else
         format.json  { render :json => @gate.errors, :status => :unprocessable_entity }
       end
@@ -31,8 +39,7 @@ class Api::GatesController < Api::ApiController
   end
   
   def update
-    @gate = Gate.where! :id => params[:id], 
-                        :count_plan_id => params[:count_plan_id]
+    @gate = Gate.find params[:id]
 
     respond_to do |format|
       if @gate.update_attributes(params[:gate])

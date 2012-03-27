@@ -1,0 +1,42 @@
+<div id="measure-tab-plan-edit">
+  <div class="modal-header">
+    <div class="row-fluid">
+      <div class="span12">
+        <h4>
+          Count plan starts Monday 
+          <select id="start-date-day-input" class="span1"></select>
+          <select id="start-date-month-input" class="span2"></select> 
+          <select id="start-date-year-input" class="span1"></select> , lasts for <input id="weeks-input" class="span1" type="number" min="1" max="52" pattern="[0-9]*" /> <span id="weeks-span"><!-- will be dynamically replaced with "week" or "weeks" --></span>, and ends Sunday <span id="end-date-span"><!-- will be dynamically replaced --></span>.
+        </h4>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-body">
+    <table id="gate-group-table" class="table table-condensed">
+      <tbody>
+        <!-- will be filled with CountPlanTableRow's -->
+      </tbody>
+    </table>
+  </div>
+
+  <div class="footer">
+    <% if (currentRouteName.startsWith("measurePlanEditGateGroup")) { %>
+      <h6 class="pull-left">
+        <a class="btn disabled"><i class="icon-plus"></i> Add Gate Group</a>
+      </h6>
+      <h6 class="pull-right">
+        <a id="cancel-button" class="btn">Cancel</a>
+        <a class="btn btn-primary disabled">Save Count Plan</a>
+      </h6>
+    <% } else { %>
+      <h6 class="pull-left">
+        <a id="add-gate-group-button" class="btn"><i class="icon-plus"></i> Add Gate Group</a>
+      </h6>
+      <h6 class="pull-right">
+        <a id="cancel-button" class="btn">Cancel</a>
+        <a id="create-count-plan-button" class="btn btn-primary">Create Count Plan</a>
+      </h6>
+    <% } %>
+  </div>
+</div>

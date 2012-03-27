@@ -28,7 +28,6 @@ Pedplus::Application.routes.draw do
         resources :counts
       end
     end
-    resources :data_sources
     match 'map_edits' => 'map_edits#upload'
   end
   

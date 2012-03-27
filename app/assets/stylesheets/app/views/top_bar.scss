@@ -49,38 +49,48 @@
     }
   }
   
+  #measure-tab-plan-edit {
+    .modal-header {
+      padding: 4px;
+      select {
+        width: auto;
+      }
+    }
+    .modal-body {
+      padding: 0;
+      height: 156px;
+      overflow-y: auto;
+      table {
+        tr.currently-editing {
+          background-color: #f5f5f5;
+          h6 {
+            color: #333333;
+          }
+        }
+        tr {
+          border: 0;
+        }
+        th, td {
+          padding: 4px;
+          .checkbox.inline {
+            margin-left: 1px;
+          }
+          select {
+            width: auto;
+          }
+        }
+      }
+    }
+    .footer {
+      padding: 4px;
+    }
+  }
+
   #measure-tab {
     #measure-sub-tabs {
       margin-bottom: 8px;
       li {
         font-size: 16px;
-      }
-    }
-
-    #count-plan-table {
-      margin-bottom: 4px;
-      tbody {
-        height: 90px;
-        overflow-y: auto;
-      }
-      tr.count-plan-table-row.new {
-        background-color: #f5f5f5;
-      }
-      th, td {
-        padding: 2px;
-        .checkbox.inline {
-          margin-left: 1px;
-        }
-        select {
-          width: auto;
-        }
-      }
-      .gate-group-label {
-        padding: 7px;
-        text-align: center;
-        font-size: 18pt;
-        font-weight: bold;
-        /* background-color will be set in count_plan_table_row.jst.ejs */
       }
     }
 

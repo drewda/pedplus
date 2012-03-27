@@ -8,7 +8,7 @@ class CountPlan < ActiveRecord::Base
 
   before_save :archive_other_count_plans
   def archive_other_count_plans
-    project.count_plans.where(:is_the_current_plan => true).update_attribute :is_the_current_plan => false
+    project.count_plans.where(:is_the_current_plan => true).update_all :is_the_current_plan => false
   end
 
   def percent_completed
@@ -19,6 +19,6 @@ class CountPlan < ActiveRecord::Base
   end
 
   def end_date
-    return start_date + total_weeks.weeks + 6.days
+    start_date + total_weeks.weeks + 6.days if start_date
   end
 end

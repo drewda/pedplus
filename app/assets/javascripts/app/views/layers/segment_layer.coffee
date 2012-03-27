@@ -8,9 +8,6 @@ class App.Views.SegmentLayer extends Backbone.View
     @layer = null
   enable: ->
     @segments.bind 'reset',   @render, this
-    # @segments.bind 'add',     @render, this
-    # @segments.bind 'remove',  @render, this
-    # @segments.bind 'change',  @render, this
     
     if $('#segment-layer').length == 0
       @render()
@@ -19,8 +16,6 @@ class App.Views.SegmentLayer extends Backbone.View
     @remove()
   remove: ->
     if @layer
-      # masterRouter.map.map.off "move",    @layer.reload()
-      # masterRouter.map.map.off "resize",  @layer.reload()
       masterRouter.map.map.remove(@layer)
     if $('#segment-layer').length > 0
       $('#segment-layer').remove()
@@ -39,9 +34,7 @@ class App.Views.SegmentLayer extends Backbone.View
     # reorder the layers: we want SegmentLayer to be under GeoPointLayer
     #                     and we want both to be under the zoom buttons
     $('#osm-color-layer').after($('#segment-layer'))
-    
-    # masterRouter.map.map.on "move",    @layer.reload()
-    # masterRouter.map.map.on "resize",  @layer.reload()
+
   loadFeatures: (e) ->
     for f in e.features   
       c = f.element
@@ -57,6 +50,7 @@ class App.Views.SegmentLayer extends Backbone.View
         $(c).bind "click", (event) ->
           cid = event.currentTarget.id.split('-').pop()
           masterRouter.segments.getByCid(cid).toggle()
+
   showFeatures: (e) ->
     connectedSegmentCids = []
     if location.hash.startsWith "#project/#{masterRouter.projects.getCurrentProjectId()}/map/geo_point/connect/c"
@@ -68,37 +62,67 @@ class App.Views.SegmentLayer extends Backbone.View
 
       c.removeAttribute "class"
 
-      if masterRouter.currentRouteName.startsWith "modelPermeability"
-        colorClass = masterRouter.segments.getByCid(f.data.cid).get('permeabilityClass')
-        c.setAttribute "class", "red#{colorClass}"
-      else if masterRouter.currentRouteName.startsWith "measure"
-        if masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
-          selectedCountSessionId = masterRouter.currentRouteName.split(':').pop()
-          selectedSegmentId = masterRouter.count_sessions.get(selectedCountSessionId).get('segment_id')
-        else if masterRouter.currentRouteName.startsWith "measureSelectedSegment"
-          selectedSegmentCid = masterRouter.currentRouteName.split(':').pop()
-          selectedSegmentId = masterRouter.segments.getByCid(selectedSegmentCid).id
+      # model tab
+      if masterRouter.currentRouteName.startsWith "model"
+        if masterRouter.currentRouteName.startsWith "modelPermeability"
+          colorClass = masterRouter.segments.getByCid(f.data.cid).get('permeabilityClass')
+          c.setAttribute "class", "red#{colorClass}"
 
-        colorClass = masterRouter.segments.getByCid(f.data.cid).get('measuredClass')
-        if f.data.id == selectedSegmentId
-          c.setAttribute "class", "segment-line selected"
-        else if colorClass > 0
-          c.setAttribute "class", "segment-line blue#{colorClass}"
+      # measure tab
+      else if masterRouter.currentRouteName.startsWith "measure"
+        # measure plan subtab
+        if masterRouter.currentRouteName.startsWith "measurePlan"
+          # set GateGroup colors for the saved gates
+          gateGroupLabel = masterRouter.segments.getByCid(f.data.cid).get('gateGroupLabel')
+          if gateGroupLabel
+            c.setAttribute "class", "gateGroup#{gateGroupLabel} segment-line"
+          # and also set the GateGroup colors for currently selected segments,
+          # if the user is editing
+          else if masterRouter.segments.getByCid(f.data.cid).get("selected")
+            gateGroupCid = masterRouter.currentRouteName.split(':')[1]
+            gateGroupLabel = masterRouter.gate_groups.getByCid(gateGroupCid).get 'label'
+            c.setAttribute "class", "gateGroup#{gateGroupLabel} segment-line"
+          else
+            c.setAttribute "class", "segment-line black"
+
+        # measure view subtab
+        else if masterRouter.currentRouteName.startsWith "measureView"
+          colorClass = masterRouter.segments.getByCid(f.data.cid).get('measuredClass')
+          # if f.data.id == selectedSegmentId
+          #   c.setAttribute "class", "segment-line selected"
+          if colorClass > 0
+            c.setAttribute "class", "segment-line blue#{colorClass}"
+          else
+            c.setAttribute "class", "segment-line black"
+
+          # if masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
+          #   selectedCountSessionId = masterRouter.currentRouteName.split(':').pop()
+          #   selectedSegmentId = masterRouter.count_sessions.get(selectedCountSessionId).get('segment_id')
+          # else if masterRouter.currentRouteName.startsWith "measureSelectedSegment"
+          #   selectedSegmentCid = masterRouter.currentRouteName.split(':').pop()
+          #   selectedSegmentId = masterRouter.segments.getByCid(selectedSegmentCid).id
+      
+      # map tab
+      else if masterRouter.currentRouteName.startsWith "map"
+        # the selected segment
+        if masterRouter.segments.getByCid(f.data.cid).get("selected")
+          c.setAttribute "class", "segment-line selected black"
+
+        # connected segments
+        else if connectedSegmentCids.length > 0
+          if _.include connectedSegmentCids, f.data.cid
+            c.setAttribute "class", "segment-line connected black"
+            connectedSegmentCids = _.without connectedSegmentCids, f.data.id
+          else
+            c.setAttribute "class", "segment-line black"
+        # other segments
         else
           c.setAttribute "class", "segment-line black"
-      else if masterRouter.segments.getByCid(f.data.cid).get("selected")
-        c.setAttribute "class", "segment-line selected black"
-      else if connectedSegmentCids.length > 0
-        if _.include connectedSegmentCids, f.data.cid
-          c.setAttribute "class", "segment-line connected black"
-          connectedSegmentCids = _.without connectedSegmentCids, f.data.id
-        else
-          c.setAttribute "class", "segment-line black"
-      else
+
+      # project tab
+      else if masterRouter.currentRouteName.startsWith "project"
         c.setAttribute "class", "segment-line black"
   
-  change: ->
-    # TODO
   setSegmentDefaultStrokeWidth: (segmentDefaultStrokeWidth) ->
     @segmentDefaultStrokeWidth = segmentDefaultStrokeWidth
     @render()

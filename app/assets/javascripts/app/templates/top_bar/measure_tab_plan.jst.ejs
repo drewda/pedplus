@@ -14,7 +14,6 @@
     </li>
   </ul>
 
-  <% if (mode == "show") { %>
   <div class="row-fluid">
     <div class="span9">
       <h3>Count plan starts <%= countPlan.get('start_date') %>, lasts for <%= countPlan.printWeeks() %>, and ends <%= countPlan.get('end_date') %>.</h3>
@@ -23,32 +22,4 @@
       <h6><a id="edit-count-plan-button" class="btn btn-inverse">Edit Count Plan</a></h6>
     </div>
   </div>
-
-  <% } else if (mode == "edit" || mode == "new") { %>
-  <div class="row-fluid">
-    <div class="span12">
-      <h4>
-        Starts Monday 
-        <select id="start-date-day-input" class="span1"></select>
-        <select id="start-date-month-input" class="span2"></select> 
-        <select id="start-date-year-input" class="span1"></select> , lasts for <input id="weeks-input" class="span1" type="number" min="1" max="52" pattern="[0-9]*" /> <span id="weeks-span"><!-- will be dynamically replaced with "week" or "weeks" --></span>, and ends Sunday <span id="end-date-span"><!-- will be dynamically replaced --></span>.
-      </h4>
-    </div>
-  </div>
-  <% } %>
-
-  <table id="count-plan-table" class="table table-condensed">
-    <tbody><!-- will be filled by CountPlanTableRow's --></tbody>
-  </table>
-
-  <% if (mode == "new") { %>
-  <div class="row-fluid">
-    <div class="span6">
-      <h6><a id="add-count-group-button" class="btn"><i class="icon-plus"></i> Add Gate Group</a></h6>
-    </div>
-    <div class="span6" style="text-align: right;">
-      <h6><a id="create-count-plan-button" class="btn btn-primary">Create Count Plan</a></h6>
-    </div>
-  </div>
-  <% } %>
 </div>

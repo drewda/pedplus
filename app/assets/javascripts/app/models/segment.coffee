@@ -36,14 +36,17 @@ class App.Models.Segment extends Backbone.Model
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/map/segment/#{@cid}", true)
         @doSelect()
     else if masterRouter.currentRouteName.startsWith "measure"
-      if masterRouter.currentRouteName.startsWith "measureEnterCountSession"
-        return # we do not want to allow selected when at the "measureEnterCountSession" route
-      if masterRouter.currentRouteName.startsWith "measurePlanAssistant"
-        if @collection.selected().length < masterRouter.measureTab.numberOfCountLocations
+      if masterRouter.currentRouteName.startsWith "measureCountEnterCountSession"
+        return # we do not want to allow selected when at the "measureCountEnterCountSession" route
+      else if masterRouter.currentRouteName.startsWith "measurePlanEditGateGroup"
+        # make sure we aren't selecting an already selected gate
+        return if @get "gateGroupLabel"
+        # when selecting the gates in a GateGroup, we want a maximum of 5 segments selected
+        if @collection.selected().length < 5
           @doSelect(true)
         else
           return
-      else
+      else if masterRouter.currentRouteName.startsWith "measureView"
         masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view/segment/#{@cid}", true)
         @doSelect()
   doSelect: (allowMultiple) ->
@@ -53,9 +56,19 @@ class App.Models.Segment extends Backbone.Model
       masterRouter.geo_points.selectNone()
     @set
        selected: true
-    $("#segment-line-#{@cid}").svg()
-      .removeClass('red0 red1 red2 red3 red4 red5 blue0 blue1 blue2 blue3 blue4 blue5')
-      .addClass('selected')
+
+    # if the user is editing a GateGroup, then we want the selected segment(s) to have the appropriate color
+    if masterRouter.currentRouteName.startsWith "measurePlanEditGateGroup"
+      gateGroupCid = masterRouter.currentRouteName.split(':')[1]
+      gateGroupLabel = masterRouter.gate_groups.getByCid(gateGroupCid).get 'label'
+      $("#segment-line-#{@cid}").svg()
+        .removeClass()
+        .addClass("gateGroup#{gateGroupLabel}")
+    # otherwise, on all other tabs, we want the selected segment(s) to have the standard green color
+    else
+      $("#segment-line-#{@cid}").svg()
+        .removeClass('red0 red1 red2 red3 red4 red5 blue0 blue1 blue2 blue3 blue4 blue5')
+        .addClass('selected')
   deselect: ->
     if masterRouter.currentRouteName.startsWith "map"
       if masterRouter.currentRouteName == "mapConnectGeoPoint:#{@cid}"
@@ -67,9 +80,9 @@ class App.Models.Segment extends Backbone.Model
       if masterRouter.currentRouteName.startsWith "measureViewSelectedSegment" or
          masterRouter.currentRouteName.startsWith "measureViewSelectedCountSession"
         # note that we do not want to allow selected when at the "measureEnterCountSession" route
-        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure", true)
+        masterRouter.navigate("#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view", true)
         @doDeselect()
-      else if masterRouter.currentRouteName.startsWith "measurePlanAssistant"
+      else if masterRouter.currentRouteName.startsWith "measurePlanEditGateGroup"
         @doDeselect()
   doDeselect: ->
     # if this Segment is not already selected, then we want its 
@@ -80,11 +93,15 @@ class App.Models.Segment extends Backbone.Model
     , 
       silent: !alreadySelected
     if alreadySelected
-      $("#segment-line-#{@cid}").svg().removeClass('selected').attr "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
+      $("#segment-line-#{@cid}").svg()
+        .removeClass('selected gateGroupA gateGroupB gateGroupC gateGroupD gateGroupE gateGroupF gateGroupG gateGroupH gateGroupI gateGroupJ gateGroupK gateGroupL gateGroupM gateGroupN gateGroupO gateGroupP gateGroupQ  gateGroupR  gateGroupS  gateGroupT')
+        .attr "stroke-width", masterRouter.segment_layer.segmentDefaultStrokeWidth
 
     if masterRouter.currentRouteName.startsWith "measureViewSelectedSegment" or
        masterRouter.currentRouteName.startsWith "measureViewSelectedCountSession"
       $("#segment-line-#{@cid}").svg().addClass "blue" + @get('measuredClass')
+    else if masterRouter.currentRouteName.startsWith "measurePlanEditGateGroup"
+      $("#segment-line-#{@cid}").svg().addClass "black"
   toggle: ->
     if @get 'selected'
       @deselect()

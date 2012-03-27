@@ -1,24 +1,28 @@
 <% if (mode == "show") { %>
-  <tr class="count-plan-table-row show">
-    <td><%= gateGroup.get('label') %></td>
-    <td><%= users.get(gateGroup.get('user_id')).full_name() %></td>
-    <td><%= gateGroup.get('status') %></td>
-    <td>
-      <%= gateGroup.printDays() %>
-      <%= gateGroup.printHours() %>
+  <tr>
+    <td style="background-color: <%= gateGroup.getColor() %>;">
+      <h3><%= gateGroup.get('label') %></h3>
     </td>
-    <td><h6><a id="edit-gate-group-button-<%= gateGroup.cid %>" class="edit-gate-group-button" class="btn">Edit</a></h6></td>
+    <td>
+      <%= users.get(gateGroup.get('user_id')).full_name() %>
+    </td>
+    <td>
+      <!-- TODO: improve the formatting of days and hours -->
+      <%= gateGroup.get('days') %><br/>
+      <%= gateGroup.get('hours') %>
+    </td>
+    <td>
+      <h6 class="pull-right">
+        <a class="edit-gate-group-button btn" href="#project/<%= projects.getCurrentProjectId() %>/measure/plan/<%= gateGroup.getCountPlan().cid %>/edit/gate_group/<%= gateGroup.cid %>">
+          <i class="icon-pencil"></i> Edit
+        </a>
+      </h6>
+    </td>
   </tr>
 <% } else if (mode == "edit") { %>
-  <tr class="count-plan-table-row edit">
-
-  </tr>
-<% } else if (mode == "new") { %>
-  <tr id="count-plan-table-row-<%= gateGroup.cid %>" class="count-plan-table-row new">
-    <td>
-      <div class="gate-group-label" style="background-color: <%= gateGroup.getColor() %>;">
-          <%= gateGroup.get('label') %>
-      </div>
+  <tr class="currently-editing">
+    <td style="background-color: <%= gateGroup.getColor() %>;" rowspan="2">
+      <h3><%= gateGroup.get('label') %></h3>
     </td>
     <td>
       <select class="gate-group-counter-select">
@@ -26,9 +30,8 @@
           <option value="<%= u.id %>"><%= u.full_name() %></option>
         <% }); %>
       </select>
-      <!-- we know the status is proposed, so no need to print that -->
     </td>
-    <td>
+    <td colspan="2">
       <label class="checkbox inline"><input id="mo-checkbox" class="day-checkbox" type="checkbox" value="mo">Monday</label>
       <label class="checkbox inline"><input id="tu-checkbox" class="day-checkbox" type="checkbox" value="tu">Tuesday</label>
       <label class="checkbox inline"><input id="we-checkbox" class="day-checkbox" type="checkbox" value="we">Wednesday</label>
@@ -63,13 +66,18 @@
       <label class="checkbox inline"><input id="2200-checkbox" class="hour-checkbox" type="checkbox" value="2200">22:00</label>
       <label class="checkbox inline"><input id="2300-checkbox" class="hour-checkbox" type="checkbox" value="2300">23:00</label>
     </td>
-    <td style="text-align: right;">
-      <h6>
-        <a id="remove-gate-group-button-<%= gateGroup.cid %>" class="remove-gate-group-button btn btn-danger">
-          <i class="icon-remove icon-white"></i>
-        </a> 
-        <a id="save-gate-group-button-<%= gateGroup.cid %>" class="save-gate-group-button btn btn-primary">
-          <i class="icon-ok icon-white"></i>
+  <tr class="currently-editing">
+    <td colspan="3">
+      <h6 class="pull-left">
+        <a id="auto-select-gates-button" class="btn">Auto Select Gates</a> 
+        <em>Or manually select 5 segments to include in the gate group.</em>
+      </h6>
+      <h6 class="pull-right">
+        <a id="remove-gate-group-button" class="btn btn-danger">
+          <i class="icon-trash icon-white"></i> Remove
+        </a>
+        <a id="save-gate-group-button" class="btn btn-primary">
+          <i class="icon-ok-sign icon-white"></i> Save
           </a>
       </h6>
     </td>

@@ -1,14 +1,29 @@
 class App.Models.CountPlan extends Backbone.Model
   name: 'count_plan'
+
+  initialize: ->
+    # listen for removals of GateGroups and then redo label letters 
+    # (which will in turn update colors) for GateGroup's
+    masterRouter.gate_groups.bind "remove", @updateGateGroupLabels, this
+    masterRouter.gate_groups.bind "change", @updateGateGroupLabels, this
+
   # return the associated GateGroup's, which can be
   # local (with CID's) or from the server (with ID's)
-  getGateGroups: ->
-    if @isNew()
-      masterRouter.gate_groups.select (gg) =>
-        gg.get('count_plan_cid') == @cid
+  getGateGroups: (includeMarkedForDelete = false) ->
+    if includeMarkedForDelete
+      if @isNew()
+        masterRouter.gate_groups.select (gg) =>
+          gg.get('count_plan_cid') == @cid and gg.get('markedForDelete') != true
+      else
+        masterRouter.gate_groups.select (gg) => 
+          gg.get('count_plan_id') == @id and gg.get('markedForDelete') != true
     else
-      masterRouter.gate_groups.select (gg) => 
-        gg.get('count_plan_id') == @id
+      if @isNew()
+        masterRouter.gate_groups.select (gg) =>
+          gg.get('count_plan_cid') == @cid
+      else
+        masterRouter.gate_groups.select (gg) => 
+          gg.get('count_plan_id') == @id
 
   # compute the end date
   getEndDate: ->
@@ -28,7 +43,7 @@ class App.Models.CountPlan extends Backbone.Model
   # add a new GateGroup, with default values
   addNewGateGroup: ->
     if @getGateGroups().length > 0
-      nextLabel = @nextLetter @lastLabel
+      nextLabel = @nextLetter @lastLabel()
     else
       nextLabel = 'A'
 
@@ -49,10 +64,30 @@ class App.Models.CountPlan extends Backbone.Model
 
     masterRouter.gate_groups.add gateGroup
 
+    return gateGroup
+
+  # listen for removals of GateGroups and then redo label letters 
+  # (which will in turn update colors) for GateGroup's
+  updateGateGroupLabels: ->
+    # sort by label
+    gateGroups = _.sortBy @getGateGroups(), (gg) ->
+      gg.get 'label'
+    # now update the labels in sequence: A, B, C...
+    lastLabel = ''
+    _.each gateGroups, (gg) ->
+      if lastLabel == ''
+        label = 'A'
+      else
+        label = @nextLetter lastLabel
+      gg.set
+        label: label
+      lastLabel = label
+    , this
+
   # which was the last letter used to label a GateGroup
   # in this CountPlan?
   lastLabel: ->
-    lastGG = @getGateGroups.max (gg) -> 
+    lastGG = _.max @getGateGroups(), (gg) -> 
       gg.get('label').charCodeAt()
     lastGG.get 'label'
 

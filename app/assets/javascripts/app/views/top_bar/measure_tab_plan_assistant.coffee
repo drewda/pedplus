@@ -50,20 +50,8 @@ class App.Views.MeasureTabPlanAssistant extends Backbone.View
     ### START###
 
 
-    # set default number of counting locations
-    numberOfUsers = $('.user-checkbox:checked').length
-#    $('#counting-locations-input').val numberOfUsers * 5
 
-    # more default values
-    $('#weeks-input').val(1)
-    for dayOfWeek in ['tuesday', 'thursday', 'saturday', 'sunday']
-      $("##{dayOfWeek}-checkbox").prop "checked", true
-    for hour in [700, 800, 900, 1200, 1300, 1600, 1700, 1800, 1900]
-      $("##{hour}-checkbox").prop "checked", true
 
-    # bindings for recomputing Mondays
-    $('#start-date-year-input').change @computeMondayDays
-    $('#start-date-month-input').change @computeMondayDays
 
     # bindings for recomputing resources
     $('.user-checkbox').change @recomputeCountPlan

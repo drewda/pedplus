@@ -16,26 +16,13 @@ class Api::CountPlansController < Api::ApiController
   end
   
   def create
+    # TODO: do something like MapEditsController
     params[:count_plan].delete 'cid'
-
-    if params[:count_plan][:users]
-      countPlanUserIds = params[:count_plan].delete 'users'
-      countPlanUserIds = countPlanUserIds.split ','
-    end
-    if params[:count_plan][:segments]
-      segmentIds = params[:count_plan].delete 'segments'
-      segmentIds = segmentIds.split ','
-    end
 
     @count_plan = CountPlan.new params[:count_plan]
     
     respond_to do |format|
       if @count_plan.save
-        countPlanUserIds.each { |userId| CountPlanUser.create :count_plan_id => @count_plan.id, :user_id => userId }
-        segmentIds.each { |segmentId| CountPlanSegment.create :count_plan_id => @count_plan.id, :segment_id => segmentId }
-
-        # TODO: create the CountSessions
-
         format.json  { render :json => @count_plan, :status => :created, :location => api_project_count_plan_url(@count_plan.project, @count_plan) }
       else
         format.json  { render :json => @count_plan.errors, :status => :unprocessable_entity }
@@ -44,6 +31,8 @@ class Api::CountPlansController < Api::ApiController
   end
   
   def update
+    params[:count_plan].delete 'cid'
+    
     @count_plan = CountPlan.find(params[:id])
 
     if counts = params[:counts]
