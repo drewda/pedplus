@@ -36,19 +36,9 @@ class Api::UsersController < Api::ApiController
       end
     end
 
-    # Backbone shouldn't be sending all of this, 
-    # but for now it is, so we want to ignore 
-    # these extra attributes, which will never be 
-    # updated from the browser-side
-    ['cid', 'created_at', 'current_sign_in_at', 'current_sign_in_ip', 'encrypted_password', 'id', 'invitation_accepted_at', 
-     'invitation_limit', 'invitation_sent_at', 'invitation_token', 'invited_by_id', 'invited_by_type', 'is_current_user',
-     'last_sign_in_at', 'last_sign_in_ip', 'remember_created_at', 'reset_password_sent_at', 'reset_password_token',
-     'sign_in_count', 'updated_at'].each do |a|
-      params[:user].delete(a)
-    end
-
     respond_to do |format|
-      if @user.update_attributes(params[:user])
+      # for now we'll only allow updating the password
+      if @user.update_attributes pick(params, :password, :password_confirmation)
         flash[:notice] = 'User was successfully updated.'
         format.json  { render :json => @user }
       else

@@ -4,7 +4,6 @@
 //= require underscore
 //= require underscore-addons
 //= require backbone
-//= require backbone-rails
 //= require polymaps
 //= require d3
 //= require d3.geo
@@ -31,7 +30,7 @@ String.prototype.startsWith = function (str){
 // include local cid in Backbone-produced JSON
 Backbone.Model.prototype.toJSON = function() {
   var object = new Object;
-  object[this.name] = _(_.clone(this.wrappedAttributes()[this.name])).extend({
+  object = _(_.clone(this.attributes)).extend({
     cid : this.cid
   });
   return object;
