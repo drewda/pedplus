@@ -25,6 +25,26 @@ class App.Models.CountPlan extends Backbone.Model
         masterRouter.gate_groups.select (gg) => 
           gg.get('count_plan_id') == @id
 
+  # return all the associated Gate's
+  getGates: (includeMarkedForDelete = false) ->
+    if includeMarkedForDelete
+      if @isNew()
+        masterRouter.gates.select (g) =>
+          g.get('count_plan_cid') == @cid and g.get('markedForDelete') != true
+      else
+        masterRouter.gates.select (g) => 
+          g.get('count_plan_id') == @id and g.get('markedForDelete') != true
+    else
+      if @isNew()
+        masterRouter.gates.select (g) =>
+          g.get('count_plan_cid') == @cid
+      else
+        masterRouter.gates.select (g) => 
+          g.get('count_plan_id') == @id
+
+  getGateGroupSchedule: ->
+    masterRouter.gate_group_schedules.first()
+
   # compute the end date
   getEndDate: ->
     startDate = new XDate @get 'start_date'
@@ -34,7 +54,7 @@ class App.Models.CountPlan extends Backbone.Model
   # does the CountPlan last for a singular or plural
   # number of weeks?
   printWeeks: ->
-    string = @get 'weeks'
+    string = @get 'total_weeks'
     if string != 1
       string += ' weeks'
     else

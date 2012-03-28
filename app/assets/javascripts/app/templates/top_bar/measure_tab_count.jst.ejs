@@ -15,5 +15,7 @@
     </li>
   </ul>
 
-  <h1>Count</h1>
+  <% _.each(gateGroupSchedule.attributes, function(date) { %>
+    <h1><%= date %></h1>
+  <% }); %>
 </div>

@@ -4,8 +4,8 @@ class App.Views.MeasureTabPlan extends Backbone.View
     @topBar = @options.topBar
     @topBar.render 'measure'
 
-    # get ready to render CountPlanTableRow's
-    @countPlanTableRows = []
+    # get ready to render GateGroupTableRow's
+    gateGroupTableRows = []
 
     # select the current CountPlan
     @countPlan = masterRouter.count_plans.getCurrentCountPlan()
@@ -24,15 +24,51 @@ class App.Views.MeasureTabPlan extends Backbone.View
       # and now redirect to MeasureTabPlanEdit
       masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/plan/#{@countPlan.cid}/edit", true
 
+    # assuming there is a current CountPlan
     else
+      # render the MeasureTabPlan tab
       @render()
+
+      # now render all the GateGroupTableRow's
+      _.each @countPlan.getGateGroups(), (gg) ->
+        gateGroupTableRow = new App.Views.GateGroupTableRow
+          gateGroup: gg
+          mode: "show"
+        gateGroupTableRows.push gateGroupTableRow
+      , this
+      # and remove all the buttons to edit GateGroup's
+      $('.edit-gate-group-button').remove()
+
   template: JST["app/templates/top_bar/measure_tab_plan"]
+
   render: ->
     # render the template
     $('#tab-area').empty().html @template
       project: @options.projects.getCurrentProject()
       users: @options.users
       countPlan: @countPlan
+
+    # bind button actions
+    $('#archive-count-plan-button').on "click", $.proxy @archiveCountPlanButton, this
+    $('#edit-count-plan-button').on "click", $.proxy @editCountPlanButton, this
+
+  archiveCountPlanButton: ->
+    bootbox.confirm "Are you sure you want to archive this count plan? It will no longer be visible to counters.", (confirmed) =>
+      if confirmed
+        @countPlan.save
+          is_the_current_plan: false
+        ,
+          success: ->
+            masterRouter.countPlan.fetch
+              success: ->
+                masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view", true
+          error: ->
+            bootbox.alert "Error updating the count plan on the server. Please start over.", (ok) =>
+              window.location.reload()
+
+  editCountPlanButton: ->
+    # TODO
+    bootbox.alert "This functionality has not yet been implemented."
 
   nextMonday: ->
     # start with today

@@ -113,9 +113,26 @@ class App.Views.MeasureTabPlanEdit extends Backbone.View
       bootbox.alert "Count plans must include at least one gate group."
       return
 
-    # now we now it's ready for upload to the server
-
-    # TODO: upload to the server
+    # upload to Api::CountPlansController
+    @countPlan.save
+      start_date: "#{year}-#{month}-#{day}"
+      total_weeks: weeks
+      gateGroups: @countPlan.getGateGroups()
+      gates: @countPlan.getGates()
+    ,
+      success: (model, response) ->
+        # if upload succeeded, clear the local collections
+        masterRouter.count_plans.reset()
+        masterRouter.gate_groups.reset()
+        masterRouter.gates.reset()
+        # and reload the local collections
+        masterRouter.count_plans.fetch
+          success: ->
+            # this will trigger gate_groups and gates to re-fetch()
+            # finally redirect to view the count plan
+            masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/plan", true
+      error: (model, response) ->
+        alert 'Error uploading the count plan to the server. Please restart.'
 
   addGateGroupButton: (event) ->
     countPlan = masterRouter.count_plans.getCurrentCountPlan()

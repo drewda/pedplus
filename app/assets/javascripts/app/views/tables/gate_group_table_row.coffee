@@ -112,8 +112,8 @@ class App.Views.GateGroupTableRow extends Backbone.View
         segment_id: segment.id
         gate_group_cid: @gateGroup.cid
         gate_group_id: @gateGroup.id # TODO: check
-        count_plan_cid: @gateGroup.count_plan_cid
-        count_plan_id: @gateGroup.cid # TODO: check
+        count_plan_cid: @gateGroup.get 'count_plan_cid'
+        count_plan_id: @gateGroup.get 'count_plan_id' # TODO: check
       # and add to the Gate collection
       masterRouter.gates.add gate
     , this

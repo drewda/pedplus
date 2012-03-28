@@ -1,4 +1,4 @@
-<div id="measure-tab">
+<div id="measure-tab-plan">
   <ul id="measure-sub-tabs" class="nav nav-tabs">
     <% if (project.get('permissions_for_current_user').plan == true) { %>
     <li id="plan-sub-tab" class="active">
@@ -14,12 +14,23 @@
     </li>
   </ul>
 
-  <div class="row-fluid">
-    <div class="span9">
-      <h3>Count plan starts <%= countPlan.get('start_date') %>, lasts for <%= countPlan.printWeeks() %>, and ends <%= countPlan.get('end_date') %>.</h3>
+  <div id="count-plan-header-row" class="row-fluid">
+    <div class="span7">
+      <h3>Count plan starts <%= new XDate(countPlan.get('start_date')).toString("dddd d MMMM yyyy") %>, lasts for <%= countPlan.printWeeks() %>, and ends <%= new XDate(countPlan.get('end_date')).toString("dddd d MMMM yyyy") %>.</h3>
     </div>
-    <div class="span3" align="right">
-      <h6><a id="edit-count-plan-button" class="btn btn-inverse">Edit Count Plan</a></h6>
+    <div class="span5" align="right">
+      <h6>
+        <a id="archive-count-plan-button" class="btn">Archive Count Plan</a>
+        <a id="edit-count-plan-button" class="btn">Edit Count Plan</a>
+      </h6>
     </div>
+  </div>
+
+  <div class="modal-body">
+    <table id="gate-group-table" class="table table-condensed">
+      <tbody>
+        <!-- will be filled with CountPlanTableRow's -->
+      </tbody>
+    </table>
   </div>
 </div>

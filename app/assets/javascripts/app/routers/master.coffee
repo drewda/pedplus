@@ -27,6 +27,7 @@ class App.Routers.Master extends Backbone.Router
     # will be fetch'ed for only one CountPlan
     @gate_groups = new App.Collections.GateGroups
     @gates = new App.Collections.Gates
+    @gate_group_schedules = new App.Collections.GateGroupSchedules
     
     # will be populated by the client-side
     @map_edits = new App.Collections.MapEdits

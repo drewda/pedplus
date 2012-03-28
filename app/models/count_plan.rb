@@ -8,7 +8,7 @@ class CountPlan < ActiveRecord::Base
 
   before_save :archive_other_count_plans
   def archive_other_count_plans
-    project.count_plans.where(:is_the_current_plan => true).update_all :is_the_current_plan => false
+    project.count_plans.where("is_the_current_plan = true AND id != ?", self.id).update_all :is_the_current_plan => false
   end
 
   def percent_completed

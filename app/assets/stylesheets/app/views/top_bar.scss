@@ -48,6 +48,24 @@
       display: none;
     }
   }
+
+  #measure-tab-plan {
+    #measure-sub-tabs {
+      margin-bottom: 8px;
+      li {
+        font-size: 16px;
+      }
+    }
+    
+    #count-plan-header-row {
+      padding-bottom: 4px;
+    }
+    .modal-body {
+      padding: 0;
+      height: 118px;
+      overflow-y: auto;
+    }
+  }
   
   #measure-tab-plan-edit {
     .modal-header {

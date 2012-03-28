@@ -16,13 +16,39 @@ class Api::CountPlansController < Api::ApiController
   end
   
   def create
-    # TODO: do something like MapEditsController
-    params[:count_plan].delete 'cid'
+    if params[:gateGroups]
+      gateGroups = params.delete 'gateGroups'
+      gateGroupCidToIdHash = Hash.new
+    end
+    if params[:gates]
+      gates = params.delete 'gates'
+    end
 
-    @count_plan = CountPlan.new params[:count_plan]
+    @count_plan = CountPlan.new pick(params, :project_id, :start_date, :count_session_duration_seconds, :total_weeks, :is_the_current_plan)
     
     respond_to do |format|
       if @count_plan.save
+        if gateGroups
+          gateGroups.each do |ggLocal|
+            gateGroup = GateGroup.create :count_plan_id => @count_plan.id,
+                                         :label => ggLocal[:label],
+                                         :days => ggLocal[:days],
+                                         :hours => ggLocal[:hours],
+                                         :status => ggLocal[:status],
+                                         :user_id => ggLocal[:user_id]
+            gateGroupCidToIdHash[ggLocal[:cid]] = gateGroup.id
+          end
+        end
+        if gates
+          gates.each_with_index do |gLocal, index|
+            gate = Gate.create :segment_id => gLocal[:segment_id],
+                               :gate_group_id => gateGroupCidToIdHash[gLocal[:gate_group_cid]],
+                               :count_plan_id => @count_plan.id,
+                               :counting_days_remaining => @count_plan.project.organization.default_counting_days_per_gate,
+                               :label => index + 1
+          end
+        end
+
         format.json  { render :json => @count_plan, :status => :created, :location => api_project_count_plan_url(@count_plan.project, @count_plan) }
       else
         format.json  { render :json => @count_plan.errors, :status => :unprocessable_entity }
@@ -31,19 +57,11 @@ class Api::CountPlansController < Api::ApiController
   end
   
   def update
-    params[:count_plan].delete 'cid'
-    
+    # TODO: make this work the same as create    
     @count_plan = CountPlan.find(params[:id])
 
-    if counts = params[:counts]
-      counts.each do |c|
-        count = Count.create(:at => c[:at],
-                             :count_plan_id => c[:count_plan_id])
-      end
-    end
-
     respond_to do |format|
-      if @count_plan.update_attributes(params[:count_plan])
+      if @count_plan.update_attributes pick(params, :is_the_current_plan)
         format.json  { render :json => @count_plan }
       else
         format.json  { render :json => @count_plan.errors, :status => :unprocessable_entity }
