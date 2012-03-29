@@ -13,8 +13,25 @@ class App.Views.MeasureTabCount extends Backbone.View
     # we'll show today (or the first date of the CountPlan) and this user
     # (or the first user listed on the CountPlan)
     if @countPlan and (not @date) and (not @userId)
+      # see if today is in CountPlan's date range
+      today = new XDate()
+      startDate = new XDate @countPlan.get('start_date')
+      endDate = new XDate @countPlan.get('end_date')
+      if today >= startDate and today <= endDate
+        date = today.toString("yyyy-MM-dd")
+      else if today < startDate
+        date = startDate.toString("yyyy-MM-dd")
+      else
+        date = endDate.toString("yyyy-MM-dd")
 
-      masterRouter.navigate # TODO
+      # see if current user is in CountPlan
+      currentUserId = masterRouter.users.getCurrentUser().id
+      if _.include @countPlan.getAllUserIds(), currentUserId
+        userId = currentUserId
+      else
+        userId = @countPlan.getAllUserIds()[0]
+
+      masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count/schedule/date/#{date}/user/#{userId}}", true
 
     # otherwise we'll render the small version of MeasureTabCount,
     # which instruct the user to create a CountPlan
@@ -31,30 +48,25 @@ class App.Views.MeasureTabCount extends Backbone.View
         project: @options.projects.getCurrentProject()
 
     # the full-fledged schedule
-    else if masterRouter.currentRouteName.startsWith "measureCountScheduleDateUserId"
+    else if masterRouter.currentRouteName.startsWith "measureCountScheduleDateUser"
       $('#tab-area').empty().html @measureTabCountTemplate
         project: @options.projects.getCurrentProject()
         users: masterRouter.users
         countPlan: @countPlan
 
       # set the appropriate date in the drop-down select
+      $('#measure-count-day-select').val @date
 
-      # set 
+      # set the appropriate user in the drop-down select
+      $('#measure-count-user-select').val @userId
 
       # bindings for drop-down selects
       $('#measure-count-day-select').on "change", $.proxy @measureCountDaySelectChange, this
       $('#measure-count-user-select').on "change", $.proxy @measureCountUserSelectChange, this
 
-    # select today
-    # If today's date in not in the CountPlan, the CountPlan's first day
-    # will remain selected.
-    $('#measure-count-day-select').val new XDate().toString("yyyy-MM-dd")
-
-    # select current user
-    $('#measure-count-user-select').val masterRouter.users.getCurrentUser().id
-
   measureCountDaySelectChange: ->
     date = $('#measure-count-day-select').val()
+    masterRouter.navigate 
 
   measureCountUserSelectChange: ->
     userId = $('#measure-count-user-select').val()

@@ -106,7 +106,7 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/measure/plan/:count_plan_cid/edit/gate_group/:gate_group_cid" : "measurePlanEditGateGroup"
 
     "project/:project_id/measure/count"                                                : "measureCount"
-    "project/:project_id/measure/count/schedule/date/:date/user_id/:user_id"           : "measureCountScheduleDateUserId"
+    "project/:project_id/measure/count/schedule/date/:date/user/:user_id"              : "measureCountScheduleDateUser"
     "project/:project_id/measure/count/enter/count_session/:count_session_cid"         : "measureCountEnterCountSession"
 
     "project/:project_id/measure/view"                                                 : "measureView"
@@ -434,9 +434,9 @@ class App.Routers.Master extends Backbone.Router
       @geo_points.selectNone()
       @segments.selectNone()
 
-  measureCountScheduleDateUserId: (date, userId) ->
+  measureCountScheduleDateUser: (date, userId) ->
     if @reset(projectId, true, 250)
-      @routeNameKeeper 'measureCount'
+      @routeNameKeeper 'measureCountScheduleDateUser'
       @mostRecentMeasureSubTab = "count"
       @measureTab = new App.Views.MeasureTabCount
         topBar: masterRouter.topBar
