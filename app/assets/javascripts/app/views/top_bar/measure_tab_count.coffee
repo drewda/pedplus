@@ -31,7 +31,7 @@ class App.Views.MeasureTabCount extends Backbone.View
       else
         userId = @countPlan.getAllUserIds()[0]
 
-      masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count/schedule/date/#{date}/user/#{userId}}", true
+      masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count/schedule/date/#{date}/user/#{userId}", true
 
     # otherwise we'll render the small version of MeasureTabCount,
     # which instruct the user to create a CountPlan

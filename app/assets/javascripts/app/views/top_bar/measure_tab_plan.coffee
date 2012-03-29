@@ -51,6 +51,7 @@ class App.Views.MeasureTabPlan extends Backbone.View
     # bind button actions
     $('#archive-count-plan-button').on "click", $.proxy @archiveCountPlanButton, this
     $('#edit-count-plan-button').on "click", $.proxy @editCountPlanButton, this
+    $('#delete-count-plan-button').on "click", $.proxy @deleteCountPlanButton, this
 
   archiveCountPlanButton: ->
     bootbox.confirm "Are you sure you want to archive this count plan? It will no longer be visible to counters.", (confirmed) =>
@@ -61,6 +62,10 @@ class App.Views.MeasureTabPlan extends Backbone.View
           success: ->
             masterRouter.count_plans.fetch
               success: ->
+                # remove all GateGroup colors from the Segment's
+                masterRouter.segments.each (segment) -> 
+                  segment.unset 'gateGroupLabel'
+                # take the user to the Measure view subtab
                 masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view", true
           error: ->
             bootbox.alert "Error updating the count plan on the server. Please start over.", (ok) =>
@@ -69,6 +74,22 @@ class App.Views.MeasureTabPlan extends Backbone.View
   editCountPlanButton: ->
     # TODO
     bootbox.alert "This functionality has not yet been implemented."
+
+  deleteCountPlanButton: ->
+    bootbox.confirm "Are you sure you want to delete this count plan? All of its gate groups and gates will be deleted as well.", (confirmed) =>
+      if confirmed
+        @countPlan.destroy
+          success: ->
+            masterRouter.count_plans.fetch
+              success: ->
+                # remove all GateGroup colors from the Segment's
+                masterRouter.segments.each (segment) -> 
+                  segment.unset 'gateGroupLabel'
+                # take the user to the Measure view subtab
+                masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view", true
+          error: ->
+            bootbox.alert "Error destroying the count plan on the server. Please start over.", (ok) =>
+              window.location.reload()
 
   nextMonday: ->
     # start with today

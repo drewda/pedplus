@@ -36,7 +36,7 @@ class App.Views.MeasureTabPlanEdit extends Backbone.View
       if @gateGroupCidCurrentlyEditing
         # remove all the buttons to edit other GateGroup's
         $('.edit-gate-group-button').remove()
-        # and scroll the table to the row being edited
+        # scroll the table to the row being edited
         $('.modal-body').scrollTo $('.currently-editing')
 
   template: JST["app/templates/top_bar/measure_tab_plan_edit"]
@@ -52,7 +52,10 @@ class App.Views.MeasureTabPlanEdit extends Backbone.View
     # just put in the CountPlan's year
     year = XDate(@countPlan.get('start_date')).getFullYear()
     $('#start-date-year-input').append $("<option></option>").attr("value", year).text(year)
-    $('#start-date-year-input').val year
+    if temporary_year = @countPlan.get 'temporary_year'
+      $('#start-date-year-input').val temporary_year
+    else  
+      $('#start-date-year-input').val year
     # put in all the months
     for monthNumber in [1..12]
       fullMonthName = XDate.locales[''].monthNames[monthNumber - 1]
@@ -60,19 +63,28 @@ class App.Views.MeasureTabPlanEdit extends Backbone.View
       $('#start-date-month-input').append option
     # and now select the CountPlan's month
     # note that XDate's month indices are off by 1
-    month = XDate(@countPlan.get('start_date')).getMonth() + 1
-    $('#start-date-month-input').val month
+    if temporary_month = @countPlan.get 'temporary_month'
+      $('#start-date-month-input').val temporary_month
+    else
+      month = XDate(@countPlan.get('start_date')).getMonth() + 1
+      $('#start-date-month-input').val month
     # put in all the Mondays
     @computeMondayDays()
     # set the day from the CountPlan
-    $('#start-date-day-input').val XDate(@countPlan.get('start_date')).getDate()
+    if temporary_day = @countPlan.get 'temporary_day'
+      $('#start-date-day-input').val temporary_day
+    else
+      $('#start-date-day-input').val XDate(@countPlan.get('start_date')).getDate()
 
     # bindings for recomputing Mondays
     $('#start-date-year-input').change @computeMondayDays
     $('#start-date-month-input').change @computeMondayDays
 
     # set the number of weeks
-    $('#weeks-input').val @countPlan.get 'total_weeks'
+    if temporary_weeks = @countPlan.get 'temporary_weeks'
+      $('#weeks-input').val temporary_weeks
+    else
+      $('#weeks-input').val @countPlan.get 'total_weeks'
     # bindings for changing the label for weeks
     $('#weeks-input').change @changeWeeksLabel
 
@@ -81,6 +93,14 @@ class App.Views.MeasureTabPlanEdit extends Backbone.View
     $('#start-date-month-input').change @changeEndDate
     $('#start-date-day-input').change @changeEndDate
     $('#weeks-input').change @changeEndDate
+
+    # Bindings to save temporary values for start date and number of weeks.
+    # This is important so that we don't lose those values when switching back
+    # and forth between editing GateGroup's.
+    $('#start-date-year-input').on "change", $.proxy @saveTemporaryStartDateAndWeekValues, this
+    $('#start-date-month-input').on "change", $.proxy @saveTemporaryStartDateAndWeekValues, this
+    $('#start-date-day-input').on "change", $.proxy @saveTemporaryStartDateAndWeekValues, this
+    $('#weeks-input').on "change", $.proxy @saveTemporaryStartDateAndWeekValues, this
 
     # act on the default form values
     @changeEndDate()
@@ -112,6 +132,12 @@ class App.Views.MeasureTabPlanEdit extends Backbone.View
     if @countPlan.getGateGroups().length < 1
       bootbox.alert "Count plans must include at least one gate group."
       return
+
+    # remove the temporary values
+    @countPlan.unset 'temporary_day'
+    @countPlan.unset 'temporary_month'
+    @countPlan.unset 'temporary_year'
+    @countPlan.unset 'temporary_weeks'
 
     # upload to Api::CountPlansController
     @countPlan.save
@@ -211,3 +237,15 @@ class App.Views.MeasureTabPlanEdit extends Backbone.View
     # render the options
     _.each mondays, (day) ->
       $('#start-date-day-input').append $("<option></option>").attr("value", day).text(day)
+
+  saveTemporaryStartDateAndWeekValues: ->
+    year = $('#start-date-year-input').val()
+    month = $('#start-date-month-input').val()
+    day = $('#start-date-day-input').val()
+    weeks = $('#weeks-input').val()
+
+    @countPlan.set
+      temporary_year: year
+      temporary_month: month
+      temporary_day: day
+      temporary_weeks: weeks

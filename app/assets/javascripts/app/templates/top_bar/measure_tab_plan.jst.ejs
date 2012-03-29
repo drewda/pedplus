@@ -18,11 +18,20 @@
     <div class="span7">
       <h3>Count plan starts <%= new XDate(countPlan.get('start_date')).toString("dddd d MMMM yyyy") %>, lasts for <%= countPlan.printWeeks() %>, and ends <%= new XDate(countPlan.get('end_date')).toString("dddd d MMMM yyyy") %>.</h3>
     </div>
-    <div class="span5" align="right">
-      <h6>
-        <a id="archive-count-plan-button" class="btn">Archive Count Plan</a>
-        <a id="edit-count-plan-button" class="btn">Edit Count Plan</a>
-      </h6>
+    <div class="span5">
+      <div class="btn-group pull-right">
+        <h6>
+          <a id="edit-count-plan-button" class="btn">
+            <i class="icon-pencil"></i> Edit
+          </a>
+          <a id="archive-count-plan-button" class="btn">
+            <i class="icon-lock"></i> Archive
+          </a>
+          <a id="delete-count-plan-button" class="btn">
+            <i class="icon-trash"></i> Delete
+          </a>
+        </h6>
+      </div>
     </div>
   </div>
 

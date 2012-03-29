@@ -434,7 +434,7 @@ class App.Routers.Master extends Backbone.Router
       @geo_points.selectNone()
       @segments.selectNone()
 
-  measureCountScheduleDateUser: (date, userId) ->
+  measureCountScheduleDateUser: (projectId, date, userId) ->
     if @reset(projectId, true, 250)
       @routeNameKeeper 'measureCountScheduleDateUser'
       @mostRecentMeasureSubTab = "count"

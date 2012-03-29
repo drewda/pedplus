@@ -17,6 +17,7 @@ class App.Collections.Gates extends Backbone.Collection
     @fetch() if masterRouter.count_plans.getCurrentCountPlan()
 
   addAllSegmentColors: ->
+    # add the segment colors
     @each (gate) ->
       masterRouter.segments.get(gate.get 'segment_id').set
         gateGroupLabel: gate.getGateGroup().get 'label'
