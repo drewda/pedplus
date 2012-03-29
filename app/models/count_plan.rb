@@ -1,7 +1,7 @@
 class CountPlan < ActiveRecord::Base
   belongs_to :project
   has_many :gate_groups, :order => "label ASC", :dependent => :destroy
-  has_many :gates
+  has_many :gates, :dependent => :destroy
   has_many :count_sessions, :dependent => :destroy
 
   accepts_nested_attributes_for :gate_groups

@@ -42,14 +42,25 @@ class App.Models.CountPlan extends Backbone.Model
         masterRouter.gates.select (g) => 
           g.get('count_plan_id') == @id
 
-  getGateGroupSchedule: ->
-    masterRouter.gate_group_schedules.first()
-
   # compute the end date
   getEndDate: ->
     startDate = new XDate @get 'start_date'
-    endDate = startDate.addWeeks numberOfWeeks
-    endDate = startDate.addDays 6
+    endDate = startDate.addWeeks @get 'total_weeks'
+    endDate = endDate.addDays -1
+
+  # Return an array with all the dates within the CountPlan.
+  # This will be used for MeasureTabCount
+  getAllDates: ->
+    dates = []
+    date = new XDate @get 'start_date' 
+    while date <= @getEndDate()
+      dates.push date.clone()
+      date = date.addDays 1
+    return dates
+
+  # return id's for all the User's who are listed as counters in this CountPlan
+  getAllUserIds: ->
+    _.uniq _.map @getGateGroups(), (gg) -> gg.get 'user_id'
 
   # does the CountPlan last for a singular or plural
   # number of weeks?

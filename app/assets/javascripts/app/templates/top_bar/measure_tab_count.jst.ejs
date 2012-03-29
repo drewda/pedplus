@@ -3,19 +3,15 @@
   <ul id="measure-sub-tabs" class="nav nav-tabs">
     <% if (project.get('permissions_for_current_user').plan == true) { %>
     <li id="plan-sub-tab">
-    	<a href="#project/<%= project.id %>/measure/plan">Plan</a>
+      <a href="#project/<%= project.id %>/measure/plan">Plan</a>
     </li>
-    <% } if (project.get('permissions_for_current_user').count == true) { %>
     <li id="count-sub-tab" class="active">
-    	<a href="#project/<%= project.id %>/measure/count">Count</a>
+      <a href="#project/<%= project.id %>/measure/count">Count</a>
     </li>
-    <% } %>
     <li id="view-sub-tab">
-    	<a href="#project/<%= project.id %>/measure/view">View</a>
+      <a href="#project/<%= project.id %>/measure/view">View</a>
     </li>
   </ul>
 
-  <% _.each(gateGroupSchedule.attributes, function(date) { %>
-    <h1><%= date %></h1>
-  <% }); %>
+  <h6><em>Before starting to count, you must have a count plan.</em></h6>
 </div>

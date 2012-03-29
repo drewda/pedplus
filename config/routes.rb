@@ -22,7 +22,6 @@ Pedplus::Application.routes.draw do
       resources :count_plans do
         resources :gate_groups
         resources :gates
-        resources :gate_group_schedules, :only => [:index]
       end
       resources :count_sessions do
         resources :counts

@@ -59,7 +59,7 @@ class App.Views.MeasureTabPlan extends Backbone.View
           is_the_current_plan: false
         ,
           success: ->
-            masterRouter.countPlan.fetch
+            masterRouter.count_plans.fetch
               success: ->
                 masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view", true
           error: ->

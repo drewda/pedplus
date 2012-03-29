@@ -1,0 +1,48 @@
+<div id="measure-tab">
+
+  <ul id="measure-sub-tabs" class="nav nav-tabs">
+    <% if (project.get('permissions_for_current_user').plan == true) { %>
+    <li id="plan-sub-tab">
+      <a href="#project/<%= project.id %>/measure/plan">Plan</a>
+    </li>
+    <li id="count-sub-tab" class="active">
+      <a href="#project/<%= project.id %>/measure/count">Count</a>
+    </li>
+    <li id="view-sub-tab">
+      <a href="#project/<%= project.id %>/measure/view">View</a>
+    </li>
+  </ul>
+
+  <div class="row-fluid">
+    <div class="span3">
+      <h3>Show counting schedule for:</h3>
+    </div>
+    <div class="span2">
+      <select id="measure-count-day-select">
+        <% _.each(countPlan.getAllDates(), function(date) { %> 
+          <option value="<%= date.toString("yyyy-MM-dd") %>"><%= date.toString("dddd d MMMM yyyy") %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="span2">
+      <select id="measure-count-user-select">
+        <% _.each(countPlan.getAllUserIds(), function(userId) { %>
+          <option value="<%= userId %>"><%= users.get(userId).full_name() %></option>
+        <% }); %>
+      </select>
+    </div>
+  </div>
+  <table id="gate-group-table" class="table table-condensed">
+    <tbody>
+      <tr>
+        <td rowspan="5">7:00</td>
+        <td>A-1</td>
+        <td>
+          <h6><a class="btn">Gate A-1</a></h6>
+        </td>
+      </tr>
+      <tr>
+        <td>A-2</td>
+      </tr>
+    </tbody>
+  </table>

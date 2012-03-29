@@ -27,7 +27,6 @@ class App.Routers.Master extends Backbone.Router
     # will be fetch'ed for only one CountPlan
     @gate_groups = new App.Collections.GateGroups
     @gates = new App.Collections.Gates
-    @gate_group_schedules = new App.Collections.GateGroupSchedules
     
     # will be populated by the client-side
     @map_edits = new App.Collections.MapEdits
@@ -107,7 +106,8 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/measure/plan/:count_plan_cid/edit/gate_group/:gate_group_cid" : "measurePlanEditGateGroup"
 
     "project/:project_id/measure/count"                                                : "measureCount"
-    "project/:project_id/measure/count/count_session/:count_session_cid/enter"         : "measureCountEnterCountSession"
+    "project/:project_id/measure/count/schedule/date/:date/user_id/:user_id"           : "measureCountScheduleDateUserId"
+    "project/:project_id/measure/count/enter/count_session/:count_session_cid"         : "measureCountEnterCountSession"
 
     "project/:project_id/measure/view"                                                 : "measureView"
     "project/:project_id/measure/view/segment/:segment_id"                             : "measureViewSelectedSegment"
@@ -422,7 +422,7 @@ class App.Routers.Master extends Backbone.Router
       # so we don't want to do a selectNone() after rendering measureTab
 
   measureCount: (projectId) ->
-    if @reset(projectId, true, 250)
+    if @reset(projectId, true, 120)
       @routeNameKeeper 'measureCount'
       @mostRecentMeasureSubTab = "count"
       @measureTab = new App.Views.MeasureTabCount
@@ -433,6 +433,19 @@ class App.Routers.Master extends Backbone.Router
       @map.resetMap false, true
       @geo_points.selectNone()
       @segments.selectNone()
+
+  measureCountScheduleDateUserId: (date, userId) ->
+    if @reset(projectId, true, 250)
+      @routeNameKeeper 'measureCount'
+      @mostRecentMeasureSubTab = "count"
+      @measureTab = new App.Views.MeasureTabCount
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        date: date
+        userId: userId
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
 
   measureCountEnterCountSession: (projectId, countSessionId) ->
     if @reset(projectId, true, 160)
