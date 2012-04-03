@@ -2,7 +2,7 @@ class App.Collections.Gates extends Backbone.Collection
   model: App.Models.Gate
 
   initialize: ->
-    masterRouter.count_plans.bind "reset", @fetchIfCurrentCountPlan, this
+    masterRouter.gate_groups.bind "reset", @fetchIfCurrentCountPlan, this
 
     # whenever GateGroup's are modified, update the coloring of the segments
     @bind "reset", @addAllSegmentColors, this

@@ -180,7 +180,8 @@ class App.Routers.Master extends Backbone.Router
                     masterRouter.count_sessions.fetch()
                     masterRouter.count_plans.fetch()
                     # if there is a current CountPlan, that will trigger
-                    # the fetching of gates and gate_counts
+                    # the fetching of GateGroup's, which will in turn
+                    # trigger the fetching of Gate's
         masterRouter.model_jobs.fetch()
 
       # topBar
