@@ -7,7 +7,9 @@ class App.Views.Map extends Backbone.View
     @latestTap = null
     
     @map = null
-    @osmLayer = null
+    # @osmGrayLayer = null
+    @osmColorLayer = null
+    @bingAerialLayer = null
     
     @segmentWorkingAnimation = null
     
@@ -21,6 +23,7 @@ class App.Views.Map extends Backbone.View
        .add(po.touch())
        .add(po.arrow())
     
+    # OpenStreetMap layer
     ### 
     URBPED-16: disable gray layer for now, as MapQuest does not provide differently styled tiles
     if/when we switch to Esri base maps, they have a gray tile set that we can use:
@@ -30,13 +33,56 @@ class App.Views.Map extends Backbone.View
     #             .url(po.url('http://otile{S}.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png').hosts(["1", "2", "3", "4"]))
     #             .id("osm-gray-layer")
     # @map.add(@osmGrayLayer)
-    @osmColorLayer = po.image()
-                .url(po.url('http://otile{S}.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png').hosts(["1", "2", "3", "4"]))
-                .id("osm-color-layer")
-    @map.add(@osmColorLayer)
+
+    # if there is a project and that project uses the Bing aerial base map, set up that layer
+    if masterRouter.projects.getCurrentProject()
+      if masterRouter.projects.getCurrentProject().get('base_map') == 'bing'
+        bingAerialUrl = "http:\/\/ecn.{subdomain}.tiles.virtualearth.net\/tiles\/a{quadkey}.jpeg?g=914&mkt={culture}"
+        bingAerialUrlSubdomains = ["t0","t1","t2","t3"]
+        @bingAerialLayer = po.image()
+                    .url(@bingAerialTemplate(bingAerialUrl, bingAerialUrlSubdomains))
+                    .id("osm-color-layer") # TODO: change the layer id, which means also changing the layer bindings
+        @map.add @bingAerialLayer
+
+      # if not (by default), show the OSM tiles from MapQuest
+      else
+        @osmColorLayer = po.image()
+                    .url(po.url('http://otile{S}.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png').hosts(["1", "2", "3", "4"]))
+                    .id("osm-color-layer")
+        @map.add(@osmColorLayer)
+
+    # TODO: clean this up
+    # if not (by default), show the OSM tiles from MapQuest
+    else
+      @osmColorLayer = po.image()
+                  .url(po.url('http://otile{S}.mqcdn.com/tiles/1.0.0/osm/{Z}/{X}/{Y}.png').hosts(["1", "2", "3", "4"]))
+                  .id("osm-color-layer")
+      @map.add(@osmColorLayer)
     
+    # add the compass to the top right of the screen
     @map.add(po.compass().position('top-right'))
+
     
+  # Returns a Bing URL template given a string and a list of subdomains.
+  # code from http://polymaps.org/ex/bing.html
+  bingAerialTemplate: (url, subdomains) ->
+    n = subdomains.length
+    salt = ~~(Math.random() * n) # per-session salt
+
+    # Returns the given coordinate formatted as a 'quadkey'.
+    quad = (column, row, zoom) ->
+      key = ""
+      for i in [1..zoom]
+        key += (((row >> zoom - i) & 1) << 1) | ((column >> zoom - i) & 1)
+      return key
+
+    return (c) ->
+      quadKey = quad(c.column, c.row, c.zoom)
+      server = Math.abs(salt + c.column + c.row + c.zoom) % n
+      return url
+          .replace("{quadkey}", quadKey)
+          .replace("{subdomain}", subdomains[server])
+
   setOsmLayer: (mode = "color") ->
     if mode == "color"
       # $('#osm-color-layer').show()

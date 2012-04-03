@@ -160,6 +160,11 @@ class App.Routers.Master extends Backbone.Router
       @routeNameKeeper 'project'
       $('#top-bar').show() # was hidden in projectOpen()
 
+      # because we might be changing from OSM to Bing tiles,
+      # we will empty and re-render the map
+      $('#map-area').empty()
+      @map.render()
+
       # fetch project data
       if masterRouter.geo_points.length == 0 or 
          masterRouter.geo_point_on_segments.length == 0 or

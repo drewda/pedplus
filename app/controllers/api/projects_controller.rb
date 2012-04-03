@@ -13,4 +13,16 @@ class Api::ProjectsController < Api::ApiController
       format.json { render :json => @projects.to_json(:methods => [:permissions_for_current_user]) }
     end
   end
+
+  def update
+    @project = Project.find params[:id]
+
+    respond_to do |format|
+      if @project.update_attributes pick(params, :base_map, :name)
+        format.json  { render :json => @project }
+      else
+        format.json  { render :json => @project.errors, :status => :unprocessable_entity }
+      end
+    end
+  end
 end

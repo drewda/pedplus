@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120322175807) do
+ActiveRecord::Schema.define(:version => 20120402224128) do
 
   create_table "count_plans", :force => true do |t|
     t.integer  "project_id"
@@ -177,6 +177,7 @@ ActiveRecord::Schema.define(:version => 20120322175807) do
     t.decimal  "northeast_longitude", :precision => 15, :scale => 10
     t.integer  "version"
     t.integer  "max_number_of_gates"
+    t.string   "base_map",                                            :default => "osm"
   end
 
   add_index "projects", ["organization_id"], :name => "index_projects_on_organization_id"

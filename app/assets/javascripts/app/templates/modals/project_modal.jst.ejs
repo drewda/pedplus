@@ -13,7 +13,18 @@
   
   <div class="modal-body">
     <% if (mode == "settings") { %>
-      <p><span class="label notice">Info</span> There are no settings that you can configure for this project.</p>
+      <form class="form-horizontal">
+        <div class="control-group">
+          <label class="control-label">Base map</label>
+          <div class="controls">
+            <select id="base-map-select">
+              <option value="osm">OpenStreetMap</option>
+              <option value="bing">Bing aerial imagery</option>
+            </select>
+            <p class="help-block">Which map tiles should be displayed behind this project's segments and points?</p>
+          </div>
+        </div>
+      </form>
     <% } else if (mode == "export") { %>
       <h4>Map</h4>
 
