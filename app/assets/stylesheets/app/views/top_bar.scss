@@ -49,6 +49,19 @@
     }
   }
 
+  /* TODO: clean up the styles for the various MeasureTab variations */
+  #measure-tab-count {
+    #measure-sub-tabs {
+      margin-bottom: 8px;
+      li {
+        font-size: 16px;
+      }
+    }
+    #gate-group-table-wrapper {
+      height: 130px;
+      overflow-y: auto;
+    }
+  }
   #measure-tab-plan {
     #measure-sub-tabs {
       margin-bottom: 8px;
@@ -148,43 +161,43 @@
         }
       }
     }
-    // #count-session-entry {
-    //   clear: both;
-    //   #timer {
-    //     float: left;
-    //     padding: 20px;
-    //     margin-left: 20px;
-    //     width: 100px;
-    //     text-align: left;
+    #count-session-entry {
+      clear: both;
+      #timer {
+        float: left;
+        padding: 20px;
+        margin-left: 20px;
+        width: 100px;
+        text-align: left;
 
-    //   }
-    //   #counter {
-    //    float: left; 
-    //    font-size: 52pt;
-    //    padding: 33px;
-    //    text-align: center;
-    //    h6 {
-    //      display: block;
-    //      width: 100%;
-    //      padding-top: 20px;
-    //    }
-    //   }
-    //   .btn {
-    //     height: 120px;
-    //     width: 130px;
-    //     font-size: 52pt;
-    //   }
-    //   #count-minus-one-button {
-    //     float: left;
-    //   }
-    //   #count-plus-one-button {
-    //     float: right;
-    //     margin-left: 4px;
-    //   }
-    //   #count-plus-five-button {
-    //     float: right;
-    //   }
-    // }
+      }
+      #counter {
+       float: left; 
+       font-size: 52pt;
+       padding: 33px;
+       text-align: center;
+       h6 {
+         display: block;
+         width: 100%;
+         padding-top: 20px;
+       }
+      }
+      .btn {
+        height: 120px;
+        width: 130px;
+        font-size: 52pt;
+      }
+      #count-minus-one-button {
+        float: left;
+      }
+      #count-plus-one-button {
+        float: right;
+        margin-left: 4px;
+      }
+      #count-plus-five-button {
+        float: right;
+      }
+    }
   }
   #design-tab {
     table {

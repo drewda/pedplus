@@ -37,7 +37,7 @@ class App.Views.CountSessionTable extends Backbone.View
         { "bVisible": false } # this is CountSession.id
         { "bVisible": false} # this is CountSession.segment_id
         { "sTitle": "Start Time", "sType": "date", "fnRender": (oObj) => XDate(oObj.aData[2]).toString("d MMM yyyy h:mm tt") }
-        { "sTitle": "Duration (minutes)" , "fnRender": (oObj) => oObj.aData[3] / 60 }
+        { "sTitle": "Duration (minutes)" , "fnRender": (oObj) => oObj.aData[3] }
         { "sTitle": "Taken By", "fnRender": (oObj) => masterRouter.users.get(oObj.aData[4]).full_name() }
         { "sTitle": "Total Pedestrians Counted" }
         { "bVisible": false, "sType": "string" } # this is CountSession.selected

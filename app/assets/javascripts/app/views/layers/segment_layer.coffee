@@ -85,6 +85,34 @@ class App.Views.SegmentLayer extends Backbone.View
           else
             c.setAttribute "class", "segment-line black"
 
+        # measure count subtab
+        else if masterRouter.currentRouteName.startsWith "measureCount"
+          if masterRouter.currentRouteName.startsWith "measureCountScheduleDateUser"
+            # pull the date and user ID out of the URL
+            date = String(window.location).match(/date\/([\d-]+)/g)[0].replace('date/','')
+            userId = Number(String(window.location).split('/').pop())
+            # identify all the segments associated with the gates being shown for this date and user
+            segmentIds = masterRouter.count_plans.getCurrentCountPlan().getGatesFor(date, userId) # TODO: speed this up, maybe with _.memoize
+            # find the current segment
+            segment = masterRouter.segments.getByCid(f.data.cid)
+            # if the current segment is one of the segments associated with the gates, then show display
+            # if not, don't display the segment
+            if _.include segmentIds, segment.id
+              gateGroupLabel = segment.get('gateGroupLabel')
+              c.setAttribute "class", "gateGroup#{gateGroupLabel} segment-line"
+          else if masterRouter.currentRouteName.startsWith "measureCountStartGate"
+            # only show the segment for the Gate the user may start counting at
+            gateId = Number(String(window.location).split('/').pop())
+            gate = masterRouter.gates.get(gateId)
+            if gate.getSegment().cid == f.data.cid
+              c.setAttribute "class", "selected segment-line"
+          else if masterRouter.currentRouteName.startsWith "measureCountEnterCountSession"
+            # only show the segment for the CountSessions
+            countSessionCid = String(window.location).split('/').pop()
+            gate = masterRouter.count_sessions.getByCid(countSessionCid).getGate()
+            if gate.getSegment().cid == f.data.cid
+              c.setAttribute "class", "selected segment-line"
+
         # measure view subtab
         else if masterRouter.currentRouteName.startsWith "measureView"
           colorClass = masterRouter.segments.getByCid(f.data.cid).get('measuredClass')

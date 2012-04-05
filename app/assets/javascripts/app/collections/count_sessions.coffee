@@ -21,7 +21,7 @@ class App.Collections.CountSessions extends Backbone.Collection
           cs.id
           cs.get('segment_id')
           cs.get('start')
-          cs.get('duration_seconds')
+          cs.get('duration_minutes')
           cs.get('user_id')
           cs.get('counts_count')
           if !cs.get('selected') then false else cs.get('selected')

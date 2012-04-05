@@ -1,4 +1,4 @@
-<div id="measure-tab">
+<div id="measure-tab-count">
 
   <ul id="measure-sub-tabs" class="nav nav-tabs">
     <% if (project.get('permissions_for_current_user').plan == true) { %>
@@ -15,35 +15,47 @@
   </ul>
 
   <div class="row-fluid">
-    <div class="span3">
+    <div class="span4">
       <h3>Show counting schedule for:</h3>
     </div>
-    <div class="span2">
-      <select id="measure-count-day-select">
+    <div class="span3">
+      <select id="measure-count-day-select" style="width: auto;">
         <% _.each(countPlan.getAllDates(), function(date) { %> 
           <option value="<%= date.toString("yyyy-MM-dd") %>"><%= date.toString("dddd d MMMM yyyy") %></option>
         <% }); %>
       </select>
     </div>
-    <div class="span2">
-      <select id="measure-count-user-select">
+    <div class="span3">
+      <select id="measure-count-user-select" style="width: auto;">
         <% _.each(countPlan.getAllUserIds(), function(userId) { %>
           <option value="<%= userId %>"><%= users.get(userId).full_name() %></option>
         <% }); %>
       </select>
     </div>
   </div>
-  <table id="gate-group-table" class="table table-condensed">
-    <tbody>
-      <tr>
-        <td rowspan="5">7:00</td>
-        <td>A-1</td>
-        <td>
-          <h6><a class="btn">Gate A-1</a></h6>
-        </td>
-      </tr>
-      <tr>
-        <td>A-2</td>
-      </tr>
-    </tbody>
-  </table>
+  <% if (countingSchedule.length == 0) { %>
+    <h6><em>No counts have been scheduled for this day and this user.</em></h6>
+  <% } %>
+  <div id="gate-group-table-wrapper">
+    <table id="gate-group-table" class="table table-condensed">
+      <tbody>
+        <% _.each(countingSchedule, function(hour) { %>
+        <tr id="hour-row-<%= hour.hour.replace(':','') %>">
+          <td><p>starting at <strong><%= hour.hour %></strong></p></td>
+          <td>
+            <h6>
+              <% _.each(hour.gates, function (gate) { %>
+                <% if (gate.completed) { %>
+                  <a class="btn btn-success"><i class="icon-ok icon-white"></i> Gate <%= hour.gateGroupLetter %>-<%= gate.label %></a>
+                <% } else { %>
+                  <a data-date="<%= date %>" data-hour="<%= hour.hour.replace(':','') %>" data-gate-id="<%= gate.gateId %>" class="btn gate-to-count-button">Gate <%= hour.gateGroupLetter %>-<%= gate.label %></a>
+                <% } %>
+              <% }); %>
+            </h6>
+          </td>
+        </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+</div>

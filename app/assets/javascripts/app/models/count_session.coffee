@@ -1,11 +1,20 @@
 class App.Models.CountSession extends Backbone.Model
   name: 'count_session'
+  
   initialize: (args) ->
-    @maybeUnwrap(args); # relevant to backbone-rails.js
     @counts = new App.Collections.Counts
     @bind "change", =>
       @counts.url = "/api/projects/#{masterRouter.projects.getCurrentProjectId()}/count_sessions/#{@id}/counts"
     , this
+
+  getGate: ->
+    masterRouter.gates.get @get 'gate_id'
+
+  durationMinutes: ->
+    minutes = XDate(@get 'start').diffMinutes(@get 'end')
+    # only show one decimal point of accuracy
+    minutes.toFixed(1)
+
   select: ->  
     @collection.selectNone() # only want one CountSession selected at a time
     @set
@@ -28,9 +37,3 @@ class App.Models.CountSession extends Backbone.Model
       @deselect()
     else
       @select()
-  uploadCounts: (options) ->
-    @save
-      counts: @counts.toJSON()
-    , 
-      success: ->
-        options.success()

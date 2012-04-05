@@ -16,19 +16,37 @@ class App.Models.GateGroup extends Backbone.Model
           g.get('gate_group_cid') == @cid and g.get('markedForDelete') != true
       else
         masterRouter.gates.select (g) => 
-          g.get('gate_group_cid') == @id and g.get('markedForDelete') != true
+          g.get('gate_group_id') == @id and g.get('markedForDelete') != true
     else
       if @isNew()
         masterRouter.gates.select (g) =>
           g.get('gate_group_cid') == @cid
       else
         masterRouter.gates.select (g) => 
-          g.get('gate_group_cid') == @id
+          g.get('gate_group_id') == @id
 
   getDaysArray: ->
     @get('days').split ','
   getHoursArray: ->
     @get('hours').split ','
+
+  # used in GateGroupTableRow
+  printDays: ->
+    daysArray = @getDaysArray()
+    daysArray = _.map daysArray, (day) ->
+      switch day
+        when 'su' then 'Sunday'
+        when 'mo' then 'Monday'
+        when 'tu' then 'Tuesday'
+        when 'we' then 'Wednesday'
+        when 'th' then 'Thursday'
+        when 'fr' then 'Friday'
+        when 'sa' then 'Saturday'
+    daysArray.join(', ')
+
+  # used in GateGroupTableRow
+  printHours: ->
+    @get('hours').replace(/,/g, ', ').replace(/00/g, ':00')
 
   # select a color from d3's set of 20 categorical colors
   # note that this effectively limits the number of CountGroup's in a CountPlan to 20!

@@ -7,9 +7,8 @@
       <%= users.get(gateGroup.get('user_id')).full_name() %>
     </td>
     <td>
-      <!-- TODO: improve the formatting of days and hours -->
-      <%= gateGroup.get('days') %><br/>
-      <%= gateGroup.get('hours') %>
+      <%= gateGroup.printDays() %><br/>
+      <%= gateGroup.printHours() %>
     </td>
     <td>
       <h6 class="pull-right">

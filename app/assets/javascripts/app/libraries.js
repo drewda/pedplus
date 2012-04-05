@@ -65,3 +65,9 @@ $.fn.dataTableExt.oSort[ 'string-asc' ] = function(lhs, rhs){
 $.fn.dataTableExt.oSort[ 'string-desc' ] = function(lhs, rhs){
   return fnCompareString(lhs, rhs) * -1;
 };
+
+// code from http://forums.devarticles.com/showpost.php?p=71368&postcount=2
+function roundNumber(num, dec) {
+  var result = Math.round(num*Math.pow(10,dec))/Math.pow(10,dec);
+  return result;
+}

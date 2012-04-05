@@ -62,6 +62,87 @@ class App.Models.CountPlan extends Backbone.Model
   getAllUserIds: ->
     _.uniq _.map @getGateGroups(), (gg) -> gg.get 'user_id'
 
+  # Produce a counting schedule for a certain date and user. For example:
+  # [
+  #   {
+  #     'hour': '700',
+  #     'gateGroupLetter': 'A',
+  #     'gates':
+  #       [
+  #         {
+  #           'segment_id': '3323',
+  #           'label': 'A-1',
+  #           'completed': false
+  #         }
+  #       ]
+  #   },
+  # ]
+  # This function is used by MeasureTabCountSchedule
+  getCountingSchedule: (date, userId) ->
+    gateGroups = @getGateGroupsFor(date, userId)
+
+    daySchedule = []
+
+    for gateGroup in gateGroups
+      for hour in gateGroup.get('hours').split(',')
+        gates = []
+        for gate in gateGroup.getGates()
+          gateSchedule =
+            segmentId: gate.get('segment_id')
+            gateId: gate.id
+            label: gate.get('label')
+            completed: gate.isCompletedFor(date, hour)
+          gates.push gateSchedule
+        hourSchedule =
+          hour: hour.replace('00',':00')
+          gateGroupLetter: gateGroup.get('label')
+          gates: gates
+        daySchedule.push hourSchedule
+
+    return daySchedule
+
+  # This function is used by SegmentLayer to determine which Segment's
+  # to draw on the map. Will return a set of Segment ID's.
+  getGatesFor: (date, userId) ->
+    segmentIds = []
+    for gateGroup in @getGateGroupsFor(date, userId)
+      for gate in gateGroup.getGates()
+        segmentIds.push gate.get('segment_id')
+    return segmentIds
+
+  # Return the GateGroup's for a certain date and user ID.
+  # This function is used by @getCountingSchedule()
+  getGateGroupsFor: (date, userId) ->
+    # we're going to use the XDate library
+    date = new XDate(date)
+
+    # first filter GateGroup's by user ID
+    gateGroups = _.select @getGateGroups(), (gg) -> 
+      gg.get('user_id') == Number(userId)
+
+    # set up to filter by day of the week
+    switch date.getDay()
+      when 0 then day = 'su'
+      when 1 then day = 'mo'
+      when 2 then day = 'tu'
+      when 3 then day = 'we'
+      when 4 then day = 'th'
+      when 5 then day = 'fr'
+      when 6 then day = 'sa'
+
+    # now filter by day of the week
+    gateGroups = _.select gateGroups, (gg) ->
+      gg.get('days').match(day)
+
+    # and finally make sure that this date is within
+    # the date range of this overall CountPlan
+    if date > XDate(@get 'start_date') and
+       date < XDate(@get 'end_date')
+      return gateGroups
+    # if it isn't within the date range, just return an empty array
+    else
+      return []
+
   # does the CountPlan last for a singular or plural
   # number of weeks?
   printWeeks: ->

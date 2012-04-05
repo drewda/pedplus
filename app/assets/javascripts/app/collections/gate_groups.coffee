@@ -12,3 +12,4 @@ class App.Collections.GateGroups extends Backbone.Collection
   
   fetchIfCurrentCountPlan: ->
     @fetch() if masterRouter.count_plans.getCurrentCountPlan()
+    # this fetch will trigger the fetching of the Gate collection

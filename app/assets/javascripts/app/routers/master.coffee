@@ -86,6 +86,7 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/settings"  : "projectSettings"
     "project/:project_id/export"    : "projectExport"
     
+    # TODO: change geo_point_id to geo_point_cid and segment_id to segment_cid
     "project/:project_id/map"                                  : "map"
     "project/:project_id/map/geo_point/:geo_point_id"          : "mapSelectedGeoPoint"
     "project/:project_id/map/geo_point/move/:geo_point_id"     : "mapMoveGeoPoint"
@@ -107,7 +108,9 @@ class App.Routers.Master extends Backbone.Router
 
     "project/:project_id/measure/count"                                                : "measureCount"
     "project/:project_id/measure/count/schedule/date/:date/user/:user_id"              : "measureCountScheduleDateUser"
+    "project/:project_id/measure/count/start/gate/:gate_id"                            : "measureCountStartGate"
     "project/:project_id/measure/count/enter/count_session/:count_session_cid"         : "measureCountEnterCountSession"
+    "project/:project_id/measure/count/confirm/count_session/:count_session_cid"       : "measureCountConfirmCountSession"
 
     "project/:project_id/measure/view"                                                 : "measureView"
     "project/:project_id/measure/view/segment/:segment_id"                             : "measureViewSelectedSegment"
@@ -443,8 +446,7 @@ class App.Routers.Master extends Backbone.Router
   measureCountScheduleDateUser: (projectId, date, userId) ->
     if @reset(projectId, true, 250)
       @routeNameKeeper 'measureCountScheduleDateUser'
-      @mostRecentMeasureSubTab = "count"
-      @measureTab = new App.Views.MeasureTabCount
+      @measureTab = new App.Views.MeasureTabCountSchedule
         topBar: masterRouter.topBar
         projectId: projectId
         projects: masterRouter.projects
@@ -453,14 +455,34 @@ class App.Routers.Master extends Backbone.Router
       @map.setOsmLayer "gray"
       @map.resetMap false, true
 
-  measureCountEnterCountSession: (projectId, countSessionId) ->
-    if @reset(projectId, true, 160)
-      @routeNameKeeper 'measureCountEnterCountSession'
-      @measureTab = new App.Views.MeasureTab
+  measureCountStartGate: (projectId, gateId) ->
+    if @reset(projectId, true, 70)
+      @routeNameKeeper 'measureCountStartGate'
+      @measureTab = new App.Views.MeasureTabCountStart
         topBar: masterRouter.topBar
         projectId: projectId
         projects: masterRouter.projects
-        countSessionId: countSessionId
+        gateId: gateId
+      @map.setOsmLayer "gray"
+      @map.resetMap false, true
+
+  measureCountEnterCountSession: (projectId, countSessionCid) ->
+    if @reset(projectId, true, 160)
+      @routeNameKeeper 'measureCountEnterCountSession'
+      @measureTab = new App.Views.MeasureTabCountEnter
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        countSessionCid: countSessionCid
+
+  measureCountConfirmCountSession: (projectId, countSessionCid) ->
+    if @reset(projectId, true, 160)
+      @routeNameKeeper 'measureCountConfirmCountSession'
+      @measureTab = new App.Views.MeasureTabCountConfirm
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        countSessionCid: countSessionCid
 
   measureView: (projectId) ->
     if @reset(projectId, true, 250)
@@ -557,6 +579,7 @@ class App.Routers.Master extends Backbone.Router
         $('.modal-backdrop').remove()
         masterRouter.topBarTabs = []
         masterRouter.modals = []
+        $('#top-bar').empty()
       $('#top-bar').animate {height:"#{topBarHeight}px"}, 400 unless $('#top-bar').height == topBarHeight 
       return true # continue with the rest of the page setup
     
