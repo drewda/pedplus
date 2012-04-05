@@ -36,7 +36,8 @@ class App.Views.MeasureTabCountEnter extends Backbone.View
       if now > masterRouter.measureTab.endTime
         clearInterval timer
         masterRouter.measureTab.finish()
-      masterRouter.measureTab.redrawTimer()
+      else
+        masterRouter.measureTab.redrawTimer()
     , 1000 # run every second
     # add it to the timers array so that it can be cleared later
     masterRouter.timers.push timer
@@ -52,14 +53,16 @@ class App.Views.MeasureTabCountEnter extends Backbone.View
     $('#count-minus-one-button').on "click", $.proxy @countMinusOneButtonClick, this
 
   cancelCountingButtonClick: ->
-    # remove timers
-    masterRouter.clearTimers()
-    # clear array
-    @countSessionDates = []
-    # remove the CountSession
-    masterRouter.count_sessions.remove @countSession
-    # return to MeasureTabCountSchedule
-    masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count", true
+    bootbox.confirm "Are you sure you want to cancel counting?", (confirm) ->
+      if confirm
+        # remove timers
+        masterRouter.clearTimers()
+        # clear array
+        @countSessionDates = []
+        # remove the CountSession
+        masterRouter.count_sessions.remove @countSession
+        # return to MeasureTabCountSchedule
+        masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count", true
       
   countPlusOneButtonClick: ->
     # add the current datetime to the list
@@ -104,6 +107,7 @@ class App.Views.MeasureTabCountEnter extends Backbone.View
     stop = new XDate
     countSession.set
       stop: stop.toString()
+      status: 'completed'
 
     # create Count objects
     _.each masterRouter.measureTab.countSessionDates, (cdt) ->
@@ -113,17 +117,5 @@ class App.Views.MeasureTabCountEnter extends Backbone.View
         at: cdt
       countSession.counts.add count
 
-    # upload the CountSession with its Count's to the server
-    countSession.save
-      counts: countSession.counts.toJSON()
-      status: 'completed'
-    ,
-      success: ->
-        # unselect the 
-        masterRouter.count_sessions.selected()[0].deselect()
-        # return to MeasureTabCountSchedule
-        masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count", true
-      error: ->
-        # TODO: provide a way to recover and do a local save of the CountSession and its Count's
-        bootbox.alert 'Error uploading count session to the server. It is now necessary to restart.', (ok) ->
-          window.location.reload()
+    # advance to MeasureTabCountValidate
+    masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count/validate/count_session/#{countSession.cid}", true

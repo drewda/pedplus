@@ -110,7 +110,7 @@ class App.Routers.Master extends Backbone.Router
     "project/:project_id/measure/count/schedule/date/:date/user/:user_id"              : "measureCountScheduleDateUser"
     "project/:project_id/measure/count/start/gate/:gate_id"                            : "measureCountStartGate"
     "project/:project_id/measure/count/enter/count_session/:count_session_cid"         : "measureCountEnterCountSession"
-    "project/:project_id/measure/count/confirm/count_session/:count_session_cid"       : "measureCountConfirmCountSession"
+    "project/:project_id/measure/count/validate/count_session/:count_session_cid"      : "measureCountValidateCountSession"
 
     "project/:project_id/measure/view"                                                 : "measureView"
     "project/:project_id/measure/view/segment/:segment_id"                             : "measureViewSelectedSegment"
@@ -475,10 +475,10 @@ class App.Routers.Master extends Backbone.Router
         projects: masterRouter.projects
         countSessionCid: countSessionCid
 
-  measureCountConfirmCountSession: (projectId, countSessionCid) ->
-    if @reset(projectId, true, 160)
-      @routeNameKeeper 'measureCountConfirmCountSession'
-      @measureTab = new App.Views.MeasureTabCountConfirm
+  measureCountValidateCountSession: (projectId, countSessionCid) ->
+    if @reset(projectId, true, 70)
+      @routeNameKeeper 'measureCountValidateCountSession'
+      @measureTab = new App.Views.MeasureTabCountValidate
         topBar: masterRouter.topBar
         projectId: projectId
         projects: masterRouter.projects
@@ -586,4 +586,5 @@ class App.Routers.Master extends Backbone.Router
   clearTimers: ->
     _.each @timers, (t) ->
       clearTimeout t
+      clearInterval t
     @timers = []

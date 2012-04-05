@@ -3,7 +3,7 @@ class CountSession < ActiveRecord::Base
   belongs_to :project
   belongs_to :gate
   belongs_to :count_plan
-  has_many :counts, :order => "at DESC", :dependent => :delete_all
+  has_many :counts, :order => "at ASC", :dependent => :delete_all
   
   accepts_nested_attributes_for :counts
 
