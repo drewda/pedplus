@@ -136,8 +136,8 @@ class App.Models.CountPlan extends Backbone.Model
 
     # and finally make sure that this date is within
     # the date range of this overall CountPlan
-    if date > XDate(@get 'start_date') and
-       date < XDate(@get 'end_date')
+    if date >= XDate(@get 'start_date') and
+       date <= XDate(@get 'end_date')
       return gateGroups
     # if it isn't within the date range, just return an empty array
     else
