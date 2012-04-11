@@ -15,9 +15,9 @@ class App.Views.MeasureTabCountValidate extends Backbone.View
       counts_count: @countSession.counts.length
 
     # bindings for buttons
-    $('#delete-button').on "click", $.proxy @deleteButtonClick, this
-    $('#edit-button').on "click", $.proxy @editButtonClick, this
-    $('#save-button').on "click", $.proxy @saveButtonClick, this
+    $('#delete-button').on "click touchstart", $.proxy @deleteButtonClick, this
+    $('#edit-button').on "click touchstart", $.proxy @editButtonClick, this
+    $('#save-button').on "click touchstart", $.proxy @saveButtonClick, this
 
   deleteButtonClick: ->
     bootbox.confirm "Are you sure you want to delete this count session?", (confirm) ->
@@ -36,13 +36,13 @@ class App.Views.MeasureTabCountValidate extends Backbone.View
     $('#count-edit-buttons').show()
 
     # bindings for the edit count buttons
-    $('#minus-one-button').on "click", $.proxy ->
+    $('#minus-one-button').on "click touchstart", $.proxy ->
       # remove the last Count
       @countSession.counts.pop()
       # update the text
       $('h2').text "#{@countSession.counts.length} pedestrians"
     , this
-    $('#plus-one-button').on "click", $.proxy ->
+    $('#plus-one-button').on "click touchstart", $.proxy ->
       # add another Count, with the CountSession's end time
       count = new App.Models.Count
         at: @countSession.get('stop')

@@ -11,7 +11,7 @@ class App.Views.DeleteGeoPointModal extends Backbone.View
     $('#delete-geo-point-modal').modal
       backdrop: true
       show: true
-    $('#delete-geo-point-button').click $.proxy =>
+    $('#delete-geo-point-button').on "click touchstart", $.proxy =>
       # if hide checkbox is checked, then we'll hide the modal for the rest of the session
       if $('#hide-delete-geo-point-confirmation').is(':checked')
         masterRouter.hideDeleteGeoPointConfirmation = true

@@ -107,9 +107,9 @@ class App.Views.MeasureTabPlanEdit extends Backbone.View
     @changeWeeksLabel()
 
     # bind actions to buttons
-    $('#add-gate-group-button').bind "click", @addGateGroupButton
-    $('#cancel-button').bind "click", @cancelButton
-    $('#create-count-plan-button').on "click", $.proxy @createCountPlanButton, this
+    $('#add-gate-group-button').on "click touchstart", @addGateGroupButton
+    $('#cancel-button').on "click touchstart", @cancelButton
+    $('#create-count-plan-button').on "click touchstart", $.proxy @createCountPlanButton, this
 
   createCountPlanButton: ->
     year = $('#start-date-year-input').val()

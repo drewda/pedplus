@@ -7,7 +7,7 @@ class App.Views.UserSettingsModal extends Backbone.View
     $('#user-settings-modal').modal
       backdrop: "static"
       show: true
-    $('#change-password-button').click (event) =>
+    $('#change-password-button').on "click touchstart", (event) =>
       if $('#new_password').val() and
          $('#new_password_confirmation').val() and
          $('#new_password').val() == $('#new_password_confirmation').val() and

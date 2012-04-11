@@ -11,7 +11,7 @@ class App.Views.DeleteSegmentModal extends Backbone.View
     $('#delete-segment-modal').modal
       backdrop: true
       show: true
-    $('#delete-segment-button').click $.proxy =>
+    $('#delete-segment-button').on "click", $.proxy =>
       # if hide checkbox is checked, then we'll hide the modal for the rest of the session
       if $('#hide-delete-segment-confirmation').is(':checked')
         masterRouter.hideDeleteSegmentConfirmation = true
