@@ -1,21 +1,25 @@
 class Smartphone.Models.CountSession extends Backbone.Model
   name: 'count_session'
-  initialize: ->
-    # @counts = new Smartphone.Collections.Counts
-    # @bind "change", =>
-    #   @counts.url = "/api/projects/#{projects.getCurrentProjectId()}/count_sessions/#{@id}/counts"
-    # , this
-    # @bind "destroy", @removeDestroyedModels, this
+
+  initialize: (args) ->
+    @counts = new Smartphone.Collections.Counts
+    @bind "change", =>
+      @counts.url = "/api/projects/#{masterRouter.projects.getCurrentProjectId()}/count_sessions/#{@id}/counts"
+    , this
+
+  getGate: ->
+    masterRouter.gates.get @get 'gate_id'
+
+  durationMinutes: ->
+    minutes = XDate(@get 'start').diffMinutes(@get 'end')
+    # only show one decimal point of accuracy
+    minutes.toFixed(1)
+
   select: ->  
     @collection.selectNone() # only want one CountSession selected at a time
     @set
       selected: true
-    # masterRouter.navigate "#project/#{projects.getCurrentProjectId()}/measure/count_session/#{@cid}", true
   deselect: ->
-    # if masterRouter.currentRouteName == "measureSelectedCountSession:#{@cid}"
-    # else if masterRouter.currentRouteName == "measureEnterCountSession:#{@cid}"
-    # else if masterRouter.currentRouteName == "measureDeleteCountSession:#{@cid}"
-        
     # if this CountSession is not already selected, then we want its 
     # @set() command to be silent and not fire a changed event
     alreadySelected = @get 'selected'
@@ -28,11 +32,3 @@ class Smartphone.Models.CountSession extends Backbone.Model
       @deselect()
     else
       @select()
-  uploadCounts: (options) ->
-    @save
-      counts: @counts.toJSON()
-    , 
-      success: ->
-        options.success()
-  # removeDestroyedModels: (model) ->
-  #   @remove model

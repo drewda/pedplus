@@ -1,7 +1,10 @@
 - content_for :head do
   script
     | function injectProjects() {
-    == "projects.reset(#{@projects.to_json(:methods => [:permissions_for_current_user])});"
+    == "masterRouter.projects.reset(#{@projects.to_json(:methods => [:permissions_for_current_user])});"
+    | }
+    | function injectUsers() {
+    == "masterRouter.users.reset(#{@users.to_json(:methods => [:is_current_user])});"
     | }
 
 - content_for :body do
@@ -9,36 +12,93 @@
   / OPEN PROJECT
   ///
   #open-project(data-role="page")
-  	div(data-role="header")
-  		h1 Open a Project
+    div(data-role="header")
+      h1 Open a Project
 
-  	div(data-role="content")
-  		ul(data-role="listview")
-  		  - current_user.projects.each do |p|
-  		    li
-  		      a(href="#project?projectId=#{p.id}") #{p.name}
-  		      
-  	.ui-bar(data-role="footer" data-id="footer" data-position="fixed")
-  	  h1(style="float: left;") = current_user.full_name
-  	  a(href="/users/sign_out" data-role="button" data-ajax="false" style="float: right; margin-right:27px;") Sign Out 
+    div(data-role="content")
+      ul(data-role="listview")
+        - current_user.projects.each do |p|
+          li
+            a href="#show-count-schedule?projectId=#{p.id}" #{p.name}
+            
+    .ui-bar(data-role="footer" data-id="footer" data-position="fixed")
+      h1(style="float: left;") = current_user.full_name
+      a(href="/users/sign_out" data-role="button" data-ajax="false" style="float: right; margin-right:27px;") Sign Out 
   
   ///
-  / PROJECT
+  / SHOW COUNT SCHEDULE
   ///
-  #project(data-role="page")
-  	div(data-role="header")
-  		h1(data-bind="text name") Project
+  #show-count-schedule data-role="page"
+    div data-role="header" data-position="fixed"
+      h1 data-bind="text name"
+       / will be filled with text by backbone-databind
+      #schedule-bar.ui-bar.ui-bar-b align="center" 
+        fieldset data-role="controlgroup" data-type="horizontal"
+          select#measure-count-day-select
+          select#measure-count-user-select
 
-  	#project-content(data-role="content")
-  		#map-area
-  		#count-session-listview(data-role="listview")
+    .content data-role="content"
+      #counting-schedule-listview data-role="listview"
 
-  	.ui-bar(data-role="footer" data-id="footer" data-position="fixed")
-  	  a(href="#open-project" data-role="button" data-icon="grid") Switch Project
+    .ui-bar(data-role="footer" data-id="footer" data-position="fixed")
+      a href="#open-project" data-role="button" data-icon="grid" Switch Project
   
   ///
-  / COUNT SESSION
+  / START COUNT
   ///
-  #count-session(data-role="page")
+  #start-count data-role="page"
+    div data-role="header"
+      h1 
+        ' Do you want to start counting at Gate 
+        span.header-gate-label-span X
+        |?
+    .ui-bar.ui-bar-c align="center"
+      div data-role="controlgroup" data-type="horizontal"
+        a data-role="button" data-rel="back" Cancel
+        a#start-count-yes-button data-theme="b" data-role="button" Yes
+
+    .content data-role="content"
+      #map-area
+
+  ///
+  / ENTER COUNT
+  ///
+  #enter-count data-role="page"
+    div data-role="header"
+      h1 
+        ' Counting at Gate
+        span.header-gate-label-span X
+    .content data-role="content"
+      fieldset.ui-grid-a
+        .ui-block-a
+          a#count-plus-five-button data-role="button" data-theme="b" style="height: 50px;" +5
+          #counter
+            span#counter-number 0
+            h1 people
+        .ui-block-b
+          a#count-plus-one-button data-role="button" data-theme="b" style="height: 50px;" +1
+          a#count-minus-one-button data-role="button" data-theme="r" style="height: 50px;" -1
+      #timer
+        #minutes 2 minutes
+        #seconds 30 seconds
+        #remaining remaining
+    .ui-bar(data-role="footer" data-id="footer" data-position="fixed")
+      a#cancel-counting-button data-role="button" data-icon="delete" Cancel Counting
+
+  ///
+  / VERIFY COUNT
+  ///
+  #verify-count data-role="dialog"
+    div data-role="header"
+      h1 Verify Count
+    div data-role="content"
+      h3
+        ' Do you want to save your count of 
+        span#number-counted X
+        '  pedestrians?
+      a#delete-count-session-button data-role="button" data-theme="r" data-icon="delete" Delete
+      a#edit-count-session-button data-role="button" data-theme="c" Edit
+      a#save-count-session-button data-role="button" data-theme="b" data-icon="check" Save
+
 
 = render :template => '/smartphone/layout'

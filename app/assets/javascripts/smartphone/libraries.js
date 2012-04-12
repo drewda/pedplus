@@ -2,22 +2,16 @@
 //= require jquery_ujs
 //= require json2
 //= require underscore
+//= require underscore-addons
 //= require backbone
-//= require backbone-rails
 //= require backbone-modelbinding
 //= require polymaps
+//= require xdate
 
 // http://stackoverflow.com/questions/646628/javascript-startswith
 String.prototype.startsWith = function (str){
     return this.indexOf(str) == 0;
 };
-
-// include local cid in Backbone-produced JSON
-Backbone.Model.prototype.toJSON = function() {
- return _(_.clone(this.attributes)).extend({
-  cid : this.cid
- });
-}
 
 // http://stackoverflow.com/a/4198132/40956
 function getHashParams() {

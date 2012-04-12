@@ -22,7 +22,7 @@ class Smartphone.Views.Map extends Backbone.View
     @centerMap()
 
   centerMap: ->
-    if currentProject = projects.getCurrentProject()
+    if currentProject = masterRouter.projects.getCurrentProject()
       if currentProject.get 'southwest_latitude'
         @map.extent [
           lat: currentProject.get 'northeast_latitude'
@@ -39,10 +39,10 @@ class Smartphone.Views.Map extends Backbone.View
   centerMapAtCurrentPosition: ->
     if navigator.geolocation
       navigator.geolocation.getCurrentPosition (position) ->
-        window.map.map.center
+        masterRouter.map.map.center
           lat: position.coords.latitude
           lon: position.coords.longitude
-        window.map.map.zoom 16
+        masterRouter.map.map.zoom 16
     else # Berkeley Way
       map.center
         lat: 37.871592
