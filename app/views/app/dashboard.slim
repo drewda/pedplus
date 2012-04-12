@@ -2,6 +2,9 @@
   = javascript_include_tag  "jquery", "app/dashboard"
   = stylesheet_link_tag     "app/dashboard"
 
+- content_for :title do
+  = current_user.organization.software_package
+
 - content_for :body do
   .container
     .row#header-row
