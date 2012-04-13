@@ -2,6 +2,7 @@
   = current_user.organization.software_package
 
 - content_for :head do
+  = airbrake_javascript_notifier
   = javascript_include_tag "app/libraries", "app/app"
   / = javascript_include_tag "http://#{Rails.configuration.juggernaut_host}:#{Rails.configuration.juggernaut_port}/application.js"
   = stylesheet_link_tag    "app/app"
