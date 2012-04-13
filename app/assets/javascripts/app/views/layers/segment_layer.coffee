@@ -67,6 +67,8 @@ class App.Views.SegmentLayer extends Backbone.View
         if masterRouter.currentRouteName.startsWith "modelPermeability"
           colorClass = masterRouter.segments.getByCid(f.data.cid).get('permeabilityClass')
           c.setAttribute "class", "red#{colorClass}"
+        else
+          c.setAttribute "class", "segment-line black"
 
       # measure tab
       else if masterRouter.currentRouteName.startsWith "measure"
