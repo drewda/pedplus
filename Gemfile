@@ -36,12 +36,20 @@ group :development do
   gem 'pry'
 end
 
-group :development, :test do
-	gem 'rspec-rails', '~> 2.6'
+gem 'rspec-rails', :group => [:development, :test]
+
+group :test do
+	gem 'factory_girl_rails'
+	gem 'spork'
+	gem 'database_cleaner'
 	gem 'capybara'
-	gem 'autotest'
-	gem 'autotest-rails-pure'
+	gem 'capybara-webkit'
+	gem 'launchy' # used for save_and_open_page()
+	gem 'timecop' # added for testing the times associated with CountSession's
+	gem 'guard-rspec'
+	gem 'guard-spork'
+	gem 'guard-livereload'
 	# for use while developing on Mac OS X
-	gem 'autotest-fsevent'
-	gem 'autotest-growl'
+	gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
+	gem 'growl', :require => false if RUBY_PLATFORM =~ /darwin/i
 end

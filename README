@@ -22,6 +22,9 @@ In order to do this, you need to have already installed [Graphviz](http://www.gr
 * god:
   sudo apt-get install god
   for init script, see http://openmonkey.com/2008/05/27/god-init-script-for-debian-ubuntu-systems/
+
+* pyqt (is required for capybara-webkit, which is used for testing)
+	sudo brew install pyqt
   
   
 == Install
