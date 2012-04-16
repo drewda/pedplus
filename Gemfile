@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.2'
+gem 'rails', '3.2.3'
 
 gem 'mysql2'
 
@@ -8,7 +8,7 @@ gem 'airbrake'
 gem 'capistrano'
 
 gem 'resque', :require => "resque/server"
-gem 'juggernaut', :git => 'https://github.com/maccman/juggernaut.git'
+# gem 'juggernaut', :git => 'https://github.com/maccman/juggernaut.git'
 
 gem 'devise'
 gem 'devise_invitable'
