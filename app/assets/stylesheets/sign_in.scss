@@ -4,20 +4,36 @@
 */
 
 #header-row {
-	text-align: center; 
-	padding-top: 100px;
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-bottom: 60px;
-	font-size: 72pt;
-	font-weight: bold;
+  text-align: center; 
+  padding-top: 100px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 60px;
+  font-size: 72pt;
+  font-weight: bold;
+  line-height: 72pt;
+}
+@media (max-width: 480px) {
+  #header-row {
+    font-size: 48pt;
+    line-height: 48pt;
+  }
+}
+
+#sign-in-row {
+  text-align: center;
+  fieldset {
+    display: inline-block;
+    float: none;
+    text-align: left;
+  }
 }
 
 #forgot-password-link {
-	padding-left: 20px;
+  padding-left: 20px;
 }
 
 #footer-row {
-	padding-top: 30px;
-	text-align: center;
+  padding-top: 30px;
+  text-align: center;
 }

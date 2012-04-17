@@ -6,20 +6,20 @@
   = current_user.organization.software_package
 
 - content_for :body do
-  .container
-    .row#header-row
+  .container-fluid
+    .row-fluid#header-row
       .span12
         img(src="/assets/pedplus-icon.png" valign="absmiddle" style="padding-right: 10px;") 
         = current_user.organization.software_package
-    .row#user-row
-      .span8.offset2
+    .row-fluid#user-row
+      .span12
         p 
           | Welcome 
           strong = current_user.full_name
           |. 
           a(href="/users/sign_out") Sign out
-    .row
-      .span8.offset2
+    .row-fluid#thumbnail-row
+      .span8#thumbnail-row-inner
         ul.thumbnails
           li.span4
             a.thumbnail.dashboard-button#desktop-button(href="/app")
@@ -38,7 +38,7 @@
             li.span8
               a.thumbnail.dashboard-button#help-button(href="/help")
                 h3 Help + Documentation
-    .row#footer-row
+    .row-fluid#footer-row
       p 
         img(src="/assets/s3sol-logo-small.png" alt="S3Sol logo" valign="middle" style="padding-right: 10px;")
         | a tool by <a href="http://www.s3sol.com/" style="color: #990f17;" >Strategic Spatial Solutions, Inc.</a>

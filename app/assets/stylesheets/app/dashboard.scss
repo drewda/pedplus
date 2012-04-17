@@ -3,35 +3,56 @@
  *= require_self
 */
 #header-row {
-	text-align: center; 
-	padding-top: 100px;
-	padding-left: 20px;
-	padding-right: 20px;
-	padding-bottom: 60px;
-	font-size: 72pt;
-	font-weight: bold;
+  text-align: center; 
+  padding-top: 100px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 60px;
+  font-size: 72pt;
+  font-weight: bold;
+  line-height: 72pt;
+}
+@media (max-width: 480px) {
+  #header-row {
+    font-size: 48pt;
+    line-height: 48pt;
+  }
 }
 #user-row {
-	text-align: center;
-	padding-bottom: 30px;
-	p {
-		font-size: 18pt;
-	}
+  text-align: center;
+  padding-bottom: 30px;
+  p {
+    font-size: 18pt;
+    line-height: 22pt;
+  }
+}
+#thumbnail-row {
+  text-align: center;
+  #thumbnail-row-inner {
+    display: inline-block;
+    float: none;
+    ul {
+      margin-left: -45px;
+      .thumnails {
+        margin: 0;
+      }
+    }
+  }
 }
 #footer-row {
-	text-align: center;
+  text-align: center;
 }
 .dashboard-button {
-	height: 140px;
-	text-align: center;
-	background-position: 50% 70%;
-	background-repeat: no-repeat;
+  height: 140px;
+  text-align: center;
+  background-position: 50% 70%;
+  background-repeat: no-repeat;
 }
 .dashboard-button:hover {
-	text-decoration: none;
-	h3 {
-		color: #00aeef;
-	}
+  text-decoration: none;
+  h3 {
+    color: #00aeef;
+  }
 }
 #desktop-button {
   background-image: url('/assets/desktop-icon-gray.png');
