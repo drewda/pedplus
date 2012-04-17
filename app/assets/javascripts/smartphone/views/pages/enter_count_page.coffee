@@ -14,46 +14,57 @@ class Smartphone.Views.EnterCountPage extends Backbone.View
     @countSession.set
       start: start.toString()
 
-    # set the end time; this is used by the setInterval  
+    # set the end time; this is used by the setTimeout  
     # function to see if the CountSession is over yet
     @endTime = start.addSeconds @countSession.get('duration_seconds')
 
-    # and this is used to update the timer display
-    @millisecondsRemaining = @countSession.get('duration_seconds') * 1000
-
-    # initialize and start the timer
-    timer = setInterval =>
-      now = new XDate
-      if now > masterRouter.enterCountPage.endTime
-        clearInterval timer
-        masterRouter.enterCountPage.finish()
-      else
-        masterRouter.enterCountPage.redrawTimer()
-    , 1000 # run every second
-    # add it to the timers array so that it can be cleared later
-    masterRouter.timers.push timer
+    # initialize and start the first timer
+    @timer = setTimeout @timerFunction, 1000 # run every second
 
     # display the proper header title
     $('.header-gate-label-span').text @countSession.getGate().printLabel()
 
     # button bindings
-    $('#count-plus-five-button').on "click touchstart", $.proxy @countPlusFiveButtonClick, this
-    $('#count-plus-one-button').on "click touchstart", $.proxy @countPlusOneButtonClick, this
-    $('#count-minus-one-button').on "click touchstart", $.proxy @countMinusOneButtonClick, this
-    $('#cancel-counting-button').on "click touchstart", $.proxy @cancelCountingButtonClick, this
+    $('#count-plus-five-button').on "click", $.proxy @countPlusFiveButtonClick, this
+    $('#count-plus-one-button').on "click", $.proxy @countPlusOneButtonClick, this
+    $('#count-minus-one-button').on "click", $.proxy @countMinusOneButtonClick, this
+    $('#cancel-counting-button').on "click", $.proxy @yesCancelCountingButtonClick, this
+
+  timerFunction: ->
+    clearInterval masterRouter.enterCountPage.timer
+    now = new XDate
+    if now > masterRouter.enterCountPage.endTime
+      masterRouter.enterCountPage.finish()
+    else
+      masterRouter.enterCountPage.redrawTimer()
+      # run again in another second
+      masterRouter.enterCountPage.timer = setTimeout masterRouter.enterCountPage.timerFunction, 1000
 
   cancelCountingButtonClick: ->
-    # TODO: write the appropriate dialog code for jqm
-    bootbox.confirm "Are you sure you want to cancel counting?", (confirm) ->
-      if confirm
-        # remove timers
-        masterRouter.clearTimers()
-        # clear array
-        @countSessionDates = []
-        # remove the CountSession
-        masterRouter.count_sessions.remove @countSession
-        # return to ShowCountSchedule
-        window.history.back(-1)
+    $(document).simpledialog2
+      mode: 'blank'
+      showModal: 'true'
+      safeNuke: true
+      blankContent : 
+        '<h3 align="center">Are you sure you want to cancel counting?</h3>' +
+        '<a class="yes-cancel-counting-button" data-role="button" data-theme="r">Yes</a>'+
+        '<a rel="close" data-role="button">No</a>'
+      callbackOpen: ->
+        # TODO: deal with the multiple dialogs!!!!!!!
+        $('.yes-cancel-counting-button').on "click", masterRouter.enterCountPage.yesCancelCountingButtonClick
+  yesCancelCountingButtonClick: ->
+    # cancel the timer
+    clearInterval masterRouter.enterCountPage.timer
+    # clear out the data
+    masterRouter.enterCountPage.countSessionDates = []
+    masterRouter.enterCountPage.endTime = null
+    masterRouter.enterCountPage.millisecondsRemaining = null
+    # remove the CountSession
+    masterRouter.count_sessions.remove @countSession
+    # close and destroy the dialog
+    #!!!! $.mobile.sdCurrentDialog.close()
+    # return to ShowCountSchedule
+    $.mobile.changePage "#show-count-schedule?projectId=#{masterRouter.projects.getCurrentProjectId()}"
 
   countPlusOneButtonClick: ->
     # add the current datetime to the list
@@ -75,16 +86,14 @@ class Smartphone.Views.EnterCountPage extends Backbone.View
     $('#counter-number').text @countSessionDates.length
 
   redrawTimer: ->
-    @millisecondsRemaining = @millisecondsRemaining - 1000
-    minutes = Math.floor (@millisecondsRemaining / (60 * 1000))
-    seconds = (@millisecondsRemaining % (60 * 1000)) / 1000
+    now = new XDate
+    secondsRemaining = now.diffSeconds(masterRouter.enterCountPage.endTime)
+    minutes = Math.floor (secondsRemaining / 60)
+    seconds = Math.round (secondsRemaining % 60)
     $('#timer #minutes').html "#{minutes} minutes"
     $('#timer #seconds').html "#{seconds} seconds"
 
   finish: ->
-    # remove timers
-    masterRouter.clearTimers()
-
     # get the CountSession
     countSession = masterRouter.count_sessions.selected()[0]
 
@@ -95,12 +104,18 @@ class Smartphone.Views.EnterCountPage extends Backbone.View
       status: 'completed'
 
     # create Count objects
-    _.each masterRouter.measureTab.countSessionDates, (cdt) ->
-      count = new App.Models.Count
+    _.each masterRouter.enterCountPage.countSessionDates, (cdt) ->
+      count = new Smartphone.Models.Count
       count.set
         count_session_id: countSession.id
         at: cdt
       countSession.counts.add count
 
+    # clear out the remaining data
+    masterRouter.enterCountPage.countSessionDates = []
+    masterRouter.enterCountPage.endTime = null
+    masterRouter.enterCountPage.millisecondsRemaining = null
+
     # advance to MeasureTabCountValidate
-    window.location = "/smartphone#verify-count?projectId=#{projectId}&countSessionCid=#{countSession.cid}"
+    projectId = masterRouter.projects.getCurrentProjectId()
+    $.mobile.changePage "#validate-count?projectId=#{projectId}&countSessionCid=#{countSession.cid}"

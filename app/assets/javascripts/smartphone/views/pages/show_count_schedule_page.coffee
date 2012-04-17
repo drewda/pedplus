@@ -7,7 +7,7 @@ class Smartphone.Views.ShowCountSchedulePage extends Backbone.View
     @userId = @options.userId
     @countPlan = masterRouter.count_plans.getCurrentCountPlan()
 
-    if not @date or not @userId
+    if not (@date and @userId)
       if not @date
         # otherwise select the start or the end of the CountPlan's date range
         today = new XDate()
@@ -28,7 +28,7 @@ class Smartphone.Views.ShowCountSchedulePage extends Backbone.View
         else
           @userId = @countPlan.getAllUserIds()[0]
       projectId = masterRouter.projects.getCurrentProjectId()
-      window.location = "/smartphone#show-count-schedule?projectId=#{projectId}&date=#{@date}&userId=#{@userId}"
+      $.mobile.changePage "#show-count-schedule?projectId=#{projectId}&date=#{@date}&userId=#{@userId}"
     
     @countingScheduleListView = new Smartphone.Views.CountingScheduleListview
       date: @date
@@ -62,7 +62,7 @@ class Smartphone.Views.ShowCountSchedulePage extends Backbone.View
     date = $('#measure-count-day-select').val()
     userId = $('#measure-count-user-select').val()
     projectId = masterRouter.projects.getCurrentProjectId()
-    window.location = "/smartphone#show-count-schedule?projectId=#{projectId}&date=#{date}&userId=#{userId}"
+    $.mobile.changePage "#show-count-schedule?projectId=#{projectId}&date=#{date}&userId=#{userId}"
 
 
 

@@ -28,11 +28,14 @@ class Smartphone.Routers.Master extends Backbone.Router
                 masterRouter.count_plans.fetch
                   success: ->
                     masterRouter.count_sessions.fetch()
-
-                    masterRouter.showCountSchedulePage = new Smartphone.Views.ShowCountSchedulePage
-                      model: masterRouter.projects.getCurrentProject()
-                      date: hashParams.date
-                      userId: hashParams.userId
+                    # we need to fetch GateGroup's because that's needed for CountPlan.getAllUserIds()
+                    # maybe in the future this is a method to move to the server-side
+                    masterRouter.gate_groups.fetch
+                      success: ->
+                        masterRouter.showCountSchedulePage = new Smartphone.Views.ShowCountSchedulePage
+                          model: masterRouter.projects.getCurrentProject()
+                          date: hashParams.date
+                          userId: hashParams.userId
 
         startCount: (eventType, matchObj, ui, page, evt) =>
           hashParams = getHashParams()
@@ -72,7 +75,6 @@ class Smartphone.Routers.Master extends Backbone.Router
 
     masterRouter.clearTimers = ->
       _.each @timers, (t) ->
-        clearTimeout t
         clearInterval t
       @timers = []
 

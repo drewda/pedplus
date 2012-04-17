@@ -48,7 +48,7 @@
   ///
   #start-count data-role="page"
     div data-role="header"
-      h1 
+      h1
         ' Do you want to start counting at Gate 
         span.header-gate-label-span X
         |?
@@ -71,16 +71,16 @@
     .content data-role="content"
       fieldset.ui-grid-a
         .ui-block-a
-          a#count-plus-five-button data-role="button" data-theme="b" style="height: 50px;" +5
+          a#count-minus-one-button data-role="button" data-theme="r" style="height: 50px;" -1
           #counter
             span#counter-number 0
             h1 people
         .ui-block-b
           a#count-plus-one-button data-role="button" data-theme="b" style="height: 50px;" +1
-          a#count-minus-one-button data-role="button" data-theme="r" style="height: 50px;" -1
+          a#count-plus-five-button data-role="button" data-theme="b" style="height: 50px;" +5
       #timer
-        #minutes 2 minutes
-        #seconds 30 seconds
+        #minutes XX minutes
+        #seconds XX seconds
         #remaining remaining
     .ui-bar(data-role="footer" data-id="footer" data-position="fixed")
       a#cancel-counting-button data-role="button" data-icon="delete" Cancel Counting
@@ -88,16 +88,17 @@
   ///
   / VERIFY COUNT
   ///
-  #verify-count data-role="dialog"
+  #validate-count data-role="dialog"
     div data-role="header"
-      h1 Verify Count
+      h1 Validate Count
     div data-role="content"
       h3
         ' Do you want to save your count of 
         span#number-counted X
         '  pedestrians?
       a#delete-count-session-button data-role="button" data-theme="r" data-icon="delete" Delete
-      a#edit-count-session-button data-role="button" data-theme="c" Edit
+      / TODO: make the edit button work
+      / a#edit-count-session-button data-role="button" data-theme="c" Edit
       a#save-count-session-button data-role="button" data-theme="b" data-icon="check" Save
 
 

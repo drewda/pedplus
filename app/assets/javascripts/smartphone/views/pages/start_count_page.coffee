@@ -41,4 +41,4 @@ class Smartphone.Views.StartCountPage extends Backbone.View
     countSession.select()
 
     # advance to EnterCount
-    window.location = "/smartphone#enter-count?projectId=#{projectId}&countSessionCid=#{countSession.cid}"
+    $.mobile.changePage "#enter-count?projectId=#{projectId}&countSessionCid=#{countSession.cid}"

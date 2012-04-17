@@ -7,6 +7,13 @@ class Smartphone.Views.Map extends Backbone.View
     
     @render()
   render: ->
+    # make the map div fit the screen
+    mapContainer = $('#map-area')
+    usedHeight = 0
+    usedHeight += $('#start-count .ui-header').outerHeight()
+    usedHeight += $('#start-count .ui-bar').outerHeight()
+    mapContainer.height($(window).height() - usedHeight)
+
     window.po = org.polymaps
     @map = po.map()
        .container(document.getElementById("map-area").appendChild(po.svg("svg")))
