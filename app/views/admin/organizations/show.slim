@@ -29,6 +29,9 @@
     ' Owns PedPlus?
     == @organization.owns_pedplus ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
     br
+    ' Allowed to export projects?
+    == @organization.allowed_to_export_projects ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+    br
     ' Subscription active until: 
     strong = @organization.subscription_active_until.strftime "%d %B %Y"
     br

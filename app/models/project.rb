@@ -20,6 +20,15 @@ class Project < ActiveRecord::Base
   validates :name, :presence => true
   validates :organization, :presence => true
   
+  after_create :set_allowed_to_export
+  def set_allowed_to_export
+    if organization.allowed_to_export_projects
+      self.update_attribute :allowed_to_export, true
+    else
+      self.update_attribute :allowed_to_export, false
+    end
+  end
+
   def remove_broken_segments
     self.segments.each do |s|
       if s.geo_points.length != 2

@@ -17,6 +17,9 @@
     p
       ' Max number of gates in a counting plan: 
       strong = @project.max_number_of_gates
+    p
+      ' Allowed to export:
+      == @project.allowed_to_export ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
 
     h2 Users
     table.table.table-striped

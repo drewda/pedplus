@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120402224128) do
+ActiveRecord::Schema.define(:version => 20120419164841) do
 
   create_table "count_plans", :force => true do |t|
     t.integer  "project_id"
@@ -148,6 +148,7 @@ ActiveRecord::Schema.define(:version => 20120402224128) do
     t.date     "subscription_active_until"
     t.integer  "default_counting_days_per_gate"
     t.integer  "extra_counting_day_credits_available",    :default => 0
+    t.boolean  "allowed_to_export_projects",              :default => false
   end
 
   create_table "project_members", :force => true do |t|
@@ -178,6 +179,7 @@ ActiveRecord::Schema.define(:version => 20120402224128) do
     t.integer  "version"
     t.integer  "max_number_of_gates"
     t.string   "base_map",                                            :default => "osm"
+    t.boolean  "allowed_to_export",                                   :default => false
   end
 
   add_index "projects", ["organization_id"], :name => "index_projects_on_organization_id"

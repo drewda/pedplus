@@ -12,6 +12,7 @@
     = f.association :organization, :as => :select
     = f.input :name
     = f.input :kind, :as => :select, :collection => @project.organization.software_packages
+    = f.input :allowed_to_export
 
     h2 Users
     table.table.table-striped
