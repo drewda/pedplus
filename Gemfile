@@ -50,6 +50,6 @@ group :test, :darwin do
 	gem 'guard-spork'
 	gem 'guard-livereload'
 	# for use while developing on Mac OS X
-	gem 'rb-fsevent', :require => false if RUBY_PLATFORM =~ /darwin/i
-	gem 'growl', :require => false if RUBY_PLATFORM =~ /darwin/i
+	gem 'rb-fsevent', :require => false
+	gem 'growl', :require => false
 end
