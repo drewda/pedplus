@@ -4,6 +4,10 @@ class Api::CountSessionsController < Api::ApiController
     
     respond_to do |format|
       format.json { render :json => @count_sessions.to_json(:methods => [:segment_id, :duration_minutes]) }
+      format.csv do
+        # use render_csv(), which is defined in api_controller.rb
+        render_csv("project-#{params[:project_id]}-count_sessions")
+      end
     end
   end
   

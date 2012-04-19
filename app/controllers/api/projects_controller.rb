@@ -14,7 +14,13 @@ class Api::ProjectsController < Api::ApiController
     end
   end
 
+  def show
+    # TODO: permissions
+    @project = Project.find params[:id]
+  end
+
   def update
+    # TODO: permissions
     @project = Project.find params[:id]
 
     respond_to do |format|

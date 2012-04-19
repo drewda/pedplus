@@ -26,15 +26,27 @@
         </div>
       </form>
     <% } else if (mode == "export") { %>
+
+      <% if (project.get('allowed_to_export')) { %>
       <h4>Map</h4>
-      <p><span class="label notice">Info</span> Map export is not enabled for this project. Please contact S3Sol.</p>
+      <p>Export the map to use in Google Earth, Esri ArcGIS, MapInfo, and other geographic information systems. Each segment has a unique ID number; the same ID numbers are used in the measurement CSV files.</p>
+      <h6><a href="/api/projects/<%= project.id %>.kml" class="btn"><i class="icon-download-alt"></i> Download Map (.kml)</a></h6>
 
       <h4>Measure</h4>
-      <p><span class="label notice">Info</span> Measure export is not enabled for this project. Please contact S3Sol.</p>
+      <p>Export a table of count sessions for analysis in Microsoft Excel, SPSS, R, and other spreadsheet or statistics software.</p>
+      <h6><a href="/api/projects/<%= project.id %>/count_sessions.csv" class="btn"><i class="icon-download-alt"></i> Download Count Sessions (.csv)</a></h6>
+
+      <% } else { %>
+      <h4>Map</h4>
+      <p><span class="label notice">Info</span> Map export is not allowed for this project. Please contact S3Sol to enable this functionality.</p>
+
+      <h4>Measure</h4>
+      <p><span class="label notice">Info</span> Measure export is not allowed for this project. Please contact S3Sol. Please contact S3Sol to enable this functionality.</p>
+      <% } %>
     <% } %>
   </div>
 
   <div class="modal-footer" style="align: right;">
-    <a href="#project/<%= project.id %>" class="btn">Close</a>
+    <h6><a href="#project/<%= project.id %>" class="btn">Close</a></h6>
   </div>
 </div>

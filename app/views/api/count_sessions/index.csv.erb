@@ -1,0 +1,14 @@
+<% require 'csv' %>
+CountSessionId,CountPlanStartDate,Gate,SegmentId,StartTime,StopTime,Count,Counter
+<%= CSV.generate do |csv|
+  @count_sessions.each do |cs|
+    csv << [ cs.id, 
+    				 cs.count_plan.start_date, 
+    				 cs.gate.full_label, 
+    				 cs.gate.segment.id, 
+    				 cs.start,
+    				 cs.stop, 
+    				 cs.counts_count,
+    				 cs.user.full_name]
+  end
+end %>

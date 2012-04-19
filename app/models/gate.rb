@@ -7,4 +7,8 @@ class Gate < ActiveRecord::Base
   # there should only be one Gate with 
   # each number label in a GateGroup
   validates_uniqueness_of :label, :scope => :gate_group_id
+
+  def full_label
+  	"#{gate_group.label}-#{label}"
+  end
 end
