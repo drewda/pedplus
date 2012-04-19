@@ -29,6 +29,8 @@ set :git_shallow_clone, 1
 
 set :keep_releases, 5
 
+set :bundle_without, [:darwin, :development, :test]
+
 # tasks
 namespace :deploy do
   task :start, :roles => :app do
