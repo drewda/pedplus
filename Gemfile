@@ -20,6 +20,7 @@ gem 'simple_form'
 gem 'dynamic_form'
 gem 'attribute_choices'
 gem 'country_select'
+gem 'validate_url'
 gem 'ejs'
 
 gem 'jquery-rails'
