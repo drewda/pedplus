@@ -17,7 +17,7 @@ class Organization < ActiveRecord::Base
 
   validates :name, :presence => true, :uniqueness => true
   validates :country, :presence => true
-  validates :url, :url => true
+  validates_format_of :url, :with => URI::regexp(%w(http https)), :allow_blank => true
   validates :time_zone, :presence => true
   validates :max_number_of_users, :presence => true
   validates :max_number_of_projects, :presence => true
