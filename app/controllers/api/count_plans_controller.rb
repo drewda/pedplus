@@ -53,6 +53,14 @@ class Api::CountPlansController < Api::ApiController
           end
         end
 
+        # make a log entry
+        LogEntry.create :kind => 'count-plan',
+                        :organization => @count_plan.project.organization,
+                        :user => current_user,
+                        :project => @count_plan.project,
+                        :count_plan => @count_plan,
+                        :note => 'count plan created'
+
         format.json  { render :json => @count_plan, :status => :created, :location => api_project_count_plan_url(@count_plan.project, @count_plan) }
       else
         format.json  { render :json => @count_plan.errors, :status => :unprocessable_entity }
@@ -66,6 +74,14 @@ class Api::CountPlansController < Api::ApiController
 
     respond_to do |format|
       if @count_plan.update_attributes pick(params, :is_the_current_plan)
+        # make a log entry
+        LogEntry.create :kind => 'count-plan',
+                        :organization => @count_plan.project.organization,
+                        :user => current_user,
+                        :project => @count_plan.project,
+                        :count_plan => @count_plan,
+                        :note => 'count plan updated'
+
         format.json  { render :json => @count_plan }
       else
         format.json  { render :json => @count_plan.errors, :status => :unprocessable_entity }

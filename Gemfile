@@ -21,6 +21,8 @@ gem 'dynamic_form'
 gem 'attribute_choices'
 gem 'country_select'
 gem 'validate_url'
+gem 'will_paginate'
+gem 'will_paginate-bootstrap'
 gem 'ejs'
 
 gem 'jquery-rails'

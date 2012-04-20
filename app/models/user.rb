@@ -5,6 +5,8 @@ class User < ActiveRecord::Base
   
   has_many :gate_groups
   has_many :count_sessions, :dependent => :destroy
+
+  has_many :log_entries
   
   devise :database_authenticatable, 
          :invitable,

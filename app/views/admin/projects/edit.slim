@@ -1,9 +1,9 @@
 - content_for :body do
-  = simple_form_for([:admin, @project], :html => { :class => 'form-horizontal' }) do |f|
+  = simple_form_for([:admin, @project.organization, @project], :html => { :class => 'form-horizontal' }) do |f|
     h1 = @project.name
     ul.nav.nav-tabs
       li 
-        = link_to "View", admin_project_path(@project.id)
+        = link_to "View", admin_organization_project_path(@project.organization, @project)
       li.active
         a Edit
         
@@ -44,6 +44,6 @@
   p Deleting this project will also remove all of its associated data, including segments and count sessions.
   .form-horizontal
     .form-actions
-       = button_to "Delete Project", admin_project_path(@project.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@project.name}?"
+       = button_to "Delete Project", admin_organization_project_path(@project.organization, @project), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@project.name}?"
       
 = render :template => '/admin/layout'

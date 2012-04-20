@@ -1,9 +1,9 @@
 - content_for :body do
-  = simple_form_for([:admin, @user], :html => { :class => 'form-horizontal' }) do |f|
+  = simple_form_for([:admin, @user.organization, @user], :html => { :class => 'form-horizontal' }) do |f|
     h1 = @user.full_name
     ul.nav.nav-tabs
       li
-        = link_to "View", admin_user_path(@user.id)
+        = link_to "View", admin_organization_user_path(@user.organization, @user)
       li.active
         a Edit
         
@@ -23,7 +23,7 @@
       = f.submit "Save Changes", {:class => "btn btn-primary"}
 
   h2 Change Password
-  = simple_form_for([:admin, @user], :html => {:class => 'form-horizontal'}) do |f|
+  = simple_form_for([:admin, @user.organization, @user], :html => {:class => 'form-horizontal'}) do |f|
     = f.input :password
     = f.input :password_confirmation
     .form-actions
@@ -33,6 +33,6 @@
   p Deleting this user will permanently remove all associated records, including count sessions.
   .form-horizontal
     .form-actions
-      = button_to "Delete User", admin_user_path(@user.id), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@user.full_name}?"
+      = button_to "Delete User", admin_organization_user_path(@user.organization, @user), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete #{@user.full_name}?"
       
 = render :template => '/admin/layout'

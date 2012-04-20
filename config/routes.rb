@@ -35,7 +35,9 @@ Pedplus::Application.routes.draw do
   # admin is only for S3Sol internal users
   namespace :admin do
     root :to => 'site#dashboard'
-    resources :users, :organizations, :projects, :oauth_clients
+    resources :organizations do
+      resources :users, :projects
+    end
   end
 
   # probably letting all users access, not just admin ones

@@ -1,5 +1,8 @@
 class ModelJob < ActiveRecord::Base
   belongs_to :project
+
+  has_many :log_entries
+
   before_save :delete_old_model_jobs
   def delete_old_model_jobs
     # delete all the other old model jobs that have been run

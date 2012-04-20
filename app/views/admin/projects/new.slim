@@ -1,5 +1,5 @@
 - content_for :body do
-  = simple_form_for([:admin, @project], :html => { :class => 'form-horizontal' }) do |f|
+  = simple_form_for([:admin, @project.organization, @project], :html => { :class => 'form-horizontal' }) do |f|
     h1 Create Project
         
     - if f.error_messages

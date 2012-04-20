@@ -1,18 +1,19 @@
 class Admin::ProjectsController < Admin::AdminController
   def index
-    @projects = Project.all
+    @projects = Organization.find(params[:organization_id]).projects
   end
   
   def new
     @project = Project.new
+    @project.organization = Organization.find(params[:organization_id])
   end
   
   def show
-    @project = Project.find(params[:id])
+    @project = Organization.find(params[:organization_id]).projects.find(params[:id])
   end
   
   def edit
-    @project = Project.find(params[:id])
+    @project = Organization.find(params[:organization_id]).projects.find(params[:id])
   end
   
   def create
@@ -22,7 +23,7 @@ class Admin::ProjectsController < Admin::AdminController
       if @project.save
         @project.update_attribute :max_number_of_gates, @project.organization.default_max_number_of_gates_per_project
         flash[:success] = "<strong>#{@project.name}</strong> project created."
-        format.html { redirect_to(edit_admin_project_url(@project)) }
+        format.html { redirect_to(admin_organization_project_url(@project.organization, @project)) }
       else
         format.html { render :action => "new" }
       end
@@ -35,7 +36,7 @@ class Admin::ProjectsController < Admin::AdminController
     respond_to do |format|
       if @project.update_attributes(params[:project])
         flash[:success] = "<strong>#{@project.name}</strong> project updated."
-        format.html { redirect_to(admin_project_url(@project)) }
+        format.html { redirect_to(admin_organization_project_url(@project.organization, @project)) }
       else
         format.html { render :action => "edit" }
       end
@@ -48,7 +49,7 @@ class Admin::ProjectsController < Admin::AdminController
 
     respond_to do |format|
       flash[:success] = "<strong>#{@project.name}</strong> project deleted."
-      format.html { redirect_to(admin_projects_url) }
+      format.html { redirect_to(admin_organization_url(@project.organization)) }
     end
   end
 end

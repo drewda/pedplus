@@ -4,6 +4,8 @@ class CountPlan < ActiveRecord::Base
   has_many :gates, :dependent => :destroy
   has_many :count_sessions, :dependent => :destroy
 
+  has_many :log_entries
+
   accepts_nested_attributes_for :gate_groups
 
   before_save :archive_other_count_plans

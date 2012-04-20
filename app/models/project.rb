@@ -10,6 +10,8 @@ class Project < ActiveRecord::Base
   has_many :count_sessions, :dependent => :destroy
   has_many :scenarios, :dependent => :destroy
   has_many :model_jobs, :dependent => :destroy
+
+  has_many :log_entries
   
   accepts_nested_attributes_for :project_members, :allow_destroy => true
 

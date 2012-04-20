@@ -43,7 +43,7 @@
           = f.fields_for :users, u do |u_fields|
             tr
               td 
-                strong = link_to u.full_name, admin_user_path(u.id)
+                strong = link_to u.full_name, admin_organization_user_path(u.organization, u)
               td = u.email
               td = u_fields.check_box :organization_billing
               td = u_fields.check_box :organization_manager

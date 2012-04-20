@@ -2,23 +2,23 @@
   .span10.columns
     h1 Users
   .span2.columns(align="right")
-    = link_to "Create User", new_admin_user_path, :class => "btn"
+    = link_to "Create User", new_admin_organization_user_path, :class => "btn"
 table.table.table-striped
   thead
     tr
       th Name
       th
-      th E-mail Address
       th Organization
       th Billing?
       th Manager?
+      th Last Sign in at
       th 
   tbody
     - @users.each do |u|
       tr
-        td = link_to u.full_name, admin_user_path(u.id)
+        td = link_to u.full_name, admin_organization_user_path(u.organization, u)
         td == u.s3sol_admin ? '<span class="label label-important">S3Sol Admin</span>' : ""
-        td = u.email
         td = u.organization.name
         td == u.organization_billing ? '<i class="icon-ok"/>' : ""
         td == u.organization_manager ? '<i class="icon-ok"/>' : ""
+        td == u.last_sign_in_at

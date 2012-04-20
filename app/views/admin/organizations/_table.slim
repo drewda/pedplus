@@ -15,7 +15,7 @@ table.table.table-striped
     - @organizations.each do |o|
       tr
         td 
-          strong = link_to o.name, admin_organization_path(o.id)
+          strong = link_to o.name, admin_organization_path(o)
         td = o.kind_display
         td = "#{o.city}, #{o.state}, #{o.country}"
         td = o.software_package

@@ -1,6 +1,32 @@
 - content_for :body do
   = render "/admin/organizations/table"
-  = render "/admin/users/table"
-  = render "/admin/projects/table"
+
+  h2 Activity
+  - if @log_entries.length > 0
+    table.table.table-striped
+      thead
+        tr
+          th Time
+          th Organization
+          th Project
+          th User
+          th Note
+      tbody
+        - for le in @log_entries
+          tr
+            td 
+              = time_ago_in_words le.created_at
+              '  ago
+            td = link_to le.organization.name, admin_organization_path(le.organization)
+            td = link_to le.project.name, admin_organization_project_path(le.organization, le.project) if le.project
+            td = link_to le.user.full_name, admin_organization_user_path(le.organization, le.user) if le.user
+            td = le.note
+
+    = form_tag admin_root_path, :method => 'post' do
+      = submit_tag "Clear Log Entries", :id => 'clear-log-entries-button', :class => 'btn btn-danger', :confirm => "Are you sure you want to delete all the log entries?"
+
+    = will_paginate @log_entries, :param_name => :log_page, :renderer => BootstrapPagination::Rails
+  - else
+    p No log entries to display.
 
 = render :template => '/admin/layout'

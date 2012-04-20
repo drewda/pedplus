@@ -1,49 +1,75 @@
 - content_for :body do
-  = form_for([:admin, @project]) do |f|
-    h1 = @project.name
-
-    ul.nav.nav-tabs
-      li.active
-        a View
-      li
-        = link_to "Edit", edit_admin_project_path(@project.id)
-
-    p
-      ' Organization:
-      strong = link_to @project.organization.name, admin_organization_path(@project.organization.id)
-    p
-      ' Name:
+  ul.breadcrumb
+    li 
+      = link_to "Organizations", admin_root_path
+      span.divider
+        ' /
+    li 
+      = link_to @project.organization.name, admin_organization_path(@project.organization)
+      span.divider
+        ' /
+    li
       strong = @project.name
-    p
-      ' Kind
-      strong = @project.kind_display
-    p
-      ' Max number of gates: 
-      strong = @project.max_number_of_gates
-    p
-      ' Allowed to export:
-      == @project.allowed_to_export ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+  h1 = @project.name
 
-    h2 Users
-    table.table.table-striped
-      thead
+  ul.nav.nav-tabs
+    li.active
+      a View
+    li
+      = link_to "Edit", edit_admin_organization_project_path(@project.organization, @project)
+
+  p
+    ' Organization:
+    strong = link_to @project.organization.name, admin_organization_path(@project.organization)
+  p
+    ' Name:
+    strong = @project.name
+  p
+    ' Kind
+    strong = @project.kind_display
+  p
+    ' Max number of gates: 
+    strong = @project.max_number_of_gates
+  p
+    ' Allowed to export:
+    == @project.allowed_to_export ? '<i class="icon-ok"></i>' : '<i class="icon-remove"></i>'
+
+  h2 Users
+  table.table.table-striped
+    thead
+      tr
+        th Name
+        th E-mail Address
+        th View?
+        th Count?
+        th Map?
+        th Plan?
+        th Manage?
+    tbody
+      - @project.project_members.each do |pm|
         tr
-          th Name
-          th E-mail Address
-          th View?
-          th Count?
-          th Map?
-          th Plan?
-          th Manage?
-      tbody
-        - @project.project_members.each do |pm|
-          tr
-            td = link_to pm.user.full_name, admin_user_path(pm.user.id)
-            td = pm.user.email
-            td == pm.view ? "<i class='icon-ok'/>" : ""
-            td == pm.count ? "<i class='icon-ok'/>" : ""
-            td == pm.map ? "<i class='icon-ok'/>" : ""
-            td == pm.plan ? "<i class='icon-ok'/>" : ""
-            td == pm.manage ? "<i class='icon-ok'/>" : ""
-            
+          td = link_to pm.user.full_name, admin_organization_user_path(@project.organization, pm.user)
+          td = pm.user.email
+          td == pm.view ? "<i class='icon-ok'/>" : ""
+          td == pm.count ? "<i class='icon-ok'/>" : ""
+          td == pm.map ? "<i class='icon-ok'/>" : ""
+          td == pm.plan ? "<i class='icon-ok'/>" : ""
+          td == pm.manage ? "<i class='icon-ok'/>" : ""
+  
+  h2 Activity
+  p
+    ' Map is at version
+    strong = "##{@project.version}"
+  p
+    ' Number of segments:
+    strong = @project.segments.length
+  p
+    ' Number of points:
+    strong = @project.geo_points.length
+  p
+    ' Number of count plans:
+    strong = @project.count_plans.length
+  p
+    ' Number of count sessions:
+    strong = @project.count_sessions.length
 = render :template => '/admin/layout'

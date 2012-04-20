@@ -18,6 +18,13 @@ class CalculateModel
       modelJob.update_attribute(:output, output)
       modelJob.update_attribute(:seconds_to_run, secondsElapsed)
       modelJob.update_attribute(:finished, true)
+
+      # create a log entry
+      LogEntry.create :kind => 'model-job',
+                      :organization => modelJob.project.organization,
+                      :project => modelJob.project,
+                      :model_job => modelJob,
+                      :note => "model completed in #{secondsElapsed} seconds"
       
       # tell the browser
       # so that it can refetch the results of the ModelJob

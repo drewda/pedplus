@@ -14,22 +14,22 @@ html
         .container
           h3
             = link_to "PedPlus Admin", admin_root_path, :class => "brand"
-          ul.nav
-            li class={"active" if current_page?(admin_organizations_path)} 
-              = link_to "Organizations", admin_organizations_path
-            li class={"active" if current_page?(admin_users_path)} 
-              = link_to "Users", admin_users_path
-            li class={"active" if current_page?(admin_projects_path)} 
-              = link_to "Projects", admin_projects_path
           ul.nav.pull-right
             li.dropdown
               a.dropdown-toggle data-toggle="dropdown"
                 == "<strong>#{current_user.first_name} #{current_user.last_name}</strong>"
                 | <b class="caret"></b>
               ul.dropdown-menu
-                li = link_to "Edit Your Profile", admin_user_path(current_user.id)
+                li = link_to "View Your Profile", admin_organization_user_path(current_user.organization, current_user)
                 li.divider
-                li = link_to "Sign Out", "/users/sign_out"
+                li
+                  a href="/"
+                    i.icon-th-large
+                    |  Dashboard
+                li 
+                  a href="/users/sign_out"
+                    i.icon-off
+                    |  Sign Out
     .container
       .section
       - if flash[:success]

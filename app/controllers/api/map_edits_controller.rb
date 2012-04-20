@@ -80,6 +80,13 @@ class Api::MapEditsController < Api::ApiController
     
     # increment the project's version
     project.increment!(:version)
+
+    # make a log entry
+    LogEntry.create :kind => 'project',
+                    :organization => project.organization,
+                    :user => current_user,
+                    :project => project,
+                    :note => "map edits uploaded to version #{project.version}"
     
     # json to return
     json = {

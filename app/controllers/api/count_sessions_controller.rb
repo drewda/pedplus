@@ -27,6 +27,14 @@ class Api::CountSessionsController < Api::ApiController
         # create the Count's
         params[:counts].each { |count| @count_session.counts.create :at => count[:at] }
 
+        # create a log entry
+        LogEntry.create :kind => 'count-session',
+                        :organization => @count_session.project.organization,
+                        :user => @count_session.user,
+                        :project => @count_session.project,
+                        :count_session => @count_session,
+                        :note => "completed with #{@count_session.counts_count} pedestrians counted"
+
         format.json  { render :json => @count_session, :status => :created, :location => api_project_count_session_url(@count_session.project, @count_session) }
       else
         format.json  { render :json => @count_session.errors, :status => :unprocessable_entity }

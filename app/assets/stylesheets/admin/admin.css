@@ -8,3 +8,6 @@
 .section {
   padding-top: 70px;
 }
+#clear-log-entries-button {
+	float: right;
+}

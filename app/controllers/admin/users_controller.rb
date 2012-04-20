@@ -1,18 +1,19 @@
 class Admin::UsersController < Admin::AdminController
   def index
-    @users = User.all
+    @users = Organization.find(params[:organization_id]).users
   end
   
   def new
     @user = User.new
+    @user.organization = Organization.find(params[:organization_id])
   end
   
   def show
-    @user = User.find(params[:id])
+    @user = Organization.find(params[:organization_id]).users.find(params[:id])
   end
   
   def edit
-    @user = User.find(params[:id])
+    @user = Organization.find(params[:organization_id]).users.find(params[:id])
   end
   
   def create
@@ -21,7 +22,7 @@ class Admin::UsersController < Admin::AdminController
     respond_to do |format|
       if @user.save
         flash[:success] = "User account created for <strong>#{@user.full_name}</strong>."
-        format.html { redirect_to(admin_user_url(@user)) }
+        format.html { redirect_to(admin_organization_user_url(@user.organization, @user)) }
       else
         format.html { render :action => "new" }
       end
@@ -34,7 +35,7 @@ class Admin::UsersController < Admin::AdminController
     respond_to do |format|
       if @user.update_attributes(params[:user])
         flash[:success] = "User account updated for <strong>#{@user.full_name}</strong>."
-        format.html { redirect_to(admin_user_url(@user)) }
+        format.html { redirect_to(admin_organization_user_url(@user.organization, @user)) }
       else
         format.html { render :action => "edit" }
       end
@@ -52,7 +53,7 @@ class Admin::UsersController < Admin::AdminController
     end
 
     respond_to do |format|
-      format.html { redirect_to(admin_users_url) }
+      format.html { redirect_to(admin_organization_url(@user.organization)) }
     end
   end
 end
