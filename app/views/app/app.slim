@@ -1,20 +1,29 @@
 - content_for :title do
   = current_user.organization.software_package
 
-- content_for :head do
-  = airbrake_javascript_notifier
-  = javascript_include_tag "app/libraries", "app/app"
-  / = javascript_include_tag "http://#{Rails.configuration.juggernaut_host}:#{Rails.configuration.juggernaut_port}/application.js"
-  = stylesheet_link_tag    "app/app"
-  script
-    | function injectProjects() {
-    == "masterRouter.projects.reset(#{@projects.to_json(:methods => [:permissions_for_current_user])})"
-    | }
+- if current_user.organization.is_subscription_still_active?
+  - content_for :head do
+    = airbrake_javascript_notifier
+    = javascript_include_tag "app/libraries", "app/app"
+    / = javascript_include_tag "http://#{Rails.configuration.juggernaut_host}:#{Rails.configuration.juggernaut_port}/application.js"
+    = stylesheet_link_tag    "app/app"
+    script
+      | function injectProjects() {
+      == "masterRouter.projects.reset(#{@projects.to_json(:methods => [:permissions_for_current_user])})"
+      | }
 
-- content_for :body do
-  .container-fluid
-    #top-bar
-    #map-area
-    #spinner
+  - content_for :body do
+    .container-fluid
+      #top-bar
+      #map-area
+      #spinner
+- else
+  - content_for :body do
+    h4 align="center"
+      ' Your organization's subscription expired on 
+      = current_user.organization.subscription_active_until.strftime "%d %B %Y"
+      | . 
+      br
+      | Please contact S3Sol to renew.
 
 = render :template => '/app/layout'

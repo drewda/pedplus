@@ -39,6 +39,10 @@ class Organization < ActiveRecord::Base
     end
   end
 
+  def is_subscription_still_active?
+    subscription_active_until > Date.today
+  end
+
   def user_credits_available
     return self.max_number_of_users - self.users.length
   end

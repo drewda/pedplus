@@ -18,26 +18,34 @@
           strong = current_user.full_name
           |. 
           a(href="/users/sign_out") Sign out
-    #thumbnail-row
-      #thumbnail-row-inner
-        ul.thumbnails
-          li.span4
-            a.thumbnail.dashboard-button#desktop-button(href="/app")
-              h3 Desktop + Tablet Application
-          li.span4
-            a.thumbnail.dashboard-button#smartphone-button(href="/smartphone")
-              h3 Smartphone Applications
-          - if current_user.organization_manager
+    - if current_user.organization.is_subscription_still_active?
+      #thumbnail-row
+        #thumbnail-row-inner
+          ul.thumbnails
             li.span4
-              a.thumbnail.dashboard-button#manage-button(href="/manage")
-                h3 Management
+              a.thumbnail.dashboard-button#desktop-button(href="/app")
+                h3 Desktop + Tablet Application
             li.span4
-              a.thumbnail.dashboard-button#help-button(href="/help")
-                h3 Help + Documentation
-          - else
-            li.span8
-              a.thumbnail.dashboard-button#help-button(href="/help")
-                h3 Help + Documentation
+              a.thumbnail.dashboard-button#smartphone-button(href="/smartphone")
+                h3 Smartphone Applications
+            - if current_user.organization_manager
+              li.span4
+                a.thumbnail.dashboard-button#manage-button(href="/manage")
+                  h3 Management
+              li.span4
+                a.thumbnail.dashboard-button#help-button(href="/help")
+                  h3 Help + Documentation
+            - else
+              li.span8
+                a.thumbnail.dashboard-button#help-button(href="/help")
+                  h3 Help + Documentation
+    - else
+      h4 align="center"
+        ' Your organization's subscription expired on 
+        = current_user.organization.subscription_active_until.strftime "%d %B %Y"
+        | . 
+        br
+        | Please contact S3Sol to renew.
     .row-fluid#footer-row
       p 
         img(src="/assets/s3sol-logo-small.png" alt="S3Sol logo" valign="middle" style="padding-right: 10px;")
