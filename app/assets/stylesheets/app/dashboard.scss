@@ -29,12 +29,12 @@
 #thumbnail-row {
   text-align: center;
   #thumbnail-row-inner {
+    max-width: 640px;
     display: inline-block;
     float: none;
-    ul {
-      margin-left: -45px;
-      .thumnails {
-        margin: 0;
+    @media (max-width: 640px) {
+      li {
+        float: none;
       }
     }
   }
