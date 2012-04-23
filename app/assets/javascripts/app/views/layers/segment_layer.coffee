@@ -123,7 +123,7 @@ class App.Views.SegmentLayer extends Backbone.View
           if colorClass > 0
             c.setAttribute "class", "segment-line blue#{colorClass}"
           else
-            c.setAttribute "class", "segment-line black"
+            c.setAttribute "class", "segment-line light-black"
 
           # if masterRouter.currentRouteName.startsWith "measureSelectedCountSession"
           #   selectedCountSessionId = masterRouter.currentRouteName.split(':').pop()

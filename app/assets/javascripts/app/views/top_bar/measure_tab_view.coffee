@@ -2,10 +2,22 @@ class App.Views.MeasureTabView extends Backbone.View
   initialize: ->
     @topBar = @options.topBar
 
+    # if we're in the measureViewSelectedSegment route, we'll have a Segment ID
+    if @options.segmentCid
+      @segment = masterRouter.segments.getByCid(@options.segmentCid)
+    else
+      @segment = null
+    # or if we're in the measureViewSelectedCountSession route, we'll have a CountSession ID
+    if @options.countSessionId
+      @countSession = masterRouter.count_sessions.get(@options.countSessionId)
+    else
+      @countSession = null
+
     @renderData =
       project: @options.projects.getCurrentProject()
       users: @options.users
-      segmentId: @options.segmentId
+      segment: @segment
+      countSession: @countSession
 
     @topBar.render 'measure'
 

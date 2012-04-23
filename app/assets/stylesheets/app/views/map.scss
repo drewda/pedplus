@@ -58,6 +58,10 @@
     path.black {
       stroke: #000000;
     }
+    path.light-black {
+      stroke: #ccc;
+      opacity: .4;
+    }
     path.selected {
       stroke: #55ee33;
 /*      stroke-dasharray: 20 10;*/

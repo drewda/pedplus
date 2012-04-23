@@ -15,17 +15,34 @@
     </li>
   </ul>
 
-  <div class="row-fluid">
-    <ul class="breadcrumb">
-      <li><strong>Entire Map</strong> <span class="divider">/</span></li>
-      <li>One Gate <span class="divider">/</span></li>
-      <li>One Count Session</li>
-    </ul>
-    <!-- TODO: add day-of-the-week and hour-of-the-day filter controls here (PEDPLUS-71) -->
-  </div>
+  <% if (countSession) { %>
+    <div class="row-fluid">
+      <ul class="breadcrumb">
+        <li><a href="#project/<%= project.id %>/measure/view">Entire Map</a> <span class="divider">/</span></li>
+        <li><a href="#project/<%= project.id %>/measure/view/segment/<%= countSession.getSegment().cid %>">Segment <%= countSession.get('segment_id') %></a> <span class="divider">/</span></li>
+        <li><strong>Count Session at <%= countSession.get('start') %></strong></li>
+      </ul>
+      <!-- TODO: add day-of-the-week and hour-of-the-day filter controls here (PEDPLUS-71) -->
+    </div>
+  <% } else if (segment) { %>
+    <div class="row-fluid">
+      <ul class="breadcrumb">
+        <li><a href="#project/<%= project.id %>/measure/view">Entire Map</a> <span class="divider">/</span></li>
+        <li><strong>Segment <%= segment.id %></strong></li>
+      </ul>
+      <!-- TODO: add day-of-the-week and hour-of-the-day filter controls here (PEDPLUS-71) -->
+    </div>
+  <% } else { %>
+    <div class="row-fluid">
+      <ul class="breadcrumb">
+        <li><strong>Entire Map</strong></li>
+      </ul>
+      <!-- TODO: add day-of-the-week and hour-of-the-day filter controls here (PEDPLUS-71) -->
+    </div>
 
-  <div id="count-session-table-wrapper">
-  <!-- table will be populated by App.Views.CountSessionTable using the jQuery DataTables plugin -->
-    <table id="count-session-table" class="table table-striped table-condensed"></table>
-  </div>
+    <div id="count-session-table-wrapper">
+    <!-- table will be populated by App.Views.CountSessionTable using the jQuery DataTables plugin -->
+      <table id="count-session-table" class="table table-striped table-condensed"></table>
+    </div>
+  <% } %>
 </div>

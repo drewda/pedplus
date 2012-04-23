@@ -10,6 +10,9 @@ class App.Models.CountSession extends Backbone.Model
   getGate: ->
     masterRouter.gates.get @get 'gate_id'
 
+  getSegment: ->
+    masterRouter.count_session.get @get 'segment_id'
+
   durationMinutes: ->
     minutes = XDate(@get 'start').diffMinutes(@get 'end')
     # only show one decimal point of accuracy
@@ -19,7 +22,7 @@ class App.Models.CountSession extends Backbone.Model
     @collection.selectNone() # only want one CountSession selected at a time
     @set
       selected: true
-    masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count_session/#{@id}", true
+    # masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count_session/#{@id}", true
   deselect: ->
     # if masterRouter.currentRouteName == "measureSelectedCountSession:#{@cid}"
     # else if masterRouter.currentRouteName == "measureEnterCountSession:#{@cid}"

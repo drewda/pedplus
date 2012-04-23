@@ -496,21 +496,29 @@ class App.Routers.Master extends Backbone.Router
       @map.resetMap false, true
       @geo_points.selectNone()
       @segments.selectNone()
-      if !@countSessionTable
-        @countSessionTable = new App.Views.CountSessionTable
-          count_sessions: masterRouter.count_sessions
-      else
-        @countSessionTable.render()
+      # if !@countSessionTable
+      #   @countSessionTable = new App.Views.CountSessionTable
+      #     count_sessions: masterRouter.count_sessions
+      # else
+      #   @countSessionTable.render()
 
-  measureViewSelectedSegment: (projectId) ->
+  measureViewSelectedSegment: (projectId, segmentCid) ->
     if @reset(projectId, true, 250)
       @routeNameKeeper 'measureViewSelectedSegment'
-      # TODO
+      @measureTab = new App.Views.MeasureTabView
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        segmentCid: segmentCid
 
-  measureViewSelectedCountSession: (projectId) ->
+  measureViewSelectedCountSession: (projectId, countSessionId) ->
     if @reset(projectId, true, 250)
       @routeNameKeeper 'measureViewSelectedCountSession'
-      # TODO
+      @measureTab = new App.Views.MeasureTabView
+        topBar: masterRouter.topBar
+        projectId: projectId
+        projects: masterRouter.projects
+        countSessionId: countSessionId
 
   opportunity: (projectId) ->
     if @reset(projectId, true, 580)

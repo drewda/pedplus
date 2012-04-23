@@ -61,7 +61,7 @@ class App.Views.CountSessionTable extends Backbone.View
         "fnRowSelected": (node) =>
           id = node.id.split('-').pop()
           masterRouter.count_sessions.get(id).select()
-          # masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/count_session/#{id}", true
+          masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view/count_session/#{id}", true
         "fnRowDeselected": (node) =>
           masterRouter.count_sessions.selectNone()
           masterRouter.navigate "#project/#{masterRouter.projects.getCurrentProjectId()}/measure/view", true
