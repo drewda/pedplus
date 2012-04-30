@@ -17,18 +17,18 @@ class App.Views.TopBar extends Backbone.View
       $("[rel=tooltip]").tooltip
         placement: 'right'
 
-      $('#dashboard-link').on "click touchstart", (event) =>
+      $('#dashboard-link').on "click", (event) =>
         bootbox.confirm "Do you want to exit and return to the dashboard?", (confirmed) =>
           window.location.href = "/" if confirmed
 
-      $('#user-settings-link').on "click touchstart", (event) =>
+      $('#user-settings-link').on "click", (event) =>
         userSettingsModal = new App.Views.UserSettingsModal
           user: masterRouter.users.getCurrentUser()
 
-      $('#management-link').on "click touchstart", (event) =>
+      $('#management-link').on "click", (event) =>
         bootbox.confirm "Do you want to exit and proceed to the management interface?", (confirmed) =>
           window.location.href = "/manage" if confirmed
 
-      $('#sign-out-link').on "click touchstart", (event) =>
+      $('#sign-out-link').on "click", (event) =>
         bootbox.confirm "Do you want to exit and sign out?", (confirmed) =>
           window.location.href = "/users/sign_out" if confirmed

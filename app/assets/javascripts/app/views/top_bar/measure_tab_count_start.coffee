@@ -15,8 +15,8 @@ class App.Views.MeasureTabCountStart extends Backbone.View
       gate: @gate
 
     # button bindings
-    $('#cancel-button').on "click touchstart", $.proxy @cancelButtonClick, this
-    $('#yes-button').on "click touchstart", $.proxy @yesButtonClick, this
+    $('#cancel-button').on "click", $.proxy @cancelButtonClick, this
+    $('#yes-button').on "click", $.proxy @yesButtonClick, this
 
   cancelButtonClick: ->
     # return to MeasureTabCountSchedule

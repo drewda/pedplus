@@ -39,9 +39,9 @@ class App.Views.GateGroupTableRow extends Backbone.View
       # that makes sure we aren't selecting a segment that is already a gate
 
       # bind the button actions
-      $('#auto-select-gates-button').on "click touchstart", $.proxy @autoSelectGatesButton, this
-      $('#remove-gate-group-button').on "click touchstart", $.proxy @removeGateGroupButton, this
-      $('#save-gate-group-button').on "click touchstart", $.proxy @saveGateGroupButton, this
+      $('#auto-select-gates-button').on "click", $.proxy @autoSelectGatesButton, this
+      $('#remove-gate-group-button').on "click", $.proxy @removeGateGroupButton, this
+      $('#save-gate-group-button').on "click", $.proxy @saveGateGroupButton, this
 
   autoSelectGatesButton: (event) ->
     # TODO

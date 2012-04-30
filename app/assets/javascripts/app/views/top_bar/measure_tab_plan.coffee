@@ -49,9 +49,9 @@ class App.Views.MeasureTabPlan extends Backbone.View
       countPlan: @countPlan
 
     # bind button actions
-    $('#archive-count-plan-button').on "click touchstart", $.proxy @archiveCountPlanButton, this
-    $('#edit-count-plan-button').on "click touchstart", $.proxy @editCountPlanButton, this
-    $('#delete-count-plan-button').on "click touchstart", $.proxy @deleteCountPlanButton, this
+    $('#archive-count-plan-button').on "click", $.proxy @archiveCountPlanButton, this
+    $('#edit-count-plan-button').on "click", $.proxy @editCountPlanButton, this
+    $('#delete-count-plan-button').on "click", $.proxy @deleteCountPlanButton, this
 
   archiveCountPlanButton: ->
     bootbox.confirm "Are you sure you want to archive this count plan? It will no longer be visible to counters.", (confirmed) =>

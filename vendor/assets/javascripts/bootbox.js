@@ -313,7 +313,7 @@ var bootbox = window.bootbox || (function() {
             $("a.primary:last", div).focus();
         });
 
-        $("a", div).on("click touchstart", function(e) {
+        $("a", div).on("click", function(e) {
             e.preventDefault();
             hideSource = 'button';
             div.modal("hide");

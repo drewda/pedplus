@@ -47,10 +47,10 @@ class App.Views.MeasureTabCountEnter extends Backbone.View
     # minusOneBeep = new Audio "/media/audio/minus_one_beep.mp3"
       
     # bindings for buttons
-    $('#cancel-counting-button').on "click touchstart", $.proxy @cancelCountingButtonClick, this
-    $('#count-plus-one-button').on "click touchstart", $.proxy @countPlusOneButtonClick, this
-    $('#count-plus-five-button').on "click touchstart", $.proxy @countPlusFiveButtonClick, this
-    $('#count-minus-one-button').on "click touchstart", $.proxy @countMinusOneButtonClick, this
+    $('#cancel-counting-button').on "click", $.proxy @cancelCountingButtonClick, this
+    $('#count-plus-one-button').on "click", $.proxy @countPlusOneButtonClick, this
+    $('#count-plus-five-button').on "click", $.proxy @countPlusFiveButtonClick, this
+    $('#count-minus-one-button').on "click", $.proxy @countMinusOneButtonClick, this
 
   cancelCountingButtonClick: ->
     bootbox.confirm "Are you sure you want to cancel counting?", (confirm) ->

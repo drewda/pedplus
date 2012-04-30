@@ -30,7 +30,7 @@ class App.Views.MeasureTabCountSchedule extends Backbone.View
     $('#measure-count-user-select').on "change", $.proxy @measureCountSelectChange, this
 
     # bindings for gate buttons
-    $('.gate-to-count-button').on "click touchstart", @gateToCountButtonClick
+    $('.gate-to-count-button').on "click", @gateToCountButtonClick
 
   measureCountSelectChange: ->
     date = $('#measure-count-day-select').val()
