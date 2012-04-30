@@ -21,6 +21,7 @@
 //= require jquery-datatables-bootstrap
 //= require jquery-datatables-tabletools
 //= require jquery-scrollto
+//= require jquery-stay-in-web-app
 
 // http://stackoverflow.com/questions/646628/javascript-startswith
 String.prototype.startsWith = function (str){

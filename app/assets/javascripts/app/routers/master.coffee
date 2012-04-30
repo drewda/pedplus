@@ -78,6 +78,9 @@ class App.Routers.Master extends Backbone.Router
     
     @timers = []
 
+    # if running as full-screen "app" on iPad, make sure to stay in the same window
+    $.stayInWebApp('a')
+
   routes:
     ".*" : "index"
     
