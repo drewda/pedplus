@@ -46,7 +46,8 @@ class App.Models.GateGroup extends Backbone.Model
 
   # used in GateGroupTableRow
   printHours: ->
-    @get('hours').replace(/,/g, ', ').replace(/00/g, ':00')
+    # note that we need to handle 1000 -> 10:00
+    @get('hours').replace(/,/g, ', ').replace(/00/g, ':00').replace(/:000/, "0:00")
 
   # select a color from d3's set of 20 categorical colors
   # note that this effectively limits the number of CountGroup's in a CountPlan to 20!
