@@ -22,7 +22,7 @@ class Admin::OrganizationsController < Admin::AdminController
       if @organization.save
         flash[:success] = "Organization record created for <strong>#{@organization.name}</strong>."
         flash[:info] = "Please add an initial user for the organization."
-        format.html { redirect_to(new_admin_user_url) }
+        format.html { redirect_to(new_admin_organization_user_url(@organization)) }
       else
         format.html { render :action => "new" }
       end
