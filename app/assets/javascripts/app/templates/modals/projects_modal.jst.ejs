@@ -14,7 +14,12 @@
       <% projects.each(function(p) { %>
         <li><a href="#project/<%= p.id %>"><%= p.get('name') %></a></li>
       <% }); if (projects.length == 0) { %>
-        <li>You have access to no projects.</li>
+        <p>You do not have access to any projects.</p>
+        <% if (currentUser.get('organization_manager') == true) { %>
+          <p>Use the <a href="/manage">management interface</a> to create a new project and give yourself permission to view it.</p>
+        <% } else { %>
+          <p>Contact your organization's manager to be added to a project.</p>
+        <% } %>
       <% } %>
     </ul>
     <% } %>

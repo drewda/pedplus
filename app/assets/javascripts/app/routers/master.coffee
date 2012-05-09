@@ -13,8 +13,9 @@ class App.Routers.Master extends Backbone.Router
     @projects = new App.Collections.Projects
     
     @users = new App.Collections.Users
-    @users.fetch
-      success: ->
+    injectUsers()
+    # @users.fetch
+    #   success: ->
         # masterRouter.juggernautConnector.subscribeToOrganization masterRouter.users.getCurrentUser().get('organization_id')
     
     # will be fetch'ed when the user selects a project
@@ -156,6 +157,7 @@ class App.Routers.Master extends Backbone.Router
     projectsModal = new App.Views.ProjectsModal
       mode: "open"
       projects: masterRouter.projects
+      currentUser: masterRouter.users.getCurrentUser()
     masterRouter.modals.push projectsModal
     @map.setOsmLayer "color"
     @map.resetMap false, false
@@ -579,8 +581,8 @@ class App.Routers.Master extends Backbone.Router
     @clearTimers()
 
     # if projects have not yet been loaded, kick the user back to the start
-    if @projects.length < 1
-      masterRouter.navigate '#', true
+    if @projects.length < 1 and masterRouter.currentRouteName != "projectOpen"
+      masterRouter.navigate 'project/open', true
       return false # do not continue with any more page setup
     else      
       if projectId

@@ -11,6 +11,9 @@
       | function injectProjects() {
       == "masterRouter.projects.reset(#{@projects.to_json(:methods => [:permissions_for_current_user])})"
       | }
+      | function injectUsers() {
+      == "masterRouter.users.reset(#{@users.to_json(:methods => [:is_current_user])});"
+      | }
 
   - content_for :body do
     .container-fluid
