@@ -34,6 +34,11 @@ class Smartphone.Views.ShowCountSchedulePage extends Backbone.View
       date: @date
       userId: @userId
 
+    # disable the drop-down select bindings that have been turned on
+    # when visiting this page previously
+    $('#measure-count-day-select').off "change"
+    $('#measure-count-user-select').off "change"
+
     # fill the day drop-down select
     $('#measure-count-day-select').empty()
     _.each @countPlan.getAllDates(), (date) ->

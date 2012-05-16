@@ -17,7 +17,7 @@
 
     div(data-role="content")
       ul(data-role="listview")
-        - current_user.projects.each do |p|
+        - @projects.each do |p|
           li
             a href="#show-count-schedule?projectId=#{p.id}" #{p.name}
             

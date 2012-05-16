@@ -7,7 +7,7 @@ class Smartphone.Routers.Master extends Backbone.Router
       { '#show-count-schedule(?:[?](.*))?': { events: "s", handler: "showCountSchedule" } }
       { "#start-count(?:[?](.*))?": { events: "s", handler: "startCount" } }
       { "#enter-count(?:[?](.*))?": { events: "s", handler: "enterCount" } }
-      { "#validate-count(?:[?](.*))?": { events: "s", handler: "verifyCount" } }
+      { "#validate-count(?:[?](.*))?": { events: "s", handler: "validateCount" } }
       ], 
         openProject: =>
           # clear collections for when we switch to another project

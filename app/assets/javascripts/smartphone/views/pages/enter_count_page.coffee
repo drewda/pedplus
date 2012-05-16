@@ -1,5 +1,4 @@
 class Smartphone.Views.EnterCountPage extends Backbone.View
-  el: '#enter-count-page'
   initialize: ->
     # look up the appropriate CountSession
     @countSession = masterRouter.count_sessions.getByCid @options.countSessionCid
@@ -24,11 +23,17 @@ class Smartphone.Views.EnterCountPage extends Backbone.View
     # display the proper header title
     $('.header-gate-label-span').text @countSession.getGate().printLabel()
 
+    # first remove any previous button bindings
+    $('#count-plus-five-button').off()
+    $('#count-plus-one-button').off()
+    $('#count-minus-one-button').off()
+    $('#cancel-counting-button').off()
+
     # button bindings
     $('#count-plus-five-button').on "click", $.proxy @countPlusFiveButtonClick, this
     $('#count-plus-one-button').on "click", $.proxy @countPlusOneButtonClick, this
     $('#count-minus-one-button').on "click", $.proxy @countMinusOneButtonClick, this
-    $('#cancel-counting-button').on "click", $.proxy @yesCancelCountingButtonClick, this
+    $('#cancel-counting-button').on "click", $.proxy @cancelCountingButtonClick, this
 
   timerFunction: ->
     clearInterval masterRouter.enterCountPage.timer
@@ -50,7 +55,7 @@ class Smartphone.Views.EnterCountPage extends Backbone.View
         '<a class="yes-cancel-counting-button" data-role="button" data-theme="r">Yes</a>'+
         '<a rel="close" data-role="button">No</a>'
       callbackOpen: ->
-        # TODO: deal with the multiple dialogs!!!!!!!
+        $('.yes-cancel-counting-button').off()
         $('.yes-cancel-counting-button').on "click", masterRouter.enterCountPage.yesCancelCountingButtonClick
   yesCancelCountingButtonClick: ->
     # cancel the timer
@@ -62,7 +67,7 @@ class Smartphone.Views.EnterCountPage extends Backbone.View
     # remove the CountSession
     masterRouter.count_sessions.remove @countSession
     # close and destroy the dialog
-    #!!!! $.mobile.sdCurrentDialog.close()
+    $.mobile.sdCurrentDialog.close()
     # return to ShowCountSchedule
     $.mobile.changePage "#show-count-schedule?projectId=#{masterRouter.projects.getCurrentProjectId()}"
 

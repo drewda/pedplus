@@ -1,10 +1,12 @@
 class Smartphone.Views.StartCountPage extends Backbone.View
-  el: '#start-count-page'
   initialize: ->
     @gate = @options.gate
     $('.header-gate-label-span').text @gate.printLabel()
 
-    $('#start-count-yes-button').on "click touchstart", $.proxy @startCountYesButtonClick, this
+    # remove any previously registered events
+    $('#start-count-yes-button').off()
+
+    $('#start-count-yes-button').on "vclick", $.proxy @startCountYesButtonClick, this
 
     masterRouter.map = new Smartphone.Views.Map
 
