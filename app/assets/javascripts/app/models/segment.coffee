@@ -107,3 +107,14 @@ class App.Models.Segment extends Backbone.Model
       @deselect()
     else
       @select()
+
+  getCountSessions: ->
+    masterRouter.count_sessions.select (cs) -> 
+      cs.get('segment_id') == @id
+    , this
+
+  totalCounted: ->
+    countSessions = 
+    _.reduce @getCountSessions(), (memo, cs) ->
+      memo + cs.get('counts_count')
+    , 0

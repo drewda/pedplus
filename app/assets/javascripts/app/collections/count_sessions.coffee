@@ -4,6 +4,9 @@ class App.Collections.CountSessions extends Backbone.Collection
     "/api/projects/#{masterRouter.projects.getCurrentProjectId()}/count_sessions"
   initialize: ->
     @bind "reset", @loadCountsIntoSegments
+
+    @countNaturalBreaks = []
+
   selected: ->
     @filter (cs) -> cs.get 'selected'
   selectAll: ->
@@ -27,6 +30,7 @@ class App.Collections.CountSessions extends Backbone.Collection
           if !cs.get('selected') then false else cs.get('selected')
         ]
     return array
+
   loadCountsIntoSegments: ->
     # TODO: cache this computation by version number
     masterRouter.segments.each (s) =>
@@ -37,7 +41,8 @@ class App.Collections.CountSessions extends Backbone.Collection
     max = _.max countTotals
     fullRange = max - min
     classRange = fullRange / 5
-    breaks = [min, min + classRange, min + classRange * 2, min + classRange * 3, min + classRange * 2, max]
+    breaks = [min, min + classRange, min + classRange * 2, min + classRange * 3, min + classRange * 4, max]
+    @countNaturalBreaks = breaks
     masterRouter.count_sessions.each (cs) =>
       value = cs.get('counts_count')
       for i in [1..breaks.length]
@@ -48,3 +53,11 @@ class App.Collections.CountSessions extends Backbone.Collection
         measuredClass: b    
     # # reloading SegmentLayer will draw the coloring
     # masterRouter.segment_layer.layer.reload()
+  
+  # used by MeasureTabView
+  # TODO: make a full set of functions to compute different aggregations and statistics for counts
+  # or maybe replace with backbone-query.js https://github.com/davidgtonge/backbone_query
+  totalCounted: ->
+    @reduce (memo, cs) ->
+      memo + cs.get('counts_count')
+    , 0

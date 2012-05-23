@@ -490,7 +490,7 @@ class App.Routers.Master extends Backbone.Router
         countSessionCid: countSessionCid
 
   measureView: (projectId) ->
-    if @reset(projectId, true, 250)
+    if @reset(projectId, true, 205)
       @routeNameKeeper 'measureView'
       @mostRecentMeasureSubTab = "view"
       @measureTab = new App.Views.MeasureTabView
@@ -508,7 +508,7 @@ class App.Routers.Master extends Backbone.Router
       #   @countSessionTable.render()
 
   measureViewSelectedSegment: (projectId, segmentCid) ->
-    if @reset(projectId, true, 250)
+    if @reset(projectId, true, 205)
       @routeNameKeeper 'measureViewSelectedSegment'
       @measureTab = new App.Views.MeasureTabView
         topBar: masterRouter.topBar

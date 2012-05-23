@@ -15,6 +15,7 @@ class App.Views.MeasureTabView extends Backbone.View
 
     @renderData =
       project: @options.projects.getCurrentProject()
+      countSessions: masterRouter.count_sessions
       users: @options.users
       segment: @segment
       countSession: @countSession

@@ -125,6 +125,31 @@
       }
     }
 
+    .legend {
+      margin: 0;
+      padding: 0;
+      float: right;
+      list-style: none;
+      li {
+        display: block;
+        float: left;
+        width: 70px;
+        margin-bottom: 6px;
+        text-align: center;
+        font-size: 13px;
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #bfbfbf;
+        list-style: none;
+      }
+      li span {
+        display: block;
+        float: left;
+        height: 40px;
+        width: 70px;
+      }
+    }
+
     #count-session-table-wrapper {
       table {
         width: 100%;
