@@ -1,4 +1,6 @@
 - content_for :head do
+  = javascript_include_tag  "add2home"
+  
   script
     | function injectProjects() {
     == "masterRouter.projects.reset(#{@projects.to_json(:methods => [:permissions_for_current_user])});"
