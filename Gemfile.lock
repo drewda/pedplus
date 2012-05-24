@@ -148,10 +148,12 @@ GEM
     nokogiri (1.5.2)
     orm_adapter (0.0.7)
     polyglot (0.3.3)
-    pry (0.9.9.2)
+    pry (0.9.9.6)
       coderay (~> 1.0.5)
       method_source (~> 0.7.1)
       slop (>= 2.4.4, < 3)
+    pry-rails (0.1.6)
+      pry
     rack (1.4.1)
     rack-cache (1.2)
       rack (>= 0.4)
@@ -280,7 +282,7 @@ DEPENDENCIES
   launchy
   less
   mysql2
-  pry
+  pry-rails
   rails (= 3.2.3)
   rb-fsevent
   resque
