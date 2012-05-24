@@ -15,6 +15,7 @@ html
     - else
       link(rel="apple-touch-icon" sizes="72x72" href="/assets/pedcount-icon-ipad-72.png")
       link(rel="apple-touch-icon" sizes="144x144" href="/assets/pedcount-icon-ipad-144.png")
+    == yield(:head)
   body
     .container-fluid
       == yield(:body)

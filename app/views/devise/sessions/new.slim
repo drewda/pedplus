@@ -1,3 +1,9 @@
+- content_for :head do
+  = javascript_include_tag  "add2home"
+  = stylesheet_link_tag     "add2home"
+  script
+    | addToHomeConfig = { touchIcon: true };
+
 - content_for :body do
   .row-fluid#header-row
     .span12
