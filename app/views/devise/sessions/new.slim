@@ -1,8 +1,12 @@
 - content_for :body do
   .row-fluid#header-row
     .span12
-      img(src="/assets/pedcount-icon.png" valign="absmiddle" style="padding-right: 10px;") 
-      | PedCount
+      - if request.url.include? 'pedplus'
+        img(src="/assets/pedplus-icon.png" valign="absmiddle" style="padding-right: 10px;") 
+        | PedPlus
+      - else
+        img(src="/assets/pedcount-icon.png" valign="absmiddle" style="padding-right: 10px;") 
+        | PedCount
   .row-fluid#sign-in-row
     .span12
       - flash.each do |name, msg| 
