@@ -64,9 +64,17 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.3.1)
+    columnize (0.3.6)
     commonjs (0.2.5)
     country_select (0.0.2)
     database_cleaner (0.7.2)
+    debugger (1.1.3)
+      columnize (>= 0.3.1)
+      debugger-linecache (~> 1.1.1)
+      debugger-ruby_core_source (~> 1.1.2)
+    debugger-linecache (1.1.1)
+      debugger-ruby_core_source (>= 1.1.1)
+    debugger-ruby_core_source (1.1.2)
     devise (2.0.4)
       bcrypt-ruby (~> 3.0)
       orm_adapter (~> 0.0.3)
@@ -256,6 +264,7 @@ DEPENDENCIES
   coffee-rails
   country_select
   database_cleaner
+  debugger
   devise
   devise_invitable
   drewda-railroad (~> 0.5.3)
