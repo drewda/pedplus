@@ -6,6 +6,12 @@ html
     = csrf_meta_tags
     meta(name="apple-mobile-web-app-capable" content="yes")
     meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
+    - if request.url.include? 'pedplus'
+      link(rel="apple-touch-icon" sizes="72x72" href="/assets/pedplus-icon-ipad-72.png")
+      link(rel="apple-touch-icon" sizes="144x144" href="/assets/pedplus-icon-ipad-144.png")
+    - else
+      link(rel="apple-touch-icon" sizes="72x72" href="/assets/pedcount-icon-ipad-72.png")
+      link(rel="apple-touch-icon" sizes="144x144" href="/assets/pedcount-icon-ipad-144.png")
   body
     .container-fluid
       == yield(:body)
