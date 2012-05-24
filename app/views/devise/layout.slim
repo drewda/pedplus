@@ -1,7 +1,10 @@
 doctype html
 html
   head
-    title PedCount + PedPlus
+    - if request.url.include? 'pedplus'
+      title PedPlus
+    - else
+      title PedCount
     = stylesheet_link_tag "sign_in"
     = csrf_meta_tags
     meta(name="apple-mobile-web-app-capable" content="yes")
