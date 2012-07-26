@@ -42,8 +42,6 @@ class App.Views.GeoPointLayer extends Backbone.View
       .append("svg:g")
         .attr("transform", @transform)
       .append("svg:circle")
-        .classed 'selected', (d) ->
-          d.get 'selected'
         .attr "r", (d) ->
           if d.selected
             masterRouter.geo_point_layer.geoPointSelectedRadius
@@ -55,6 +53,8 @@ class App.Views.GeoPointLayer extends Backbone.View
           "geo-point-circle-#{d.cid}"
         .on 'click', (d) -> 
           d.toggle()
+        .classed 'selected', (d) ->
+          d.get 'selected'
           
     # if there is a changed GeoPoint, go in and modify it      
     if geo_point and !geo_point.models
