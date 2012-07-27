@@ -4,7 +4,6 @@ db/*.sqlite3
 log/*.log
 tmp/
 .sass-cache/
-config/database.yml
 *.pyc
 bin/
 *.sublime-*
