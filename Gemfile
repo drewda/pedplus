@@ -41,7 +41,7 @@ end
 
 gem 'rspec-rails', :group => [:development, :test]
 
-group :test, :darwin do
+group :test do
 	gem 'factory_girl_rails'
 	gem 'spork'
 	gem 'database_cleaner'
