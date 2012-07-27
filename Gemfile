@@ -1,6 +1,6 @@
 source 'http://rubygems.org'
 
-gem 'rails', '3.2.3'
+gem 'rails', '3.2.7'
 
 gem 'mysql2'
 
@@ -28,8 +28,8 @@ gem 'jquery-rails'
 
 group :assets do
   gem 'sass-rails'
-  gem "less"
   gem 'coffee-rails'
+  gem 'therubyracer', :platforms => :ruby
   gem 'uglifier'
 end
 
