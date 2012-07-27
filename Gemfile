@@ -5,7 +5,7 @@ gem 'rails', '3.2.7'
 gem 'mysql2'
 
 gem 'airbrake'
-gem 'capistrano'
+gem 'mina'
 
 gem 'resque', :require => "resque/server"
 # gem 'juggernaut', :git => 'https://github.com/maccman/juggernaut.git'
