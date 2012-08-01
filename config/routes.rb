@@ -2,7 +2,7 @@ Pedplus::Application.routes.draw do
   root :to => 'app#dashboard'
   match 'app' => 'app#app'
   match 'smartphone' => 'smartphone#dashboard'
-  # TODO: add route for /help
+
   namespace :manage do
     root :to => 'site#dashboard'
     resources :users, :projects
