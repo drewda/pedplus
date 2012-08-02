@@ -5,12 +5,14 @@ head
   = csrf_meta_tags
   meta(name="apple-mobile-web-app-capable" content="yes")
   meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no")
-  - if current_user.organization.software_package == 'PedCount'
-    link(rel="apple-touch-icon" sizes="72x72" href="/assets/pedcount-icon-ipad-72.png")
-    link(rel="apple-touch-icon" sizes="144x144" href="/assets/pedcount-icon-ipad-144.png")
-  - elsif current_user.organization.software_package == 'PedPlus'
+  - if current_user.organization.software_package == 'PedPlus'
     link(rel="apple-touch-icon" sizes="72x72" href="/assets/pedplus-icon-ipad-72.png")
     link(rel="apple-touch-icon" sizes="144x144" href="/assets/pedplus-icon-ipad-144.png")
+    link(rel="shortcut icon" type="image/x-icon" href="/assets/pedplus-favicon.ico")
+  - else
+    link(rel="apple-touch-icon" sizes="72x72" href="/assets/pedcount-icon-ipad-72.png")
+    link(rel="apple-touch-icon" sizes="144x144" href="/assets/pedcount-icon-ipad-144.png")
+    link(rel="shortcut icon" type="image/x-icon" href="/assets/pedcount-favicon.ico")
   == yield(:head)
 body
   == yield(:body)
