@@ -1,6 +1,6 @@
 = UrbPed
 
-S3Sol Rails Web app for modeling urban pedestrian walkability. Depends on OrgUP for organization, user, and project information and for session sign-in/sign-out.
+S3Sol Rails Web app for modeling urban pedestrian walkability.
 
 == Diagrams
 To generate diagrams of the models and controllers (using Railroad) type:
