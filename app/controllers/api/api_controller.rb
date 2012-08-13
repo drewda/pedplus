@@ -1,6 +1,14 @@
 class Api::ApiController < ApplicationController
   before_filter :authenticate_user!
 
+  # If you are using token authentication with APIs and using trackable. 
+  # Every request will be considered as a new sign in (since there is no 
+  # session in APIs). This is disabled by the following before filter:
+  before_filter :skip_trackable
+  def skip_trackable
+    request.env['devise.skip_trackable'] = true
+  end
+
   # a function used to pick out only certain param attributes to use to update records
   # http://www.quora.com/Backbone-js-1/How-well-does-backbone-js-work-with-rails
   def pick(hash, *keys)

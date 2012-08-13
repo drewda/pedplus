@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120420031833) do
+ActiveRecord::Schema.define(:version => 20120813185604) do
 
   create_table "count_plans", :force => true do |t|
     t.integer  "project_id"
@@ -62,7 +62,7 @@ ActiveRecord::Schema.define(:version => 20120420031833) do
     t.string   "status"
   end
 
-  add_index "gate_groups", ["count_plan_id"], :name => "index_gate_groups_on_counting_plan_id"
+  add_index "gate_groups", ["count_plan_id"], :name => "index_gate_groups_on_count_plan_id"
   add_index "gate_groups", ["user_id"], :name => "index_gate_groups_on_user_id"
 
   create_table "gates", :force => true do |t|
@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(:version => 20120420031833) do
     t.datetime "updated_at",              :null => false
   end
 
-  add_index "gates", ["count_plan_id"], :name => "index_gates_on_counting_plan_id"
+  add_index "gates", ["count_plan_id"], :name => "index_gates_on_count_plan_id"
   add_index "gates", ["gate_group_id"], :name => "index_gates_on_gate_group_id"
   add_index "gates", ["segment_id"], :name => "index_gates_on_segment_id"
 
@@ -255,6 +255,7 @@ ActiveRecord::Schema.define(:version => 20120420031833) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.boolean  "s3sol_admin"
+    t.string   "authentication_token"
   end
 
   add_index "users", ["invitation_token"], :name => "index_users_on_invitation_token"

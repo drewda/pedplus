@@ -9,6 +9,7 @@ Pedplus::Application.routes.draw do
   end
 
   namespace :api do
+    resources :tokens, :only => [:create, :destroy]
     resources :organizations
     resources :users
     resources :projects do

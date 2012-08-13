@@ -46,6 +46,7 @@ class User < ActiveRecord::Base
   has_many :log_entries
   
   devise :database_authenticatable, 
+         :token_authenticatable,
          :invitable,
          :recoverable, 
          :rememberable, 
