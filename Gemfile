@@ -40,6 +40,8 @@ group :development do
   gem 'debugger'
   gem 'guard'
   gem 'guard-annotate'
+  gem 'guard-redis'
+  gem 'guard-resque'
 end
 
 gem 'rspec-rails', :group => [:development, :test]

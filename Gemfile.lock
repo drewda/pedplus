@@ -108,6 +108,12 @@ GEM
       em-websocket (>= 0.2.0)
       guard (>= 1.1.0)
       multi_json (~> 1.0)
+    guard-redis (0.1.0)
+      guard (>= 0.4.0)
+      redis (~> 2.2.2)
+    guard-resque (0.0.5)
+      guard (>= 0.8)
+      resque
     guard-rspec (1.2.1)
       guard (>= 1.1)
     guard-spork (1.1.0)
@@ -182,9 +188,9 @@ GEM
       ffi (>= 0.5.0)
     rdoc (3.12)
       json (~> 1.4)
-    redis (3.0.1)
-    redis-namespace (1.2.1)
-      redis (~> 3.0.0)
+    redis (2.2.2)
+    redis-namespace (1.1.0)
+      redis (< 3.0.0)
     resque (1.21.0)
       multi_json (~> 1.0)
       redis-namespace (~> 1.0)
@@ -277,6 +283,8 @@ DEPENDENCIES
   guard
   guard-annotate
   guard-livereload
+  guard-redis
+  guard-resque
   guard-rspec
   guard-spork
   jquery-rails
