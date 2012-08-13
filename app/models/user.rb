@@ -1,3 +1,40 @@
+# == Schema Information
+#
+# Table name: users
+#
+#  id                     :integer          not null, primary key
+#  first_name             :string(255)
+#  last_name              :string(255)
+#  email                  :string(255)      default(""), not null
+#  phone_number           :string(255)
+#  organization_id        :integer
+#  organization_billing   :boolean
+#  organization_manager   :boolean
+#  encrypted_password     :string(128)      default(""), not null
+#  invitation_token       :string(60)
+#  invitation_sent_at     :datetime
+#  invitation_accepted_at :datetime
+#  invitation_limit       :integer
+#  invited_by_id          :integer
+#  invited_by_type        :string(255)
+#  reset_password_token   :string(255)
+#  reset_password_sent_at :datetime
+#  remember_created_at    :datetime
+#  sign_in_count          :integer          default(0)
+#  current_sign_in_at     :datetime
+#  last_sign_in_at        :datetime
+#  current_sign_in_ip     :string(255)
+#  last_sign_in_ip        :string(255)
+#  created_at             :datetime
+#  updated_at             :datetime
+#  s3sol_admin            :boolean
+#
+# Indexes
+#
+#  index_users_on_invitation_token  (invitation_token)
+#  index_users_on_organization_id   (organization_id)
+#
+
 class User < ActiveRecord::Base
   belongs_to :organization
   has_many :project_members, :dependent => :destroy

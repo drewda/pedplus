@@ -1,3 +1,25 @@
+# == Schema Information
+#
+# Table name: model_jobs
+#
+#  id              :integer          not null, primary key
+#  project_id      :integer
+#  kind            :string(255)
+#  parameters      :text
+#  output          :text
+#  started         :boolean
+#  finished        :boolean
+#  picked_up       :boolean
+#  seconds_to_run  :integer
+#  created_at      :datetime
+#  updated_at      :datetime
+#  project_version :integer          default(1)
+#
+# Indexes
+#
+#  index_model_jobs_on_project_id  (project_id)
+#
+
 class ModelJob < ActiveRecord::Base
   belongs_to :project
 

@@ -1,3 +1,31 @@
+# == Schema Information
+#
+# Table name: organizations
+#
+#  id                                      :integer          not null, primary key
+#  name                                    :string(255)
+#  slug                                    :string(255)
+#  url                                     :string(255)
+#  address                                 :string(255)
+#  city                                    :string(255)
+#  state                                   :string(255)
+#  country                                 :string(255)
+#  postal_code                             :string(255)
+#  created_at                              :datetime
+#  updated_at                              :datetime
+#  owns_pedcount                           :boolean          default(TRUE)
+#  owns_pedplus                            :boolean          default(FALSE)
+#  max_number_of_users                     :integer          default(1)
+#  max_number_of_projects                  :integer          default(1)
+#  time_zone                               :string(255)      default("Pacific Time (US & Canada)")
+#  kind                                    :string(255)
+#  default_max_number_of_gates_per_project :integer
+#  subscription_active_until               :date
+#  default_counting_days_per_gate          :integer
+#  extra_counting_day_credits_available    :integer          default(0)
+#  allowed_to_export_projects              :boolean          default(FALSE)
+#
+
 class Organization < ActiveRecord::Base
   has_many :users, :dependent => :destroy
   has_many :projects, :dependent => :destroy

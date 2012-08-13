@@ -1,3 +1,20 @@
+# == Schema Information
+#
+# Table name: geo_points
+#
+#  id         :integer          not null, primary key
+#  latitude   :decimal(15, 10)
+#  longitude  :decimal(15, 10)
+#  accuracy   :decimal(5, 2)
+#  created_at :datetime
+#  updated_at :datetime
+#  project_id :integer
+#
+# Indexes
+#
+#  index_geo_points_on_project_id  (project_id)
+#
+
 class GeoPoint < ActiveRecord::Base
   belongs_to :project
   has_many :segments, :through => :geo_point_on_segments

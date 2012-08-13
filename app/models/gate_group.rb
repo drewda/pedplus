@@ -1,3 +1,23 @@
+# == Schema Information
+#
+# Table name: gate_groups
+#
+#  id            :integer          not null, primary key
+#  count_plan_id :integer
+#  user_id       :integer
+#  label         :string(255)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#  days          :string(255)
+#  hours         :string(255)
+#  status        :string(255)
+#
+# Indexes
+#
+#  index_gate_groups_on_count_plan_id  (count_plan_id)
+#  index_gate_groups_on_user_id        (user_id)
+#
+
 class GateGroup < ActiveRecord::Base
   belongs_to :count_plan
   belongs_to :user

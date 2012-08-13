@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: count_plans
+#
+#  id                             :integer          not null, primary key
+#  project_id                     :integer
+#  start_date                     :date
+#  created_at                     :datetime         not null
+#  updated_at                     :datetime         not null
+#  is_the_current_plan            :boolean
+#  count_session_duration_seconds :integer
+#  total_weeks                    :integer
+#
+# Indexes
+#
+#  index_count_plans_on_project_id  (project_id)
+#
+
 class CountPlan < ActiveRecord::Base
   belongs_to :project
   has_many :gate_groups, :order => "label ASC", :dependent => :destroy

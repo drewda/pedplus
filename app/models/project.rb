@@ -1,3 +1,27 @@
+# == Schema Information
+#
+# Table name: projects
+#
+#  id                  :integer          not null, primary key
+#  organization_id     :integer
+#  name                :string(255)
+#  kind                :string(255)
+#  created_at          :datetime
+#  updated_at          :datetime
+#  southwest_latitude  :decimal(15, 10)
+#  southwest_longitude :decimal(15, 10)
+#  northeast_latitude  :decimal(15, 10)
+#  northeast_longitude :decimal(15, 10)
+#  version             :integer
+#  max_number_of_gates :integer
+#  base_map            :string(255)      default("osm")
+#  allowed_to_export   :boolean          default(FALSE)
+#
+# Indexes
+#
+#  index_projects_on_organization_id  (organization_id)
+#
+
 class Project < ActiveRecord::Base
   belongs_to :organization
   has_many :project_members, :dependent => :destroy

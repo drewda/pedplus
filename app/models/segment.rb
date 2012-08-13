@@ -1,3 +1,21 @@
+# == Schema Information
+#
+# Table name: segments
+#
+#  id              :integer          not null, primary key
+#  created_at      :datetime
+#  updated_at      :datetime
+#  project_id      :integer
+#  start_longitude :decimal(15, 10)
+#  start_latitude  :decimal(15, 10)
+#  end_longitude   :decimal(15, 10)
+#  end_latitude    :decimal(15, 10)
+#
+# Indexes
+#
+#  index_segments_on_project_id  (project_id)
+#
+
 class Segment < ActiveRecord::Base
   belongs_to :project
   has_many :count_plans, :through => :count_plan_segments # TODO: destroy???

@@ -35,8 +35,11 @@ end
 
 group :development do
   gem 'drewda-railroad', '~> 0.5.3'
+  gem 'annotate'
   gem 'pry-rails'
   gem 'debugger'
+  gem 'guard'
+  gem 'guard-annotate'
 end
 
 gem 'rspec-rails', :group => [:development, :test]
