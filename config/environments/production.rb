@@ -14,6 +14,12 @@ Pedplus::Application.configure do
   # Compress JavaScripts and CSS
   config.assets.compress = true
 
+  # Fallback to assets pipeline if a precompiled asset is missed
+  config.assets.compile = true
+
+  # Generate digests for assets URLs
+  config.assets.digest = true
+
   # Specifies the header that your server uses for sending files
   # config.action_dispatch.x_sendfile_header = "X-Sendfile" # for apache
   # config.action_dispatch.x_sendfile_header = 'X-Accel-Redirect' # for nginx
@@ -34,7 +40,7 @@ Pedplus::Application.configure do
   config.action_controller.asset_host = "http://pedplus.s3.amazonaws.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  # config.assets.precompile += %w( search.js )
+  config.assets.precompile += %w( *.coffee *.js *.css *.scss *.png *.jpg *.jpeg *.gif )
 
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
