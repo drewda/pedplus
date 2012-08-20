@@ -19,7 +19,11 @@ task :deploy do
     invoke :'rails:assets_precompile'
 
     to :launch do
-      queue "touch #{deploy_to}/tmp/restart.txt"
+      queue %{
+        echo "-----> Restarting passenger/mod_rails"
+        #{echo_cmd %[mkdir -p #{deploy_to}/current/tmp]}
+        #{echo_cmd %[touch #{deploy_to}/current/tmp/restart.txt]}
+      }
     end
   end
 end
