@@ -1,6 +1,7 @@
 Pedplus::Application.routes.draw do
   root :to => 'app#dashboard'
   match 'app' => 'app#app'
+  match 'smartphone' => 'smartphone#dashboard'
 
   namespace :manage do
     root :to => 'site#dashboard'

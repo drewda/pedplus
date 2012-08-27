@@ -5,6 +5,10 @@ addToHomeConfig =
   touchIcon: true
 
 $ ->
+  # if running on a small screen, redirect to the smartphone interface
+  if screen.width < 600
+    window.location = '/smartphone'
+
   # if running as full-screen "app" on iPad, make sure to stay in the same window
   $.stayInWebApp()
 
