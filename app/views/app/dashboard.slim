@@ -37,11 +37,11 @@
                 a.thumbnail.dashboard-button#manage-button(href="/manage")
                   h3 Management
               li.span4
-                a.thumbnail.dashboard-button#help-button(href="http://www.s3sol.com/docs/pedcount.html" target="_blank")
+                a.thumbnail.dashboard-button#help-button{href=asset_path('pedcount_user_guide_29aug2012.pdf') target="_blank"}
                   h3 Help + Documentation
             - else
               li.span8
-                a.thumbnail.dashboard-button#help-button(href="http://www.s3sol.com/docs/pedcount.html" target="_blank")
+                a.thumbnail.dashboard-button#help-button{href=asset_path('pedcount_user_guide_29aug2012.pdf') target="_blank"}
                   h3 Help + Documentation
     - else
       h4 align="center"
