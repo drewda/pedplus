@@ -94,7 +94,7 @@ class Smartphone.Models.CountPlan extends Backbone.Model
             completed: gate.isCompletedFor(date, hour)
           gates.push gateSchedule
         hourSchedule =
-          hour: hour.replace('00',':00')
+          hour: hour.replace('00',':00').replace(':000', '0:00')
           gateGroupLetter: gateGroup.get('label')
           gates: gates
         daySchedule.push hourSchedule
