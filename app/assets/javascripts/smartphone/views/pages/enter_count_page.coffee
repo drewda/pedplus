@@ -8,6 +8,11 @@ class Smartphone.Views.EnterCountPage extends Backbone.View
     # like male, female, etc.
     @countSessionDates = []
 
+    # update the number of people counted (to zero)
+    # in case the currently rendered number is left
+    # over from a previous CountSession
+    @redrawCounter()
+
     # set the start time to now
     start = new XDate
     @countSession.set
