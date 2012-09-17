@@ -1,5 +1,8 @@
 /*
  *= require bootstrap
+ *= require jquery-datatables
+ *= require jquery-datatables-bootstrap
+ *= require jquery-datatables-tabletools
  *
  *= require_self
  *= require_tree . 
