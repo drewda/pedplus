@@ -12,7 +12,7 @@ table.table.table-striped.data-table
   tbody
     - @count_sessions.each do |cs|
       tr
-        td = l cs.start.in_time_zone(cs.project.organization.time_zone)
+        td = cs.start.in_time_zone(cs.project.organization.time_zone)
         td = pluralize cs.duration_minutes, "minutes"
         td = cs.status
         td = link_to cs.user.full_name, admin_organization_user_path(cs.project.organization, cs.user)
