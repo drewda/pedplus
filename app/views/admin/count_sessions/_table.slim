@@ -9,6 +9,8 @@ table.table.table-striped.data-table
       th Count Plan
       th Gate
       th Count
+      th
+      th
   tbody
     - @count_sessions.each do |cs|
       tr
@@ -18,4 +20,6 @@ table.table.table-striped.data-table
         td = link_to cs.user.full_name, admin_organization_user_path(cs.project.organization, cs.user)
         td = link_to "#{l cs.count_plan.start_date} - #{l cs.count_plan.end_date}", admin_organization_project_count_plan_path(cs.project.organization, cs.project, cs.count_plan)
         td = cs.gate.full_label
-        td = link_to pluralize(cs.counts_count, "pedestrians"), admin_organization_project_count_session_path(cs.project.organization, cs.project, cs)
+        td = pluralize(cs.counts_count, "pedestrians")
+        td = button_to "Delete", admin_organization_project_count_session_path(cs.project.organization, cs.project, cs), :method => :delete, :class => "btn btn-danger", :confirm => "Are you sure you want to delete Count Session ##{cs.id}? This includes all of its count records?"
+        td = link_to "View", admin_organization_project_count_session_path(cs.project.organization, cs.project, cs), :class => 'btn'
