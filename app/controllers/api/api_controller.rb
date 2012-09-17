@@ -1,5 +1,6 @@
 class Api::ApiController < ApplicationController
   before_filter :authenticate_user!
+  skip_before_filter :verify_authenticity_token # skip CSRF tokens for API
 
   # If you are using token authentication with APIs and using trackable. 
   # Every request will be considered as a new sign in (since there is no 
