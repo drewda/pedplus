@@ -1,0 +1,56 @@
+- content_for :head do
+  = javascript_include_tag "render-data-table", "d3"
+
+- content_for :body do
+  ul.breadcrumb
+    li 
+      = link_to "Organizations", admin_root_path
+      span.divider
+        ' /
+    li 
+      = link_to @project.organization.name, admin_organization_path(@project.organization)
+      span.divider
+        ' /
+    li
+      = link_to @project.name, admin_organization_project_path(@project.organization, @project)
+      span.divider
+        ' /
+    li
+      = link_to "Count Sessions", admin_organization_project_count_sessions_path(@project.organization, @project)
+      span.divider
+        ' /
+    li
+      strong = "Count Session ##{@count_session.id}"
+
+  h1 Count Session
+  p
+    ' Started at:
+    strong = l @count_session.start.in_time_zone(@count_session.project.organization.time_zone)
+  p
+    ' Stopped at:
+    strong = l @count_session.stop.in_time_zone(@count_session.project.organization.time_zone)
+  p
+    ' Status:
+    strong = @count_session.status
+  p
+    ' User:
+    strong = link_to @count_session.user.full_name, admin_organization_user_path(@count_session.project, @count_session.user)
+  p
+    ' Count plan:
+    strong = link_to "#{l @count_session.count_plan.start_date} - #{l @count_session.count_plan.end_date}"
+
+  h2 = pluralize @count_session.counts_count, "Counts"
+
+  .alert TODO: add a chart that shows the counts by time
+
+  table.table.table-striped.data-table
+    thead
+      tr
+        th Time
+    tbody
+      - @count_session.counts.each do |count|
+        tr
+          td = l count.at.in_time_zone(count.count_session.project.organization.time_zone)
+
+
+= render :template => '/admin/layout'

@@ -1,5 +1,8 @@
-# Sample localization file for English. Add more files in this directory for other locales.
-# See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
-
+# TODO: move these to config/initializers/time_formats.rb
 en:
-  hello: "Hello world"
+  date:
+    formats:
+      default: "%d %B %Y"
+  datetime:
+    formats:
+      default: "%d %B %Y %I:%M %p %Z"

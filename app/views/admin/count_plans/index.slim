@@ -1,0 +1,19 @@
+- content_for :body do
+  ul.breadcrumb
+    li 
+      = link_to "Organizations", admin_root_path
+      span.divider
+        ' /
+    li 
+      = link_to @project.organization.name, admin_organization_path(@project.organization)
+      span.divider
+        ' /
+    li
+      = link_to @project.name, admin_organization_project_path(@project.organization, @project)
+      span.divider
+        ' /
+    li
+      strong Count Plans
+
+  = render "table"
+= render :template => '/admin/layout'

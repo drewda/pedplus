@@ -1,0 +1,25 @@
+- content_for :body do
+  ul.breadcrumb
+    li 
+      = link_to "Organizations", admin_root_path
+      span.divider
+        ' /
+    li 
+      = link_to @project.organization.name, admin_organization_path(@project.organization)
+      span.divider
+        ' /
+    li
+      = link_to @project.name, admin_organization_project_path(@project.organization, @project)
+      span.divider
+        ' /
+    li
+      = link_to "Count Plans", admin_organization_project_count_plans_path(@project.organization, @project)
+      span.divider
+        ' /
+    li
+    	strong = "Count Plan from #{l @count_plan.start_date} to #{l @count_plan.end_date}"
+
+  h1 Count Plan
+  .alert TODO: list the details of the count plan
+  .alert TODO: actions to delete or archive
+= render :template => '/admin/layout'

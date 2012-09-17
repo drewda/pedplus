@@ -1,0 +1,15 @@
+h1 Count Plans
+table.table.table-striped
+  thead
+    tr
+      th Is the Current Plan?
+      th Start Date - End Date
+      th Total Weeks
+      th Percent Completed
+  tbody
+    - @count_plans.each do |cp|
+      tr
+        td == cp.is_the_current_plan ? '<i class="icon-ok"></i>' : ''
+        td = link_to "#{l cp.start_date} - #{l cp.end_date}", admin_organization_project_count_plan_path(cp.project.organization, cp.project, cp)
+        td = pluralize cp.total_weeks, 'weeks'
+        td = "#{cp.percent_completed}%" if cp.percent_completed

@@ -37,7 +37,11 @@ Pedplus::Application.routes.draw do
   namespace :admin do
     root :to => 'site#dashboard'
     resources :organizations do
-      resources :users, :projects
+      resources :users
+      resources :projects do
+        resources :count_plans
+        resources :count_sessions
+      end
     end
   end
 

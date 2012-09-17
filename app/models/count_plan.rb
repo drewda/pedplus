@@ -33,7 +33,7 @@ class CountPlan < ActiveRecord::Base
 
   def percent_completed
     totalNumber = self.count_sessions.count
-    return nil if totalNumber == 0
+    return 0 if totalNumber == 0
     numberCounted = self.count_sessions.where(:status => 'completed').count
     return numberCounted / totalNumber
   end

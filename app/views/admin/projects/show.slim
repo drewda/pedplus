@@ -66,10 +66,7 @@
   p
     ' Number of points:
     strong = @project.geo_points.length
-  p
-    ' Number of count plans:
-    strong = @project.count_plans.length
-  p
-    ' Number of count sessions:
-    strong = @project.count_sessions.length
+  p = link_to "Number of count plans: <strong>#{@project.count_plans.length}</strong>".html_safe, admin_organization_project_count_plans_path(@project.organization, @project)
+  p = link_to "Number of count sessions: <strong>#{@project.count_sessions.length}</strong>".html_safe, admin_organization_project_count_sessions_path(@project.organization, @project)
+
 = render :template => '/admin/layout'

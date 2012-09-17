@@ -5,6 +5,7 @@ html
     = stylesheet_link_tag "admin/admin"
     = javascript_include_tag "admin/admin"
     = csrf_meta_tags
+    == yield(:head)
   body
     .navbar.navbar-fixed-top
       .navbar-inner
