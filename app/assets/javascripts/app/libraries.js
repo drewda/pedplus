@@ -6,7 +6,6 @@
 //= require backbone
 //= require polymaps
 //= require d3
-//= require d3.geo
 //= require jquery-svg
 //= require jquery-svgdom
 //= require bootstrap-dropdown
