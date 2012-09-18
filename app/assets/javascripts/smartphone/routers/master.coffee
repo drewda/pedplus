@@ -20,6 +20,7 @@ class Smartphone.Routers.Master extends Backbone.Router
         showCountSchedule: (eventType, matchObj, ui, page, evt) =>
           hashParams = getHashParams()
           if masterRouter.reset(hashParams, ['projectId'])
+            $.mobile.showPageLoadingMsg()
             # TODO: do something while those collections are being fetched from the server
             # fetch Segment's and CountSession's because
             # we now have a currentProject defined
@@ -34,11 +35,13 @@ class Smartphone.Routers.Master extends Backbone.Router
                           # maybe in the future this is a method to move to the server-side
                           masterRouter.gate_groups.fetch
                             success: ->
+                              $.mobile.hidePageLoadingMsg()
                               masterRouter.showCountSchedulePage = new Smartphone.Views.ShowCountSchedulePage
                                 model: masterRouter.projects.getCurrentProject()
                                 date: hashParams.date
                                 userId: hashParams.userId
                         else
+                          $.mobile.hidePageLoadingMsg()
                           # if there is no current count plan for this project, 
                           # send the user back to select a different project
                           window.history.back()

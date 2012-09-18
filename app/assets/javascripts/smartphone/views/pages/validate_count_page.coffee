@@ -32,6 +32,7 @@ class Smartphone.Views.ValidateCountPage extends Backbone.View
     # TODO: add an edit button and the necessary functionality
 
   saveCountSessionButtonClick: ->
+    $.mobile.showPageLoadingMsg()
     # upload the CountSession with its Count's to the server
     @countSession.save
       counts: @countSession.counts.toJSON()
@@ -43,9 +44,11 @@ class Smartphone.Views.ValidateCountPage extends Backbone.View
         masterRouter.count_sessions.reset()
         masterRouter.count_sessions.fetch
           success: ->
+            $.mobile.hidePageLoadingMsg()
             # return to ShowCountSchedule
             $.mobile.changePage "#show-count-schedule?projectId=#{masterRouter.projects.getCurrentProjectId()}"
       error: ->
+        $.mobile.hidePageLoadingMsg()
         # TODO: redo for jqm dialogs
         bootbox.alert 'Error uploading count session to the server. It is now necessary to restart.', (ok) ->
           window.location.reload()
