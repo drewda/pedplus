@@ -30,7 +30,7 @@ class LogEntry < ActiveRecord::Base
                       ['project', 'Project'],
                       ['model-job', 'Model Job'],
                       ['count-plan', 'Count Plan'],
-                      ['cout-session', 'Count Session']
+                      ['count-session', 'Count Session']
                     ],
                     :validate => true
 end
