@@ -59,7 +59,7 @@ class Api::CountPlansController < Api::ApiController
                         :user => current_user,
                         :project => @count_plan.project,
                         :count_plan => @count_plan,
-                        :note => 'count plan created'
+                        :note => 'created'
 
         format.json  { render :json => @count_plan, :status => :created, :location => api_project_count_plan_url(@count_plan.project, @count_plan) }
       else
@@ -80,7 +80,7 @@ class Api::CountPlansController < Api::ApiController
                         :user => current_user,
                         :project => @count_plan.project,
                         :count_plan => @count_plan,
-                        :note => 'count plan updated'
+                        :note => 'archived'
 
         format.json  { render :json => @count_plan }
       else

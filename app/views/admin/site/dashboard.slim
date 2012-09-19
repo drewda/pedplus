@@ -20,7 +20,12 @@
             td = link_to le.organization.name, admin_organization_path(le.organization)
             td = link_to le.project.name, admin_organization_project_path(le.organization, le.project) if le.project
             td = link_to le.user.full_name, admin_organization_user_path(le.organization, le.user) if le.user
-            td = le.note
+            td 
+              - if le.count_plan
+                =' link_to "count plan", admin_organization_project_count_plan_path(le.organization, le.project, le.count_plan)
+              - elsif le.count_session
+                =' link_to "count session", admin_organization_project_count_session_path(le.organization, le.project, le.count_session)
+              = le.note
 
     = form_tag admin_root_path, :method => 'post' do
       = submit_tag "Clear Log Entries", :id => 'clear-log-entries-button', :class => 'btn btn-danger', :confirm => "Are you sure you want to delete all the log entries?"

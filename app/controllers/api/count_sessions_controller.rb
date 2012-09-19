@@ -33,7 +33,7 @@ class Api::CountSessionsController < Api::ApiController
                         :user => @count_session.user,
                         :project => @count_session.project,
                         :count_session => @count_session,
-                        :note => "completed with #{@count_session.counts_count} pedestrians counted"
+                        :note => "completed with #{@count_session.counts.count} pedestrians counted"
 
         format.json  { render :json => @count_session, :status => :created, :location => api_project_count_session_url(@count_session.project, @count_session) }
       else
