@@ -60,7 +60,7 @@ class App.Views.Map extends Backbone.View
       @map.add(@osmColorLayer)
     
     # add the compass to the top right of the screen
-    @map.add(po.compass().position('top-right'))
+    @map.add(po.compass().position('bottom-left'))
 
     
   # Returns a Bing URL template given a string and a list of subdomains.
