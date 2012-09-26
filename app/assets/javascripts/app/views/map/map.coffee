@@ -91,7 +91,7 @@ class App.Views.Map extends Backbone.View
     else if mode == "gray"
       # $('#osm-color-layer').hide()
       # $('#osm-gray-layer').show()
-      $('#osm-color-layer').css('opacity', '.5')
+      $('#osm-color-layer').css('opacity', '.7')
 
   centerMap: ->
     if currentProject = @projects.getCurrentProject()
