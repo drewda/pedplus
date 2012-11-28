@@ -32,12 +32,14 @@ class CountSession < ActiveRecord::Base
   
   accepts_nested_attributes_for :counts
 
-  attribute_choices :status, 
-                    [
-                      ['counting', 'Counting'], 
-                      ['completed', 'Completed']
-                    ],
-                    :validate => true
+  if self.column_names.include? 'status'
+    attribute_choices :status, 
+                      [
+                        ['counting', 'Counting'], 
+                        ['completed', 'Completed']
+                      ],
+                      :validate => true
+  end
 
   def segment_id
     return gate.segment_id
