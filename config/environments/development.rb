@@ -24,9 +24,5 @@ Pedplus::Application.configure do
 
   # Do not compress assets
   config.assets.compress = false
-  
-  # juggernaut host
-  config.juggernaut_host = "localhost"
-  config.juggernaut_port = "8080"
 
 end

@@ -29,9 +29,6 @@ GEM
       i18n (~> 0.6)
       multi_json (~> 1.0)
     addressable (2.3.2)
-    airbrake (3.1.2)
-      activesupport
-      builder
     annotate (2.5.0)
       rake
     arel (3.0.2)
@@ -78,10 +75,6 @@ GEM
       orm_adapter (~> 0.1)
       railties (~> 3.1)
       warden (~> 1.2.1)
-    devise_invitable (1.1.0)
-      actionmailer (~> 3.0)
-      devise (>= 2.1.0)
-      railties (~> 3.0)
     diff-lcs (1.1.3)
     drewda-railroad (0.5.3)
     dynamic_form (1.1.4)
@@ -160,13 +153,13 @@ GEM
       open4
       rake
     multi_json (1.3.6)
-    mysql2 (0.3.11)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
     net-ssh (2.5.2)
     nokogiri (1.5.5)
     open4 (1.3.0)
     orm_adapter (0.4.0)
+    pg (0.14.1)
     polyglot (0.3.3)
     pry (0.9.10)
       coderay (~> 1.0.5)
@@ -282,7 +275,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  airbrake
   annotate
   asset_sync
   attribute_choices
@@ -293,7 +285,6 @@ DEPENDENCIES
   database_cleaner
   debugger
   devise
-  devise_invitable
   drewda-railroad (~> 0.5.3)
   dynamic_form
   ejs
@@ -310,11 +301,10 @@ DEPENDENCIES
   jquery-rails
   launchy
   mina
-  mysql2
+  pg
   pry-rails
   rails (= 3.2.8)
   rb-fsevent
-  resque
   rspec-rails
   sass-rails
   simple_form

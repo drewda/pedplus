@@ -37,7 +37,7 @@ Pedplus::Application.configure do
   # config.cache_store = :mem_cache_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
-  config.action_controller.asset_host = "http://pedplus.s3.amazonaws.com"
+  # config.action_controller.asset_host = "http://pedplus.s3.amazonaws.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   config.assets.precompile += %w( *.coffee *.js *.css *.scss *.png *.jpg *.jpeg *.gif *.pdf )
@@ -54,8 +54,5 @@ Pedplus::Application.configure do
 
   # Send deprecation notices to registered listeners
   config.active_support.deprecation = :notify
-  
-  # juggernaut host
-  config.juggernaut_host = "pedplus.s3sol.com"
-  config.juggernaut_port = "8080"
+
 end

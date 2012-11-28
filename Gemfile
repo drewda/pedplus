@@ -2,16 +2,9 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-gem 'mysql2'
-
-gem 'airbrake'
-gem 'mina'
-
-gem 'resque', :require => "resque/server"
-# gem 'juggernaut', :git => 'https://github.com/maccman/juggernaut.git'
+gem 'pg'
 
 gem 'devise'
-gem 'devise_invitable'
 
 gem "geocoder"
 
