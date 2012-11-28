@@ -5,6 +5,7 @@ gem 'rails', '3.2.8'
 gem 'pg'
 
 gem 'devise'
+gem 'devise_invitable'
 
 gem "geocoder"
 
