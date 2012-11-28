@@ -2,10 +2,15 @@ source 'http://rubygems.org'
 
 gem 'rails', '3.2.8'
 
-gem 'pg'
+group :development, :test do
+  gem 'mysql2'
+end
+
+group :production do
+  gem 'pg'
+end
 
 gem 'devise'
-gem 'devise_invitable'
 
 gem "geocoder"
 

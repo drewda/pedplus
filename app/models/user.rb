@@ -28,6 +28,7 @@
 #  created_at             :datetime
 #  updated_at             :datetime
 #  s3sol_admin            :boolean
+#  authentication_token   :string(255)
 #
 # Indexes
 #
@@ -47,7 +48,6 @@ class User < ActiveRecord::Base
   
   devise :database_authenticatable, 
          :token_authenticatable,
-         :invitable,
          :recoverable, 
          :rememberable, 
          :trackable, 

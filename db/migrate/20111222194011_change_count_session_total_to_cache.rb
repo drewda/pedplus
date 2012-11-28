@@ -3,11 +3,10 @@
 
 class ChangeCountSessionTotalToCache < ActiveRecord::Migration
   def self.up
+  	remove_column :count_sessions, :count_total
     add_column :count_sessions, :counts_count, :integer, :default => 0
     
     CountSession.reset_column_information
-    
-    remove_column :count_sessions, :total_count
   end
 
   def self.down
