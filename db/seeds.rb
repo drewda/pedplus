@@ -1,9 +1,3 @@
-unlimited_plan = Subscription.create(:name => "Unlimited",
-                                     :uses_ped => true,
-                                     :uses_sign => true,
-                                     :max_users => '999',
-                                     :max_projects => '999')
-
 s3sol = Organization.create(:name => "Strategic Spatial Solutions, Inc.",
                             :slug => "s3sol",
                             :url => 'http://www.s3sol.com',
@@ -12,7 +6,8 @@ s3sol = Organization.create(:name => "Strategic Spatial Solutions, Inc.",
                             :state => "CA",
                             :postal_code => '94704',
                             :country => "United States",
-                            :subscription => unlimited_plan)
+                            :owns_pedcount => true,
+                            :kind => 'professional')
                             
 drew = User.create(:first_name => "Drew", 
                    :last_name => "Dara-Abrams",
