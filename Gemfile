@@ -25,7 +25,6 @@ group :assets do
   gem 'coffee-rails'
   gem 'therubyracer', :platforms => :ruby
   gem 'uglifier'
-  gem 'asset_sync'
 end
 
 group :development do
