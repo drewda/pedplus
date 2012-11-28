@@ -23,7 +23,6 @@ gem 'jquery-rails'
 group :assets do
   gem 'sass-rails'
   gem 'coffee-rails'
-  gem 'therubyracer', :platforms => :ruby
   gem 'uglifier'
 end
 
