@@ -45,8 +45,4 @@ Pedplus::Application.routes.draw do
     end
   end
 
-  # probably letting all users access, not just admin ones
-  authenticate :user do
-    mount Resque::Server, :at => "/admin/resque"
-  end
 end
