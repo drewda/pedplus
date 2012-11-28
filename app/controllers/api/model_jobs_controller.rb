@@ -15,7 +15,7 @@ class Api::ModelJobsController < Api::ApiController
     
     respond_to do |format|
       if @model_job.save
-        Resque.enqueue(CalculateModel, @model_job.id)
+        # DISABLED: Resque.enqueue(CalculateModel, @model_job.id)
 
         # create a log entry
         LogEntry.create :kind => 'model-job',
