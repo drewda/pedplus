@@ -14,6 +14,8 @@ gem 'devise'
 
 gem "geocoder"
 
+gem 'highline'
+
 gem 'slim'
 gem 'simple_form'
 gem 'dynamic_form'
@@ -32,7 +34,6 @@ group :assets do
 end
 
 group :development do
-	gem 'highline'
   gem 'drewda-railroad', '~> 0.5.3'
   gem 'annotate'
   gem 'pry-rails'

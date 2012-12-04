@@ -1,3 +1,5 @@
+require 'highline'
+
 organization_name = ask("Name of your organization?  ")
 user_first_name = ask("Your first name?  ")
 user_last_name = ask("Your last name?  ")
