@@ -14,8 +14,6 @@ gem 'devise'
 
 gem "geocoder"
 
-gem 'highline'
-
 gem 'slim'
 gem 'simple_form'
 gem 'dynamic_form'

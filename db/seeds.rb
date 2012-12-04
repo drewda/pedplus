@@ -1,14 +1,5 @@
-require 'rubygems'
-require 'highline'
-
-organization_name = ask("Name of your organization?  ")
-user_first_name = ask("Your first name?  ")
-user_last_name = ask("Your last name?  ")
-user_email_address = ask("Your e-mail address?  ")
-user_password = ask("Set your password:  ") { |q| q.echo = "x" }
-
-org = Organization.create(:name => organization_name,
-                            :slug => organization_name.parameterize,
+org = Organization.create(:name => 'Sample Organization',
+                            :slug => 'Sample',
                             :country => "United States",
                             :owns_pedcount => true,
                             :owns_pedplus => false,
@@ -18,13 +9,14 @@ org = Organization.create(:name => organization_name,
                             :default_counting_days_per_gate => 4,
                             :extra_counting_day_credits_available => 1000,
                             :allowed_to_export_projects => true,
-                            :kind => 'professional',
-                            :organization_manager => true,
-                            :s3sol_admin => true)
+                            :kind => 'professional')
                             
-user = User.create(:first_name => user_first_name,
-                   :last_name => user_last_name,
-                   :email => user_email_address,
-                   :password => user_password,
-                   :password_confirmation => user_password,
-                   :organization => org)
+user = User.create(:first_name => 'Sample',
+                   :last_name => 'User',
+                   :email => 'user@sample.com',
+                   :password => 'changeme',
+                   :password_confirmation => 'changeme',
+                   :organization => org,
+                   :organization_manager => true,
+                   :organization_billing => true,
+                   :s3sol_admin => true)
