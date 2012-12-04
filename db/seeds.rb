@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'highline'
 
 organization_name = ask("Name of your organization?  ")
