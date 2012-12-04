@@ -32,6 +32,7 @@ group :assets do
 end
 
 group :development do
+	gem 'highline'
   gem 'drewda-railroad', '~> 0.5.3'
   gem 'annotate'
   gem 'pry-rails'

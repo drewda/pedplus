@@ -1,17 +1,27 @@
-s3sol = Organization.create(:name => "Strategic Spatial Solutions, Inc.",
-                            :slug => "s3sol",
-                            :url => 'http://www.s3sol.com',
-                            :address => '2150 Allston Way, Suite 280',
-                            :city => "Berkeley",
-                            :state => "CA",
-                            :postal_code => '94704',
+organization_name = ask("Name of your organization?  ")
+user_first_name = ask("Your first name?  ")
+user_last_name = ask("Your last name?  ")
+user_email_address = ask("Your e-mail address?  ")
+user_password = ask("Set your password:  ") { |q| q.echo = "x" }
+
+org = Organization.create(:name => organization_name,
+                            :slug => organization_name.parameterize,
                             :country => "United States",
                             :owns_pedcount => true,
-                            :kind => 'professional')
+                            :owns_pedplus => false,
+                            :time_zone => 'Pacific Time (US & Canada)',
+                            :default_max_number_of_gates_per_project => 1000,
+                            :subscription_active_until => Date.today + 1.year,
+                            :default_counting_days_per_gate => 4,
+                            :extra_counting_day_credits_available => 1000,
+                            :allowed_to_export_projects => true,
+                            :kind => 'professional',
+                            :organization_manager => true,
+                            :s3sol_admin => true)
                             
-drew = User.create(:first_name => "Drew", 
-                   :last_name => "Dara-Abrams",
-                   :email => 'drew@s3sol.com',
-                   :password => 'changeme', 
-                   :password_confirmation => 'changeme',
-                   :organization => s3sol)
+user = User.create(:first_name => user_first_name,
+                   :last_name => user_last_name,
+                   :email => user_email_address,
+                   :password => user_password,
+                   :password_confirmation => user_password,
+                   :organization => org)
