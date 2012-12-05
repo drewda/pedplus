@@ -7,6 +7,7 @@ A Web application for counting pedestrians. To use, this must be hosted on a ser
 Note that this assuming that you are using a Mac. The instructions are pretty much the same on Linux. Some skill might be required to adapt them for Windows.
 
 1. Heroku prerequisites
+
     a.  [Sign up for a free Heroku account.](https://api.heroku.com/signup)
     
     b.  Download and install the [Heroku Toolbelt](https://toolbelt.heroku.com/).
@@ -61,11 +62,11 @@ Note that this assuming that you are using a Mac. The instructions are pretty mu
     
 8. Modifying Heroku settings
 
-    - To rename the application (and its hostname), run the following command: `heroku apps:rename this_is_my_new_name`
+    * To rename the application (and its hostname), run the following command: `heroku apps:rename this_is_my_new_name`
     
-    - To use a non-Heroku domain name for your application, follow the steps in [this article on the Heroku site](https://devcenter.heroku.com/articles/custom-domains).
+    * To use a non-Heroku domain name for your application, follow the steps in [this article on the Heroku site](https://devcenter.heroku.com/articles/custom-domains).
     
-    - To diagnose problems with the application, examine the server logs by running this command: `heroku logs`
+    * To diagnose problems with the application, examine the server logs by running this command: `heroku logs`
     
     
 ## Technical Details
