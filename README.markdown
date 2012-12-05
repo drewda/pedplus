@@ -15,6 +15,7 @@ Note that this assuming that you are using a Mac. The instructions are pretty mu
 2. Github prerequisites
 
     a. [Sign up for a free Github account.](https://github.com/signup/free)
+    
     b. Download and install [Github for Mac](http://mac.github.com/).
     
 3. Ruby prerequisites
@@ -61,11 +62,8 @@ Note that this assuming that you are using a Mac. The instructions are pretty mu
     c. You can change this and other account information through the admin interface by adding `/admin` to the end of the root URL. The sample account has been given admin privileges.
     
 8. Modifying Heroku settings
-
     * To rename the application (and its hostname), run the following command: `heroku apps:rename this_is_my_new_name`
-    
     * To use a non-Heroku domain name for your application, follow the steps in [this article on the Heroku site](https://devcenter.heroku.com/articles/custom-domains).
-    
     * To diagnose problems with the application, examine the server logs by running this command: `heroku logs`
     
     
