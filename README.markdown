@@ -8,6 +8,7 @@ Note that this assuming that you are using a Mac. The instructions are pretty mu
 
 1. Heroku prerequisites
     a.  [Sign up for a free Heroku account.](https://api.heroku.com/signup)
+    
     b.  Download and install the [Heroku Toolbelt](https://toolbelt.heroku.com/).
 
 2. Github prerequisites
