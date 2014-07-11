@@ -35,7 +35,7 @@ Note that this assuming that you are using a Mac. The instructions are pretty mu
 
 5. Download this code to your computer
   
-    a. Open a Web browser to https://github.com/s3sol/pedplus
+    a. Open a Web browser to https://github.com/drewda/pedplus
     
     b. Press the *Clone in Mac* button and select a local folder on your computer to place the code.
     
@@ -71,7 +71,7 @@ Note that this assuming that you are using a Mac. The instructions are pretty mu
 
 ### Server Side
 
-This is a [Ruby on Rails](http://rubyonrails.org/) application. Its server-side components are written in the [Ruby scripting language](http://www.ruby-lang.org/). Data is written to the [MySQL database](http://mysql.com/). (Or if the application is hosted on Heroku, it's written to the [Postgres database](http://www.postgresql.org/).) A number of Ruby software libraries (known as "gems") are used in the application; for a full list read the [Gemfile](https://github.com/s3sol/pedplus/blob/heroku/Gemfile) in the root folder. More information on these gems can be looked up at [rubygems.org](https://rubygems.org).
+This is a [Ruby on Rails](http://rubyonrails.org/) application. Its server-side components are written in the [Ruby scripting language](http://www.ruby-lang.org/). Data is written to the [MySQL database](http://mysql.com/). (Or if the application is hosted on Heroku, it's written to the [Postgres database](http://www.postgresql.org/).) A number of Ruby software libraries (known as "gems") are used in the application; for a full list read the [Gemfile](https://github.com/drewda/pedplus/blob/heroku/Gemfile) in the root folder. More information on these gems can be looked up at [rubygems.org](https://rubygems.org).
 
 ### Client Side
 
@@ -87,8 +87,8 @@ The first three interfaces are all generated using server-side code, including R
 
 The final two interfaces involve a good deal of client-side code, written in [CoffeeScript](http://coffeescript.org/) and compiled to [JavaScript](https://developer.mozilla.org/en-US/docs/JavaScript). Both use a standard JavaScript utility library called [jQuery](http://jquery.com/) as well as:
 
-- The desktop and tablet interface also uses [Backbone.js](http://backbonejs.org/) to structure its code. A list of other JavaScript libraries used is in [app/assets/javascripts/app/libraries.js](https://github.com/s3sol/pedplus/blob/heroku/app/assets/javascripts/app/libraries.js)
+- The desktop and tablet interface also uses [Backbone.js](http://backbonejs.org/) to structure its code. A list of other JavaScript libraries used is in [app/assets/javascripts/app/libraries.js](https://github.com/drewda/pedplus/blob/heroku/app/assets/javascripts/app/libraries.js)
 
-- The smartphone interface uses [jQuery Mobile](http://jquerymobile.com/) to structure its code and generate UI widgets and layouts. A list of other JavaScript libraries used is split between  [app/assets/javascripts/smartphone/libraries.js](https://github.com/s3sol/pedplus/blob/heroku/app/assets/javascripts/smartphone/libraries.js) and [app/assets/javascripts/smartphone/libraries-jqm.js](https://github.com/s3sol/pedplus/blob/heroku/app/assets/javascripts/smartphone/libraries-jqm.js)
+- The smartphone interface uses [jQuery Mobile](http://jquerymobile.com/) to structure its code and generate UI widgets and layouts. A list of other JavaScript libraries used is split between  [app/assets/javascripts/smartphone/libraries.js](https://github.com/drewda/pedplus/blob/heroku/app/assets/javascripts/smartphone/libraries.js) and [app/assets/javascripts/smartphone/libraries-jqm.js](https://github.com/drewda/pedplus/blob/heroku/app/assets/javascripts/smartphone/libraries-jqm.js)
 
-Note that the smartphone interface is also available as a "wrapper" application for iOS and Android, which requires additional prerequisites and compilation steps. See [the pedcount code repository](https://github.com/s3sol/pedcount) for more information.
+Note that the smartphone interface is also available as a "wrapper" application for iOS and Android, which requires additional prerequisites and compilation steps. See [the pedcount code repository](https://github.com/drewda/pedcount) for more information.
