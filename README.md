@@ -1,6 +1,8 @@
 # PedPlus
 
-A Web application for counting pedestrians and modeling walkability.
+Map pedestrian routes, count people walking by, and model walkability (using a predictive algorithm run "in the cloud"), all while you're out in the field using a tablet or a smartphone.
+
+![animated screenshots of PedPlus](doc/animated-screenshots.gif)
 
 ## Architecture
 
@@ -34,6 +36,7 @@ This repository provides all dependencies for desktop/tablet web app, JSON REST 
 
 
 ## Dependencies
+
 * Ruby 1.9
 * MySQL
 * Redis (for caching)
@@ -45,5 +48,6 @@ This repository provides all dependencies for desktop/tablet web app, JSON REST 
 
 If you'd like to try a subset of PedPlus functionality, follow [these instructions](https://github.com/drewda/pedplus/blob/heroku/README.markdown) to install a working version on the [Heroku](https://www.heroku.com/) hosting service.
   
-## Credits
-Developed by Drew Dara-Abrams in 2011 - 2012, with urban-planning assistance from Joao Pinelo and visual design assistance from Victor Schinazi. Copyright 2011 - 2012 Strategic Spatial Solutions, Inc. Released under the GPLv3 license.
+## Credits and License
+
+Developed by Drew Dara-Abrams in 2011 - 2012, with urban planning assistance from Joao Pinelo and visual design assistance from Victor Schinazi. Copyright 2011 - 2012 Strategic Spatial Solutions, Inc. Released under the GPLv3 license.
